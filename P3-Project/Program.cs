@@ -18,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 //hej simon
 //Hej med dig
 //Endnu engang hej
+//farvel simon
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
