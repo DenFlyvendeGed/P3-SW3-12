@@ -14,6 +14,9 @@ if (!app.Environment.IsDevelopment())
     //test
 }
 
+
+//hej simon
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
