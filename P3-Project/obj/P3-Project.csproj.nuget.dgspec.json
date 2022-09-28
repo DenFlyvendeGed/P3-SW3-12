@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\chris\\Source\\Repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj": {}
+    "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\chris\\Source\\Repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj": {
+    "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\chris\\Source\\Repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj",
+        "projectUniqueName": "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj",
         "projectName": "P3-Project",
-        "projectPath": "C:\\Users\\chris\\Source\\Repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj",
+        "projectPath": "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\P3-Project.csproj",
         "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\chris\\Source\\Repos\\P3-SW3-12\\P3-Project\\obj\\",
+        "outputPath": "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config",
