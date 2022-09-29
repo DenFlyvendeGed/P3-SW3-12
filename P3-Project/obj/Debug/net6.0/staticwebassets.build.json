@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "D9hOZ+yJiIz6ZW/FJxL7/l8k7CHDeiI6ewQkrNsh4Kg=",
+  "Hash": "sG/2hShdn0N+9zEpEq4WVLyoJRdP6JT0aa8y19VcOkE=",
   "Source": "P3-Project",
   "BasePath": "_content/P3-Project",
   "Mode": "Default",
@@ -1069,6 +1069,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\wwwroot\\Pics\\logo.png",
+      "SourceId": "P3-Project",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\chris\\source\\repos\\P3-SW3-12\\P3-Project\\wwwroot\\",
+      "BasePath": "_content/P3-Project",
+      "RelativePath": "Pics/logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Pics\\logo.png"
     }
   ]
 }
