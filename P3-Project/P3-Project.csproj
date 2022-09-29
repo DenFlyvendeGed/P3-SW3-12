@@ -7,8 +7,4 @@
     <RootNamespace>P3_Project</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\Pics\logo.png" />
-  </ItemGroup>
-
 </Project>
