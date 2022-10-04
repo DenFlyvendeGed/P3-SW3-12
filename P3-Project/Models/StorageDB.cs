@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Data;
+using System.Net;
 using System.Xml.Linq;
 
 namespace P3_Project.Models
@@ -38,7 +40,7 @@ namespace P3_Project.Models
             while (sdr.Read())
             {
                 Result = sdr[key].ToString();
-                string? test = sdr["ingenting"].ToString();
+               
                 
             }
             //Close the connection
@@ -46,8 +48,47 @@ namespace P3_Project.Models
             return Result;
         }
 
-        public void CreateTable(string Name, string location)
+        public void CreateTable(string Name)
         {
+            cmd.CommandText = "CREATE TABLE " + Name + "(" +
+            "PersonID int," +
+            "LastName varchar(255)," +
+            "FirstName varchar(255)," +
+            "Address varchar(255)," +
+            "City varchar(255))";
+
+
+            // open database connection.
+            conn.Open();
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            conn.Close();
+            return;
+
+            //CREATE TABLE Persons(
+            //PersonID int,
+            //LastName varchar(255),
+            //FirstName varchar(255),
+            //Address varchar(255),
+            //City varchar(255)
+        }
+
+
+        public void DeleteTable(string Name)
+        {
+            cmd.CommandText = "DROP TABLE " + Name ;
+
+
+            // open database connection.
+            conn.Open();
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            conn.Close();
+            return;
 
         }
     } 
