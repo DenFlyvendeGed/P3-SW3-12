@@ -19,6 +19,7 @@ if (!app.Environment.IsDevelopment())
 //Hej med dig
 //Endnu engang hej
 //farvel simon
+//Shut up!!
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
