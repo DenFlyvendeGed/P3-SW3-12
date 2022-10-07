@@ -17,6 +17,26 @@ body {
   margin-bottom: 60px;
 }
 
-.logoTest{
-    background-color: black;
+
+.topBar{
+    height: 42px;
+    background-color: rgb(59, 146, 178);
 }
+
+.logo{
+    padding-left: 40%;
+}
+    
+.navBarPlacement{
+    
+    height: 56px;
+    font-family: Bahnschrift;
+    font-size: 90%;
+    padding-left: 40%;
+    /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
+}
+
+.navBarText{
+    padding-top: 17px;
+}
+
