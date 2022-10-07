@@ -40,3 +40,8 @@ body {
     padding-top: 17px;
 }
 
+.footerText {
+    color: white;
+    font-family: Bahnschrift;
+    /*DIN Schriff 1451 Mittelschriff */
+}
