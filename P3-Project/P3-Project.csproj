@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Views\Pics\logo_2016.png" />
+    <None Include="wwwroot\Pics\logo_2016.png" />
   </ItemGroup>
 
   <ItemGroup>
