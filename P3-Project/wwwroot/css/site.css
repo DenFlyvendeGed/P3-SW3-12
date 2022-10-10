@@ -24,7 +24,7 @@ body {
 }
 
 .logo{
-    padding-left: 40%;
+    padding-left: 8vw;
 }
     
 .navBarPlacement{
@@ -44,8 +44,8 @@ body {
     transition: 0.7s;
 }
 
-.test{
-    padding-left: 20%;
+.moveMenu {
+    padding-left: 10vw;
 }
 
 
