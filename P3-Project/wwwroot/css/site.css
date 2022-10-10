@@ -30,7 +30,7 @@ body {
 .navBarPlacement{
     font-family: Bahnschrift;
     font-size: 90%;
-    padding-left: 23%;
+    
         
     /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
@@ -44,6 +44,9 @@ body {
     transition: 0.7s;
 }
 
+.test{
+    padding-left: 20%;
+}
 
 
 
