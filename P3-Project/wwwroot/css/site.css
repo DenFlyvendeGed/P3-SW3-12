@@ -24,18 +24,27 @@ body {
 }
 
 .logo{
-    padding-left: 50%;
+    padding-left: 40%;
 }
     
 .navBarPlacement{
     font-family: Bahnschrift;
     font-size: 90%;
     padding-left: 23%;
-       
+        
     /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
 
 .navBarText{
     padding-top: 17px;
 }
+
+.navBarText:hover {
+    background-color: rgb(59, 146, 178);
+    transition: 0.7s;
+}
+
+
+
+
 
