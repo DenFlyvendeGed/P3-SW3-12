@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
+@foreach (string id in ViewBag.itemModels)
+{
+    <div style="border: solid"> 
+        <p>modelName = @id</p> 
+        <a href="Delete?id=@id"> 
+            <button >X</button>
+        </a>
+    </div>
+    
+}
+
+<div style="border: solid">
+    <a href="createItemModel">  
+        <p>Create new!!</p>
+    </a>
+</div>

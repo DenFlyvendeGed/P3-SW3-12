@@ -1,17 +1,20 @@
-﻿namespace P3_Project.Models
+﻿using Microsoft.Build.Framework;
+
+namespace P3_Project.Models
 {
     public class ItemModel
     {
-        private int id;
+
+        public int id;
         public string modelName;
-        public string ítemTable;
-        private string description;
+        public string itemTable;
+        public string description;
         public List<string> colors;
         public List<string> sizes;
 
         public ItemModel()
         {
-
+            
         }
 
 
