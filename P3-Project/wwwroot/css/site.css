@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  color:red;
 }
 
 @media (min-width: 768px) {
@@ -23,36 +24,51 @@ body {
     background-color: rgb(59, 146, 178);
 }
 
+@media only screen and (max-width: 600px) {
+    .topBar {
+        height: 0px;
+        background-color: rgb(59, 146, 178);
+    }
+}
+
 .logo{
     padding-left: 8vw;
 }
+
+@media only screen and (max-width: 1024px) {
+    .logo {
+        padding-left: 0vw;
+    }
+}
     
+
+
 .navBarPlacement{
     font-family: Bahnschrift;
     font-size: 90%;
-    
-        
     /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
 
 .navBarText{
-    padding-top: 17px;
+    padding-top: 5px;
 }
+
 
 .navBarText:hover {
     background-color: rgb(59, 146, 178);
     transition: 0.7s;
 }
 
+
+
 .moveMenu {
     padding-left: 10vw;
 }
 
-@media only screen and (max-width: 500px) {
-    .logo{
-        padding-left: 0vw;
-    }
-}
+
+
+
+
 
 
 
