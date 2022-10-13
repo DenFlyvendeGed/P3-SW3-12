@@ -5,10 +5,14 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using NuGet.Packaging;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Dynamic;
 using System.Net;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace P3_Project.Models
@@ -106,7 +110,7 @@ namespace P3_Project.Models
 
         ///int currentAmount = int.Parse(GetField(selectorKey, selectorValue, table, field));
 
-        public void ÍncreaseItemStock(string table, string id, int amount = 1)
+        public void increaseItemStock(string table, string id, int amount = 1)
         {
             try
             {
@@ -249,7 +253,7 @@ namespace P3_Project.Models
 
         //}
 
-        public List<string> getAllElements(string tableName, string key)
+        public List<string> getAllElementsField(string tableName, string key)
         {
             List<string> list = new List<string>();
 
@@ -274,6 +278,40 @@ namespace P3_Project.Models
             conn.Close();
 
             return list;
+        }
+
+        public List<object> getAllElements(string tableName, object objectClass)
+        {
+
+            cmd.CommandText = "SELECT * FROM " + tableName;
+
+
+            FieldInfo[] myField = objectClass.GetType().GetFields();
+
+            // open database connection.
+            conn.Open();
+
+
+
+            List<object> objects = new List<object>();
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            ////Retrieve data from table and Display result
+            while (sdr.Read())
+            {
+                var instance = new ExpandoObject() as IDictionary<string, Object>;
+                foreach (FieldInfo field in myField)
+                {
+                    instance.Add(field.Name,sdr[field.Name].ToString());
+                }
+                objects.Add(instance);
+            }
+            //Close the connection
+            conn.Close();
+
+            return objects;
         }
         public void AddRowToTable(string table, List<(string,string)> keyValueSet)
         {

@@ -4,11 +4,13 @@
 @{
     
 }
-@foreach (string id in ViewBag.itemModels)
+@foreach (var item in ViewBag.itemModels)
 {
     <div style="border: solid"> 
-        <p>modelName = @id</p> 
-        <a href="Delete?id=@id"> 
+        <p>id = @item.id</p>
+        <p>modelName = @item.modelName</p> 
+        <p>discription = @item.description</p>
+        <a href="Delete?id=@item.id"> 
             <button >X</button>
         </a>
     </div>

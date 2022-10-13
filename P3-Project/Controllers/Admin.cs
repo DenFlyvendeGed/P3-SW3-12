@@ -6,7 +6,8 @@ using Microsoft.Data.SqlClient;
 using NuGet.ContentModel;
 using P3_Project.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using static System.Net.Mime.MediaTypeNames;
+using System.Dynamic;
 
 namespace P3_Project.Controllers
 {
@@ -53,11 +54,41 @@ namespace P3_Project.Controllers
         public ActionResult Webshop()
         {
 
+            
+
             StorageDB db = new StorageDB();
-            List<string> itemModels = db.getAllElements("itemModels", "modelName");
-            ViewBag.itemModels = itemModels;
+            
+            
+            if(!db.CheckTable("itemModels"))
+                setup();
+            
+
+            List<string> itemModels = db.getAllElementsField("itemModels", "modelName");
+
+            List<object> itemModels1 = db.getAllElements("itemModels", new ItemModel());
+            ViewBag.itemModels = itemModels1;
             return View();
         }
+
+
+        private void setup()
+        {
+            StorageDB db = new StorageDB();
+
+
+            List<string> param = new List<string>();
+            param.Add("id nchar(10)");
+            param.Add("modelName nchar(30)");
+            param.Add("itemTable nchar(10)");
+            param.Add("description nchar(30)");
+            param.Add("colors nchar(10)");
+            param.Add("sizes nchar(10)");
+
+            db.CreateTable("itemModels", param);
+
+
+        }
+
 
         public ActionResult CreateItemModel()
         {
@@ -116,8 +147,8 @@ namespace P3_Project.Controllers
         {
 
             StorageDB db = new StorageDB();
-            string subTable = db.GetField("modelName", id, "ItemModels", "itemTable");
-            db.RemoveRow("ItemModels", "modelName", id);
+            string subTable = db.GetField("id", id, "ItemModels", "itemTable");
+            db.RemoveRow("ItemModels", "id", id);
             db.DeleteTable(subTable);
             
             return RedirectToAction(nameof(Webshop));
