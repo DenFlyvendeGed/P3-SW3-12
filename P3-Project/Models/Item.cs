@@ -2,12 +2,12 @@
 {
     public class Item
     {
-        private string id;
-        private string modelId;
+        public string id;
+        public string modelId;
         public string modelName;
-        private string color;
-        private string size;
-        private string stock;
+        public string color;
+        public string size;
+        public string stock;
         private string reserved;
         private string sold;
 

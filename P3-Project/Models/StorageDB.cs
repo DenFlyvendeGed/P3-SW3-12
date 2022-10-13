@@ -116,8 +116,7 @@ namespace P3_Project.Models
             {
                 int currentAmount = int.Parse(GetField("id", id, table, "stock"));
 
-                //open database connection.
-                conn.Open();
+
                 if ( amount > 0)
                 {
                     UpdateField(table, "id", id, "stock", (amount + currentAmount).ToString());
@@ -140,11 +139,9 @@ namespace P3_Project.Models
             {
                 int currentAmount = int.Parse(GetField("id", id, table, "stock"));
 
-                //open database connection.
-                conn.Open();
                 if (amount + currentAmount >= 0)
                 {
-                    UpdateField(table, "id", id, "stock", (amount + currentAmount).ToString());
+                    UpdateField(table, "id", id, "stock", (currentAmount - amount).ToString());
                 }
                 else
                 {
@@ -280,7 +277,7 @@ namespace P3_Project.Models
             return list;
         }
 
-        public List<object> getAllElements(string tableName, object objectClass)
+        public List<IDictionary<string, object>> getAllElements(string tableName, object objectClass)
         {
 
             cmd.CommandText = "SELECT * FROM " + tableName;
@@ -293,7 +290,7 @@ namespace P3_Project.Models
 
 
 
-            List<object> objects = new List<object>();
+            List<IDictionary<string, object>> objects = new List<IDictionary<string, object>>();
 
             //Execute the query 
             SqlDataReader sdr = cmd.ExecuteReader();
@@ -301,7 +298,7 @@ namespace P3_Project.Models
             ////Retrieve data from table and Display result
             while (sdr.Read())
             {
-                var instance = new ExpandoObject() as IDictionary<string, Object>;
+                Dictionary<string, object> instance = new Dictionary<string, object>();
                 foreach (FieldInfo field in myField)
                 {
                     instance.Add(field.Name,sdr[field.Name].ToString());

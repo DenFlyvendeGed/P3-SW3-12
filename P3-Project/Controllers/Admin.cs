@@ -61,12 +61,25 @@ namespace P3_Project.Controllers
             
             if(!db.CheckTable("itemModels"))
                 setup();
-            
 
-            List<string> itemModels = db.getAllElementsField("itemModels", "modelName");
+            List<IDictionary<string, object>> itemModels = db.getAllElements("itemModels", new ItemModel());
+            int i = 0;
+            foreach (Dictionary<string, object> itemModel in itemModels)
+            {
+                List<IDictionary<string, object>> items  = db.getAllElements((string)itemModel["itemTable"], new Item());
+                itemModels[i].Add("items", items);
+                _ = items;
+                i++;
+            };
 
-            List<object> itemModels1 = db.getAllElements("itemModels", new ItemModel());
-            ViewBag.itemModels = itemModels1;
+
+            //foreach(object obj in itemModels){
+            //    ItemModel item = (ItemModel)obj;
+            //    items.Add(db.getAllElements(item.itemTable , new Item()));
+            //}
+
+
+            ViewBag.itemModels = itemModels;
             return View();
         }
 
@@ -143,6 +156,65 @@ namespace P3_Project.Controllers
         }
 
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult IncreaseStock(string modelId, string id)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest("Not a valid model");
+            StorageDB db = new StorageDB();
+
+            if (db.CheckRow("item" + modelId, "id", id))
+            {
+                db.increaseItemStock("item" + modelId, id);
+            }
+            else
+            {
+                throw new Exception("Item Dosent exist");
+            }
+            
+            return Redirect("Webshop");
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DecreaseStock(string modelId, string id)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest("Not a valid model");
+            StorageDB db = new StorageDB();
+
+            if (db.CheckRow("item" + modelId, "id", id))
+            {
+                db.DecreaseItemStock("item" + modelId, id);
+            }
+            else
+            {
+                throw new Exception("Item Dosent exist");
+            }
+
+            return Redirect("Webshop");
+        }
+
+        [HttpPost]
+        public void CreateItem()
+        {
+
+            string color = Request.Headers["color"];
+            string size = Request.Headers["size"];
+            string id = Request.Headers["id"];
+            
+            _ = color;
+            _ = size;
+
+            StorageDB db = new StorageDB();
+
+            //db.AddRowToTable();
+
+        }
+
         public ActionResult Delete(string id)
         {
 
@@ -154,73 +226,84 @@ namespace P3_Project.Controllers
             return RedirectToAction(nameof(Webshop));
         }
 
-        // GET: Admin/Details/5
-        public ActionResult Details(int id)
+
+        public ActionResult ItemShowCase(string id)
         {
+            StorageDB db = new StorageDB();
+
+            
+
             return View();
         }
 
-        // GET: Admin/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: Admin/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Admin/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Admin/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //// GET: Admin/Delete/5
-        //public ActionResult Delete(int id)
+        //// GET: Admin/Details/5
+        //public ActionResult Details(int id)
         //{
         //    return View();
         //}
 
-        // POST: Admin/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// GET: Admin/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        //// POST: Admin/Create
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        //// GET: Admin/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
+
+        //// POST: Admin/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        ////// GET: Admin/Delete/5
+        ////public ActionResult Delete(int id)
+        ////{
+        ////    return View();
+        ////}
+
+        //// POST: Admin/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

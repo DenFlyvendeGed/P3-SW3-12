@@ -4,16 +4,101 @@
 @{
     
 }
-@foreach (var item in ViewBag.itemModels)
+
+<script>
+    function createItem(event){
+        let inputArea = event.target.parentElement;
+        let color = inputArea.querySelector(".color").value;
+        let size = inputArea.querySelector(".size").value;
+        let itemModelElement = inputArea.closest(".itemModel");
+        let id = itemModelElement.id;
+
+        fetch("CreateItem", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' ,
+                'color': color,
+                'size': size,
+                'id': id.trim()
+            },
+
+        }).then(res => {
+            console.log("Request complete! response:", res);
+        });
+        console.log(document.querySelector(".size").value);
+    }
+
+
+    function addItem(dom){
+        let container = document.createElement("div");
+        let label = document.createElement("label");
+        label.innerText = "Color";
+        container.append(label);
+
+        let colorInput = document.createElement("input");
+        colorInput.classList = "color";
+
+        container.append(colorInput);
+
+        let sizeLabel = document.createElement("label");
+        sizeLabel.innerText = "Size";
+
+        container.append(sizeLabel);
+
+        let sizeInput = document.createElement("input");
+        sizeInput.classList= "size"
+
+        container.append(sizeInput);
+
+        let button = document.createElement("button");
+        button.textContent= "Create";
+        container.append(button);
+
+        
+
+
+        button.addEventListener("click",createItem);
+        dom.parentElement.append(container);
+
+        return;
+    }
+</script>
+
+@foreach (IDictionary<string, object> itemModel in ViewBag.itemModels)
 {
-    <div style="border: solid"> 
-        <p>id = @item.id</p>
-        <p>modelName = @item.modelName</p> 
-        <p>discription = @item.description</p>
-        <a href="Delete?id=@item.id"> 
-            <button >X</button>
-        </a>
-    </div>
+    <a href="ItemShowCase?id=@(itemModel["id"])">
+        <div style="border: solid" class="itemModel" id=" @itemModel["id"]">
+
+            <p class="modelId">id = @itemModel["id"]</p>
+            <p>modelName = @itemModel["modelName"]</p> 
+            <p>discription = @itemModel["description"]</p>
+            <a href="Delete?id=@itemModel["id"]"> 
+                <button >X</button>
+            </a>
+            <div style="border: solid">
+            @try{
+                @foreach (IDictionary<string, object> item in (List<IDictionary<string, object>>)itemModel["items"])
+                {
+                    
+                        <p>color = @item["color"]</p>
+                        <p>size = @item["size"]</p>
+                        <p>stock = @item["stock"]</p>
+                        <a href="IncreaseStock?id=@item["id"]&modelId=@item["modelId"]">
+                            <button> + </button>
+                        </a>
+                        <a href="DecreaseStock?id=@item["id"]&modelId=@item["modelId"]">
+                            <button> - </button>
+                        </a>
+
+                   
+                }
+            }
+            catch{
+                
+            }
+                <button onclick="addItem(this)"> Add item </button>
+            </div>
+        </div>
+    </a>
     
 }
 
@@ -22,3 +107,4 @@
         <p>Create new!!</p>
     </a>
 </div>
+
