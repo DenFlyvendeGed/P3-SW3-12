@@ -133,7 +133,7 @@ namespace P3_Project.Models
             
         }
 
-        public void DecreaseItemStock(string table, string id, int amount = 1)
+        public void DecreaseItemStock(string table, string id, int amount = -1)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace P3_Project.Models
 
                 if (amount + currentAmount >= 0)
                 {
-                    UpdateField(table, "id", id, "stock", (currentAmount - amount).ToString());
+                    UpdateField(table, "id", id, "stock", (currentAmount + amount).ToString());
                 }
                 else
                 {

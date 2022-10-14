@@ -198,6 +198,8 @@ namespace P3_Project.Controllers
             return Redirect("Webshop");
         }
 
+        //hej
+
         [HttpPost]
         public void CreateItem()
         {
@@ -210,8 +212,8 @@ namespace P3_Project.Controllers
             _ = size;
 
             StorageDB db = new StorageDB();
-
-            //db.AddRowToTable();
+            
+            //db.AddRowToTable() ;
 
         }
 
