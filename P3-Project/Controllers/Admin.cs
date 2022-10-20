@@ -62,15 +62,24 @@ namespace P3_Project.Controllers
             if(!db.CheckTable("itemModels"))
                 setup();
 
-            List<IDictionary<string, object>> itemModels = db.getAllElements("itemModels", new ItemModel());
-            int i = 0;
-            foreach (Dictionary<string, object> itemModel in itemModels)
+            List<ItemModel> itemModels = db.getAllElementsTest("itemModels", new ItemModel());
+
+            foreach (ItemModel itemModel in itemModels)
             {
-                List<IDictionary<string, object>> items  = db.getAllElements((string)itemModel["itemTable"], new Item());
-                itemModels[i].Add("items", items);
-                _ = items;
-                i++;
+                itemModel.items = db.getAllElementsTest(itemModel.itemTable, new Item());
+
             };
+
+
+            //List<IDictionary<string, object>> itemModels2 = db.getAllElements("itemModels", new ItemModel());
+            //int i = 0;
+            //foreach (Dictionary<string, object> itemModel in itemModels2)
+            //{
+            //    List<IDictionary<string, object>> items = db.getAllElements((string)itemModel["itemTable"], new Item());
+            //    itemModels2[i].Add("items", items);
+            //    _ = items;
+            //    i++;
+            //};
 
 
             //foreach(object obj in itemModels){
@@ -128,7 +137,7 @@ namespace P3_Project.Controllers
                 if(!db.CheckTable(id.ToString()))
                 { 
                     List<string> columns = new List<string>();
-                    columns.Add("id char(10)");
+                    columns.Add("id int IDENTITY(1,1)");
                     columns.Add("modelId char(10)");
                     columns.Add("modelName char(10)");
                     columns.Add("color char(10)");
@@ -203,17 +212,17 @@ namespace P3_Project.Controllers
         [HttpPost]
         public void CreateItem()
         {
+            Item item = new Item();
+            item.color = Request.Headers["color"];
+            item.size = Request.Headers["size"];
+            item.modelId = Request.Headers["id"];
 
-            string color = Request.Headers["color"];
-            string size = Request.Headers["size"];
-            string id = Request.Headers["id"];
-            
-            _ = color;
-            _ = size;
+
 
             StorageDB db = new StorageDB();
+
             
-            //db.AddRowToTable() ;
+            db.AddRowToTableTest("item" + item.modelId, item);
 
         }
 
@@ -228,7 +237,17 @@ namespace P3_Project.Controllers
             return RedirectToAction(nameof(Webshop));
         }
 
+        public ActionResult DeleteItem(string modelId, string id)
+        {
 
+            StorageDB db = new StorageDB();
+
+           
+            db.RemoveRow("item" + modelId, "id", id);
+
+
+            return RedirectToAction(nameof(Webshop));
+        }
         public ActionResult ItemShowCase(string id)
         {
             StorageDB db = new StorageDB();

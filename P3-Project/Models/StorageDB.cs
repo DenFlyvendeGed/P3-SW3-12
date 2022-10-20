@@ -301,7 +301,13 @@ namespace P3_Project.Models
                 Dictionary<string, object> instance = new Dictionary<string, object>();
                 foreach (FieldInfo field in myField)
                 {
-                    instance.Add(field.Name,sdr[field.Name].ToString());
+                    try
+                    {
+                        instance.Add(field.Name, sdr[field.Name].ToString());
+                    }
+                    catch
+                    {
+                    }
                 }
                 objects.Add(instance);
             }
@@ -309,6 +315,47 @@ namespace P3_Project.Models
             conn.Close();
 
             return objects;
+        }
+
+        public List<T>  getAllElementsTest<T>(string tableName, T objectClass)
+        {
+
+            cmd.CommandText = "SELECT * FROM " + tableName;
+
+
+            FieldInfo[] myField = objectClass.GetType().GetFields();
+
+            // open database connection.
+            conn.Open();
+
+
+
+            List<T> list = new List<T>();
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            ////Retrieve data from table and Display result
+            while (sdr.Read())
+            {
+                T classInstance = (T)Activator.CreateInstance(typeof(T));
+                foreach (FieldInfo field in myField)
+                {
+                    try { 
+                    field.SetValue(classInstance, sdr[field.Name]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine(field.Name + " Cant be set");
+                    }
+                    //instance.Add(field.Name, sdr[field.Name].ToString());
+                }
+                list.Add(classInstance);
+            }
+            //Close the connection
+            conn.Close();
+
+            return list;
         }
         public void AddRowToTable(string table, List<(string,string)> keyValueSet)
         {
@@ -346,6 +393,54 @@ namespace P3_Project.Models
                 throw new Exception("Table dosent exist");
             }
         }
+
+        public void AddRowToTableTest<T>(string table, T classObject)
+        {
+
+            //Id genation might need to be updated, whic affect values!!
+
+
+            if (CheckTable(table))
+            {
+                cmd.CommandText = "INSERT INTO " + table + " (";
+                string columns = "";
+                string values = "";
+                FieldInfo[] fields = classObject.GetType().GetFields();
+                foreach (FieldInfo field in fields)
+                {
+                    if (!string.IsNullOrEmpty((string)field.GetValue(classObject)))
+                    {
+                        columns += field.Name + ", ";
+                        values += "'" + (string)field.GetValue(classObject) + "', ";
+                    }
+                    
+                }
+                if (columns.EndsWith(", "))
+                    columns = columns.Remove(columns.Length - 2);
+
+                if (values.EndsWith(", "))
+                    values = values.Remove(values.Length - 2);
+
+                string modelId = (string)Array.Find(fields, (field) => field.Name == "modelId").GetValue(classObject);
+
+                //INSERT INTO ItemModels(id, modelName, description, itemTable) VALUES(2435, 'Test shirt', 'Its a nice shirt', 'item2435')
+                cmd.CommandText += columns + ") VALUES (" + values + ")";
+
+                // open database connection.
+                conn.Open();
+
+                //Execute the query 
+                cmd.ExecuteReader();
+
+                //Close the connection
+                conn.Close();
+            }
+            else
+            {
+                throw new Exception("Table dosent exist");
+            }
+        }
+
 
         public void RemoveRow(string table, string key, string value)
         {
