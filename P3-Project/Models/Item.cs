@@ -2,18 +2,22 @@
 {
     public class Item
     {
-        public string id;
-        public string modelId;
-        public string modelName;
-        public string color;
-        public string size;
-        public string stock;
-        private string reserved;
-        private string sold;
+        public int Id;
+        public string ModelId { get; set; }
+        public string Color { get; set; }
+        public string Size { get; set; }
+        public int Stock { get; set; }
+        private int Reserved { get; set; }
+        private int Sold { get; set; }
 
         public Item()
         {
-            
+            ModelId = "";
+            Color = "";
+            Size = "";
+            Stock = 0;
+            Reserved = 0;
+            Sold = 0;
         }
 
         public Item(string id, string modelId, string description, string color, string size)

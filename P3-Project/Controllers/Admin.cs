@@ -59,14 +59,14 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             
             
-            if(!db.CheckTable("itemModels"))
+            if(!db.CheckTable("ItemModels"))
                 setup();
 
-            List<ItemModel> itemModels = db.getAllElementsTest("itemModels", new ItemModel());
+            List<ItemModel> itemModels = db.getAllElements("itemModels", new ItemModel());
 
             foreach (ItemModel itemModel in itemModels)
             {
-                itemModel.items = db.getAllElementsTest(itemModel.itemTable, new Item());
+                itemModel.items = db.getAllElements(itemModel.ModelName, new Item());
 
             };
 
@@ -98,30 +98,31 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
 
 
-            List<string> param = new List<string>();
-            param.Add("id nchar(10)");
-            param.Add("modelName nchar(30)");
-            param.Add("itemTable nchar(10)");
-            param.Add("description nchar(30)");
-            param.Add("colors nchar(10)");
-            param.Add("sizes nchar(10)");
+            //List<string> param = new List<string>();
+            //param.Add("Id int");
 
-            db.CreateTable("itemModels", param);
+            //param.Add("ModelName varchar(30)");
+            //param.Add("ItemTable varchar(10)");
+            //param.Add("Description varchar(30)");
+            //param.Add("Colors varchar(10)");
+            //param.Add("Sizes varchar(10)");
 
+            //db.CreateTable("ItemModels", param);
 
+            db.CreateTable("ItemModels", new ItemModel());
         }
 
 
         public ActionResult CreateItemModel()
         {
 
-            
-            return View();
+            ItemModel model = new ItemModel();
+            return View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateItemModel( string modelName, string id, string description)
+        //[ValidateAntiForgeryToken]
+        public ActionResult CreateItemModel( string modelName, string id, string description, ItemModel model)
         {
 
             if (!ModelState.IsValid)
@@ -135,24 +136,17 @@ namespace P3_Project.Controllers
             else
             {
                 if(!db.CheckTable(id.ToString()))
-                { 
-                    List<string> columns = new List<string>();
-                    columns.Add("id int IDENTITY(1,1)");
-                    columns.Add("modelId char(10)");
-                    columns.Add("modelName char(10)");
-                    columns.Add("color char(10)");
-                    columns.Add("size char(10)");
-                    columns.Add("stock char(10)");
-                    columns.Add("reserved char(10)");
-                    columns.Add("sold char(10)");
+                {
+                    model.CreateItemTable();
 
-                    db.CreateTable("item" + id.ToString(), columns);
+                    model.Create();
+                    //List<(string, string)> modelColumns = new List<(string, string)>();
+                    //modelColumns.Add(("id", id.ToString()));
+                    //modelColumns.Add(("modelName", modelName.ToString()));
+                    //modelColumns.Add(("description", description.ToString()));
 
-                    List<(string, string)> modelColumns = new List<(string, string)>();
-                    modelColumns.Add(("id", id.ToString()));
-                    modelColumns.Add(("modelName", modelName.ToString()));
-                    modelColumns.Add(("description", description.ToString()));
-                    db.AddRowToTable("ItemModels", modelColumns);
+
+                    //db.AddRowToTable("ItemModels", modelColumns);
                 }
                 else
                 {
@@ -170,13 +164,13 @@ namespace P3_Project.Controllers
         public ActionResult IncreaseStock(string modelId, string id)
         {
 
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
+            //if (!ModelState.IsValid)
+            //    return BadRequest("Not a valid model");
             StorageDB db = new StorageDB();
-
-            if (db.CheckRow("item" + modelId, "id", id))
+            string table = db.GetTable(int.Parse(modelId));
+            if (db.CheckRow(table, "id", id))
             {
-                db.increaseItemStock("item" + modelId, id);
+                db.increaseItemStock(table, id);
             }
             else
             {
@@ -194,10 +188,10 @@ namespace P3_Project.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid model");
             StorageDB db = new StorageDB();
-
-            if (db.CheckRow("item" + modelId, "id", id))
+            string table = db.GetTable(int.Parse(modelId));
+            if (db.CheckRow(table, "id", id))
             {
-                db.DecreaseItemStock("item" + modelId, id);
+                db.DecreaseItemStock(table, id);
             }
             else
             {
@@ -210,19 +204,19 @@ namespace P3_Project.Controllers
         //hej
 
         [HttpPost]
-        public void CreateItem()
+        public void CreateItem(Item test) // updateres til at sende item med.
         {
             Item item = new Item();
-            item.color = Request.Headers["color"];
-            item.size = Request.Headers["size"];
-            item.modelId = Request.Headers["id"];
+            item.Color = Request.Headers["color"];
+            item.Size = Request.Headers["size"];
+            item.ModelId = Request.Headers["id"];
 
 
 
             StorageDB db = new StorageDB();
 
-            
-            db.AddRowToTableTest("item" + item.modelId, item);
+            string table = db.GetField("Id", item.ModelId, "ItemModels", "ModelName");
+            db.AddRowToTable(table, item);
 
         }
 

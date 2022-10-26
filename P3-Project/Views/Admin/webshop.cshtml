@@ -63,29 +63,29 @@
     }
 </script>
 
-@foreach (IDictionary<string, object> itemModel in ViewBag.itemModels)
+@foreach (ItemModel itemModel in ViewBag.itemModels)
 {
-    <a href="ItemShowCase?id=@(itemModel["id"])">
-        <div style="border: solid" class="itemModel" id=" @itemModel["id"]">
+    <a href="ItemShowCase?id=@(itemModel.Id)">
+        <div style="border: solid" class="itemModel" id=" @itemModel.Id">
 
-            <p class="modelId">id = @itemModel["id"]</p>
-            <p>modelName = @itemModel["modelName"]</p> 
-            <p>discription = @itemModel["description"]</p>
-            <a href="Delete?id=@itemModel["id"]"> 
+            <p class="modelId">id = @itemModel.Id</p>
+            <p>modelName = @itemModel.ModelName</p> 
+            <p>discription = @itemModel.Description</p>
+            <a href="Delete?id=@itemModel.Id"> 
                 <button >X</button>
             </a>
             <div style="border: solid">
             @try{
-                @foreach (IDictionary<string, object> item in (List<IDictionary<string, object>>)itemModel["items"])
+                @foreach (Item item in (List<Item>)itemModel.items)
                 {
                     
-                        <p>color = @item["color"]</p>
-                        <p>size = @item["size"]</p>
-                        <p>stock = @item["stock"]</p>
-                        <a href="IncreaseStock?id=@item["id"]&modelId=@item["modelId"]">
+                        <p>color = @item.Color</p>
+                        <p>size = @item.Size</p>
+                        <p>stock = @item.Stock</p>
+                        <a href="IncreaseStock?id=@item.Id&modelId=@item.ModelId">
                             <button> + </button>
                         </a>
-                        <a href="DecreaseStock?id=@item["id"]&modelId=@item["modelId"]">
+                        <a href="DecreaseStock?id=@item.Id&modelId=@item.ModelId">
                             <button> - </button>
                         </a>
 

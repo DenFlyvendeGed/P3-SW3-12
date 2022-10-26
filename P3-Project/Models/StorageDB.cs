@@ -21,12 +21,18 @@ namespace P3_Project.Models
     {
         private SqlConnection conn = new SqlConnection();
         private SqlCommand cmd = new SqlCommand();
+        private string sqlType = "SQLServer";
         public StorageDB()
         {
             conn.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             
             cmd.CommandType = CommandType.Text;
             cmd.Connection = conn;
+
+            if (System.Configuration.ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString.Contains("password"))
+            {
+                sqlType = "mySQL";
+            }
 
         }
         public string GetField(string key, string value, string table, string field)
@@ -317,18 +323,18 @@ namespace P3_Project.Models
             return objects;
         }
 
-        public List<T>  getAllElementsTest<T>(string tableName, T objectClass)
+        public List<T>  getAllElements<T>(string tableName, T objectClass)
         {
 
             cmd.CommandText = "SELECT * FROM " + tableName;
 
 
-            FieldInfo[] myField = objectClass.GetType().GetFields();
 
+            PropertyInfo[] Properties = objectClass.GetType().GetProperties();
             // open database connection.
             conn.Open();
 
-
+            FieldInfo[] fields = objectClass.GetType().GetFields();
 
             List<T> list = new List<T>();
 
@@ -339,10 +345,24 @@ namespace P3_Project.Models
             while (sdr.Read())
             {
                 T classInstance = (T)Activator.CreateInstance(typeof(T));
-                foreach (FieldInfo field in myField)
+
+                foreach (PropertyInfo property in Properties)
                 {
-                    try { 
-                    field.SetValue(classInstance, sdr[field.Name]);
+                    try
+                    {
+                        property.SetValue(classInstance, sdr[property.Name]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine(property.Name + " Cant be set");
+                    }
+                    //instance.Add(field.Name, sdr[field.Name].ToString());
+                }
+                foreach (FieldInfo field in fields)
+                {
+                    try
+                    {
+                        field.SetValue(classInstance, sdr[field.Name]);
                     }
                     catch
                     {
@@ -357,7 +377,7 @@ namespace P3_Project.Models
 
             return list;
         }
-        public void AddRowToTable(string table, List<(string,string)> keyValueSet)
+        public void AddRowToTable(string table, List<(string, string)> keyValueSet)
         {
 
             //Id genation might need to be updated, whic affect values!!
@@ -368,60 +388,13 @@ namespace P3_Project.Models
                 cmd.CommandText = "INSERT INTO " + table + " (";
                 string columns = "";
                 string values = "";
-                foreach( (string,string) set in keyValueSet)
+                foreach ((string, string) set in keyValueSet)
                 {
                     columns += set.Item1 + ", ";
                     values += "'" + set.Item2 + "', ";
                 }
                 columns += "itemTable";
                 values += "'item" + keyValueSet[0].Item2 + "'";
-
-                //INSERT INTO ItemModels(id, modelName, description, itemTable) VALUES(2435, 'Test shirt', 'Its a nice shirt', 'item2435')
-                cmd.CommandText += columns + ") VALUES (" + values + ")";
-
-                // open database connection.
-                conn.Open();
-
-                //Execute the query 
-                 cmd.ExecuteReader();
-
-                //Close the connection
-                conn.Close();
-            }
-            else
-            {
-                throw new Exception("Table dosent exist");
-            }
-        }
-
-        public void AddRowToTableTest<T>(string table, T classObject)
-        {
-
-            //Id genation might need to be updated, whic affect values!!
-
-
-            if (CheckTable(table))
-            {
-                cmd.CommandText = "INSERT INTO " + table + " (";
-                string columns = "";
-                string values = "";
-                FieldInfo[] fields = classObject.GetType().GetFields();
-                foreach (FieldInfo field in fields)
-                {
-                    if (!string.IsNullOrEmpty((string)field.GetValue(classObject)))
-                    {
-                        columns += field.Name + ", ";
-                        values += "'" + (string)field.GetValue(classObject) + "', ";
-                    }
-                    
-                }
-                if (columns.EndsWith(", "))
-                    columns = columns.Remove(columns.Length - 2);
-
-                if (values.EndsWith(", "))
-                    values = values.Remove(values.Length - 2);
-
-                string modelId = (string)Array.Find(fields, (field) => field.Name == "modelId").GetValue(classObject);
 
                 //INSERT INTO ItemModels(id, modelName, description, itemTable) VALUES(2435, 'Test shirt', 'Its a nice shirt', 'item2435')
                 cmd.CommandText += columns + ") VALUES (" + values + ")";
@@ -441,7 +414,68 @@ namespace P3_Project.Models
             }
         }
 
+        public void AddRowToTable<T>(string table, T classObject)
+        {
 
+            //Id genation might need to be updated, whic affect values!!
+
+
+            if (CheckTable(table))
+            {
+                cmd.CommandText = "INSERT INTO " + table + " (";
+                string columns = "";
+                string values = "";
+                //FieldInfo[] fields = classObject.GetType().GetFields();
+                //foreach (FieldInfo field in fields)
+                //{
+                //    if (!string.IsNullOrEmpty((string)field.GetValue(classObject)))
+                //    {
+                //        columns += field.Name + ", ";
+                //        values += "'" + (string)field.GetValue(classObject) + "', ";
+                //    }
+                    
+                //}
+                PropertyInfo[] Properties = classObject.GetType().GetProperties();
+
+                foreach (PropertyInfo property in Properties)
+                {
+                    if (!string.IsNullOrEmpty(property.GetValue(classObject).ToString()))
+                    {
+                        columns += property.Name + ", ";
+                        values += "'" + property.GetValue(classObject).ToString() + "', ";
+                    }
+                }
+
+                        if (columns.EndsWith(", "))
+                    columns = columns.Remove(columns.Length - 2);
+
+                if (values.EndsWith(", "))
+                    values = values.Remove(values.Length - 2);
+
+                //string modelId = (string)Array.Find(Properties, (field) => field.Name == "modelId").GetValue(classObject);
+
+                //INSERT INTO ItemModels(id, modelName, description, itemTable) VALUES(2435, 'Test shirt', 'Its a nice shirt', 'item2435')
+                cmd.CommandText += columns + ") VALUES (" + values + ")";
+
+                // open database connection.
+                conn.Open();
+
+                //Execute the query 
+                cmd.ExecuteReader();
+
+                //Close the connection
+                conn.Close();
+            }
+            else
+            {
+                throw new Exception("Table dosent exist");
+            }
+        }
+
+        public string GetTable(int id)
+        {
+            return GetField("Id", id.ToString(), "ItemModels", "ModelName");
+        }
         public void RemoveRow(string table, string key, string value)
         {
 
@@ -466,7 +500,7 @@ namespace P3_Project.Models
             }
         }
 
-
+        //lav generic
         public void CreateTable(string name, List<string> columns)
         {
             if (CheckTable(name))
@@ -490,6 +524,63 @@ namespace P3_Project.Models
                 conn.Close();
             }
         }
+
+        public void CreateTable<T>(string name, T obj)
+        {
+            if (CheckTable(name))
+            {
+                //throw new Exception("Table already exist");
+            }
+            else
+            {
+                cmd.CommandText = "CREATE TABLE " + name + "(";
+
+                if (sqlType == "mySQL")
+                    cmd.CommandText += "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id), ";
+                else
+                    cmd.CommandText += "Id int IDENTITY(1,1) PRIMARY KEY, ";
+
+                PropertyInfo[] Properties = obj.GetType().GetProperties();
+
+                foreach (PropertyInfo property in Properties)
+                {
+                    try
+                    {
+                        cmd.CommandText += (string)property.Name;
+
+                        switch (property.PropertyType.Name)
+                        {
+                            case "String":
+                                cmd.CommandText += " varchar(255), ";
+                                break;
+
+                            case "Int32":
+                                cmd.CommandText += " int, ";
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
+                            
+                            
+                    }
+                    catch
+                    {
+                        Console.WriteLine(property.Name + " failed to read in storageDB");
+                    }
+                    //instance.Add(field.Name, sdr[field.Name].ToString());
+                }
+
+                cmd.CommandText += ")";
+                // open database connection.
+                conn.Open();
+
+                //Execute the query 
+                SqlDataReader sdr = cmd.ExecuteReader();
+
+                conn.Close();
+            }
+        }
+
 
         public void CreatePromoCode()
         {

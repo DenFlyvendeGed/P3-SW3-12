@@ -17,15 +17,15 @@
                     <table>
                         <tr>
                             <td>Enter ID: </td>
-                            <td>@Html.TextBoxFor(model => model.id)</td>
+                            <td>@Html.TextBoxFor(model => model.Id)</td>
                         </tr>
                         <tr>
                             <td>Enter Name: </td>
-                            <td>@Html.TextBoxFor(model => model.modelName)</td>
+                            <td>@Html.EditorFor(model => model.ModelName)</td>
                         </tr>
                         <tr>
                             <td>Description: </td>
-                            <td>@Html.TextBoxFor(model => model.description)</td>
+                            <td>@Html.TextBoxFor(model => model.Description)</td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="submit" value="Submit Form" /></td>
@@ -46,6 +46,6 @@
 
 
 
-@section Scripts {
+@*@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+}*@
