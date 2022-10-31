@@ -54,12 +54,24 @@ body {
 }
 
 
-.navBarText:hover {
-    background-color: rgb(59, 146, 178);
-    transition: 0.7s;
+#leftFooterBox {
+    min-height: 20px;
+    float: left;
+    width: 50%;
 }
 
+#rightFooterBox {
+    width: 50%;
+    margin-top: 22px;
+    float: left;
+}
 
+#footerLayout {
+    height: 110px;
+    box-sizing: content-box;
+    padding: 38px 10px 38px 10px;
+    background: rgb(0,0,0) none;
+}
 
 .moveMenu {
     padding-left: 10vw;
@@ -67,6 +79,15 @@ body {
 
 
 
+/*#footerSlogan {
+    margin-top: 9px;
+    margin-right: 40px;
+    float: left;
+}*/
+
+#temp {
+ 
+}
 
 
 
