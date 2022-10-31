@@ -1,3 +1,24 @@
+:root {
+    /*Primary*/
+    --ash-black       : #000,
+    --ash-blue        : #3b92b2,
+    --ash-light-blue  : #73aec8,
+    /*Secondary*/
+    --ash-red         : #b50442,
+    --ash-light-red   : #c2485c,
+    --ash-orange      : #f47421,
+    --ash-light-orange: #f68d47,
+    --ash-yellow      : #fae200,
+    --ash-green       : #008348,
+    --ash-light-green : #2fb457,
+    --ash-purple      : #265584,
+    --ash-light-purple: #506a95,
+    /*Concept*/
+    --ash-turquoise   : #83d0f5,
+    --ash-light-yellow: #fffe6a,
+    --ash-pink        : #f29fc5,
+}
+
 html {
   font-size: 14px;
   color:red;
