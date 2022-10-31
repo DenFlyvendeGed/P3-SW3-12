@@ -83,5 +83,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const links = document.querySelectorAll(".nav-link");
+        //console.log(links);
+        //console.log('@ViewContext.RouteData.Values["action"].ToString()');
+
+        links.forEach(link => {
+            if (link.href.includes('@ViewContext.RouteData.Values["action"].ToString()')) {
+                link.style = "color: rgb(59, 146, 178) !important";
+            }
+
+        })
+        if ('@ViewContext.RouteData.Values["action"].ToString()' == 'Index')
+            links[0].style = "color: rgb(59, 146, 178) !important";
+    </script>
 </body>
 </html>

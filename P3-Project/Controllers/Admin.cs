@@ -89,23 +89,6 @@ namespace P3_Project.Controllers
             };
 
 
-            //List<IDictionary<string, object>> itemModels2 = db.getAllElements("itemModels", new ItemModel());
-            //int i = 0;
-            //foreach (Dictionary<string, object> itemModel in itemModels2)
-            //{
-            //    List<IDictionary<string, object>> items = db.getAllElements((string)itemModel["itemTable"], new Item());
-            //    itemModels2[i].Add("items", items);
-            //    _ = items;
-            //    i++;
-            //};
-
-
-            //foreach(object obj in itemModels){
-            //    ItemModel item = (ItemModel)obj;
-            //    items.Add(db.getAllElements(item.itemTable , new Item()));
-            //}
-
-
             ViewBag.itemModels = itemModels;
             return View();
         }
