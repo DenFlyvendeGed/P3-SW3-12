@@ -9,9 +9,9 @@ namespace P3_Project.Models
     public class ItemModel
     {
 
-        public int Id;
+        public int Id { get; set; }
         public string ModelName { get; set; }
-        //public string ItemTable { get; set; }
+        public string? ItemTable { get; set; }
         public string Description { get; set; }
         public string? Colors { get; set; }
         public string? Sizes { get; set; }
@@ -21,9 +21,9 @@ namespace P3_Project.Models
         StorageDB db = new StorageDB();
         public ItemModel()
         {
-
+            Id = 0;
             ModelName = "";
-            //ItemTable = "";
+            
             Description = "";
             
         }
@@ -32,28 +32,21 @@ namespace P3_Project.Models
         public void Create()
         {
             
-
+            if(db.CheckRow("ItemModels", "ModelName", ModelName)){
+                throw new Exception("Item already exist");
+            }
             db.AddRowToTable("ItemModels", this);
-
-
+            Id = int.Parse(db.GetField("modelName", this.ModelName, "ItemModels", "Id"));
+            ItemTable = "Item" + Id;
+            db.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
         }
 
         //Create SQL table corresponding to the items in the ItemModel that is being created
         public void CreateItemTable()
         {
-            //List<string> columns = new List<string>();
-            //columns.Add("id int IDENTITY(1,1)");
-            //columns.Add("modelId char(10)");
-            //columns.Add("modelName char(10)");
-            //columns.Add("color char(10)");
-            //columns.Add("size char(10)");
-            //columns.Add("stock char(10)");
-            //columns.Add("reserved char(10)");
-            //columns.Add("sold char(10)");
 
-            //db.CreateTable("item" + Id.ToString(), columns);
 
-            db.CreateTable(ModelName, new Item());
+            db.CreateTable(ItemTable, new Item());
         }
 
 
@@ -61,8 +54,13 @@ namespace P3_Project.Models
         public void AddItem(Item item)
         {
 
-            db.AddRowToTable(ModelName, item);
+            db.AddRowToTable(ItemTable, item);
         }
         
+        public void Delete()
+        {
+            db.DeleteTable(ItemTable);
+            db.RemoveRow("ItemModels", "Id", Id.ToString());
+        }
     }
 }

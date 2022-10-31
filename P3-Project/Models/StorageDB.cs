@@ -13,7 +13,11 @@ using System.Data;
 using System.Dynamic;
 using System.Net;
 using System.Reflection;
+using System.Security.Policy;
+using System.Text.Encodings.Web;
+using System.Web;
 using System.Xml.Linq;
+
 
 namespace P3_Project.Models
 {
@@ -63,7 +67,7 @@ namespace P3_Project.Models
         public bool CheckRow(string table, string key, string value)
         {
 
-            cmd.CommandText = "SELECT "+ key +" FROM " + table + " Where " + key + " = " + value;
+            cmd.CommandText = "SELECT "+ key +" FROM " + table + " Where " + key + " = '" + value + "'";
 
 
             // open database connection.
@@ -76,14 +80,15 @@ namespace P3_Project.Models
                 //Execute the query 
                 SqlDataReader sdr = cmd.ExecuteReader();
                 sdr.Read();
-                sdr[key].ToString();
+                Result = sdr.HasRows;
+                //sdr[key].ToString();
             }
-            catch
+            catch(SqlException ex)
             {
-                Result = false;
+                
+                throw new Exception(ex.Message);
             }
 
-            Console.WriteLine(Result);
             //Close the connection
             conn.Close();
             return Result;
@@ -116,50 +121,7 @@ namespace P3_Project.Models
 
         ///int currentAmount = int.Parse(GetField(selectorKey, selectorValue, table, field));
 
-        public void increaseItemStock(string table, string id, int amount = 1)
-        {
-            try
-            {
-                int currentAmount = int.Parse(GetField("id", id, table, "stock"));
 
-
-                if ( amount > 0)
-                {
-                    UpdateField(table, "id", id, "stock", (amount + currentAmount).ToString());
-                }
-                else
-                {
-                    throw new Exception("Cannot Add less than 1 item to stock");
-                }
-            }
-            catch
-            {
-                throw new Exception("Failed to add item!");
-            }
-            
-        }
-
-        public void DecreaseItemStock(string table, string id, int amount = -1)
-        {
-            try
-            {
-                int currentAmount = int.Parse(GetField("id", id, table, "stock"));
-
-                if (amount + currentAmount >= 0)
-                {
-                    UpdateField(table, "id", id, "stock", (currentAmount + amount).ToString());
-                }
-                else
-                {
-                    throw new Exception("Cannot reduce stock level below 0");
-                }
-            }
-            catch
-            {
-                throw new Exception("Failed to remove item stock!");
-            }
-
-        }
 
         public string getFieldType(string table, string column)
         {
@@ -195,7 +157,7 @@ namespace P3_Project.Models
                 //open database connection.
                 conn.Open();
 
-                cmd.CommandText = "UPDATE " + table + " Set " + field + "  = " + fieldValue + " Where " + selectorKey + "= " + selectorValue;
+                cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= " + selectorValue;
 
                 //Execute the query 
                 cmd.ExecuteReader();
@@ -439,10 +401,11 @@ namespace P3_Project.Models
 
                 foreach (PropertyInfo property in Properties)
                 {
-                    if (!string.IsNullOrEmpty(property.GetValue(classObject).ToString()))
+                    //if (!string.IsNullOrEmpty(property.GetValue(classObject).ToString()))
+                    if (property.GetValue(classObject) != null && property.Name != "Id")
                     {
                         columns += property.Name + ", ";
-                        values += "'" + property.GetValue(classObject).ToString() + "', ";
+                        values += "'" + property.GetValue(classObject).ToString().Replace("'","''") + "', ";
                     }
                 }
 
@@ -472,9 +435,9 @@ namespace P3_Project.Models
             }
         }
 
-        public string GetTable(int id)
+        public string GetItemTable(int ItemModelId)
         {
-            return GetField("Id", id.ToString(), "ItemModels", "ModelName");
+            return GetField("Id", ItemModelId.ToString(), "ItemModels", "ItemTable");
         }
         public void RemoveRow(string table, string key, string value)
         {
@@ -500,7 +463,6 @@ namespace P3_Project.Models
             }
         }
 
-        //lav generic
         public void CreateTable(string name, List<string> columns)
         {
             if (CheckTable(name))
@@ -527,18 +489,16 @@ namespace P3_Project.Models
 
         public void CreateTable<T>(string name, T obj)
         {
+
             if (CheckTable(name))
             {
-                //throw new Exception("Table already exist");
+                throw new Exception("Table already exist");
             }
             else
             {
                 cmd.CommandText = "CREATE TABLE " + name + "(";
 
-                if (sqlType == "mySQL")
-                    cmd.CommandText += "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id), ";
-                else
-                    cmd.CommandText += "Id int IDENTITY(1,1) PRIMARY KEY, ";
+                
 
                 PropertyInfo[] Properties = obj.GetType().GetProperties();
 
@@ -569,6 +529,11 @@ namespace P3_Project.Models
                     }
                     //instance.Add(field.Name, sdr[field.Name].ToString());
                 }
+
+                if (sqlType == "mySQL")
+                    cmd.CommandText = cmd.CommandText.Replace("(Id int,", "(Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id), ") ;
+                else
+                    cmd.CommandText = cmd.CommandText.Replace("(Id int,", "(Id int IDENTITY(1,1) PRIMARY KEY, ");
 
                 cmd.CommandText += ")";
                 // open database connection.

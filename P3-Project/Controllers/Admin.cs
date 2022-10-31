@@ -66,7 +66,7 @@ namespace P3_Project.Controllers
 
             foreach (ItemModel itemModel in itemModels)
             {
-                itemModel.items = db.getAllElements(itemModel.ModelName, new Item());
+                itemModel.items = db.getAllElements(itemModel.ItemTable, new Item());
 
             };
 
@@ -122,37 +122,28 @@ namespace P3_Project.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult CreateItemModel( string modelName, string id, string description, ItemModel model)
+        public ActionResult CreateItemModel( string modelName, string description, ItemModel model)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid model");
             StorageDB db = new StorageDB();
 
-            if (db.CheckRow("ItemModels", "id", id.ToString()))
-            {
-                throw new Exception("ItemModel already exist");
-            }
-            else
-            {
-                if(!db.CheckTable(id.ToString()))
-                {
-                    model.CreateItemTable();
+            
+                
+            model.Create();
+            model.CreateItemTable();
 
-                    model.Create();
-                    //List<(string, string)> modelColumns = new List<(string, string)>();
-                    //modelColumns.Add(("id", id.ToString()));
-                    //modelColumns.Add(("modelName", modelName.ToString()));
-                    //modelColumns.Add(("description", description.ToString()));
+                    
+                //List<(string, string)> modelColumns = new List<(string, string)>();
+                //modelColumns.Add(("id", id.ToString()));
+                //modelColumns.Add(("modelName", modelName.ToString()));
+                //modelColumns.Add(("description", description.ToString()));
 
 
-                    //db.AddRowToTable("ItemModels", modelColumns);
-                }
-                else
-                {
-                    throw new Exception("Item table already exist");
-                }
-            }
+                //db.AddRowToTable("ItemModels", modelColumns);
+            
+
 
 
             return Redirect("Webshop");
@@ -161,41 +152,42 @@ namespace P3_Project.Controllers
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult IncreaseStock(string modelId, string id)
+        public ActionResult IncreaseStock(string modelId, string id, Item item)
         {
 
-            //if (!ModelState.IsValid)
-            //    return BadRequest("Not a valid model");
+            if (!ModelState.IsValid)
+                return BadRequest("Form has to be filled out");
             StorageDB db = new StorageDB();
-            string table = db.GetTable(int.Parse(modelId));
-            if (db.CheckRow(table, "id", id))
+            try
             {
-                db.increaseItemStock(table, id);
+
+                item.ChangeStock(1);    
             }
-            else
+            catch(Exception ex)
             {
-                throw new Exception("Item Dosent exist");
+                return BadRequest(ex);
             }
+            
             
             return Redirect("Webshop");
         }
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult DecreaseStock(string modelId, string id)
+        public ActionResult DecreaseStock(string modelId, string id, Item item)
         {
 
             if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
+                return BadRequest("Form has to be filled out");
             StorageDB db = new StorageDB();
-            string table = db.GetTable(int.Parse(modelId));
-            if (db.CheckRow(table, "id", id))
+            try
             {
-                db.DecreaseItemStock(table, id);
+
+                item.ChangeStock(-1);
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("Item Dosent exist");
+                return BadRequest(ex.Message);
             }
 
             return Redirect("Webshop");
@@ -204,23 +196,27 @@ namespace P3_Project.Controllers
         //hej
 
         [HttpPost]
-        public void CreateItem(Item test) // updateres til at sende item med.
+        public void CreateItem(Item item) // updateres til at sende item med.
         {
-            Item item = new Item();
-            item.Color = Request.Headers["color"];
-            item.Size = Request.Headers["size"];
-            item.ModelId = Request.Headers["id"];
+            if (!ModelState.IsValid )
+                BadRequest("Form has to be filled out");
 
+            //Item item2 = new Item();
+            //item2.Color = Request.Headers["color"];
+            //item2.Size = Request.Headers["size"];
+            //item2.ModelId = Request.Headers["id"];
 
+            item.Create();
 
-            StorageDB db = new StorageDB();
+            //StorageDB db = new StorageDB();
 
-            string table = db.GetField("Id", item.ModelId, "ItemModels", "ModelName");
-            db.AddRowToTable(table, item);
+            //string table = db.GetField("Id", item.ModelId, "ItemModels", "ItemTable");
+            //db.AddRowToTable(table, item);
 
+            Redirect("Webshop");
         }
 
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string id, Item item)
         {
 
             StorageDB db = new StorageDB();
