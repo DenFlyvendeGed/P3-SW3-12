@@ -54,10 +54,17 @@ body {
     /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
 
-.navBarText{
+.navBarText {
     padding-top: 5px;
+    padding-left: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
+.activeTab{
+    background-color: red;
+}
 
 #leftFooterBox {
     min-height: 20px;
@@ -77,6 +84,8 @@ body {
     padding: 38px 10px 38px 10px;
     background: rgb(0,0,0) none;
 }
+
+
 
 .moveMenu {
     padding-left: 10vw;

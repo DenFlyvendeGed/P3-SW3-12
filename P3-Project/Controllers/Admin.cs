@@ -49,7 +49,25 @@ namespace P3_Project.Controllers
             return View();
         }
 
+        public ActionResult Stock()
+        {
+            return View();
+        }
 
+        public ActionResult AddItemModel()
+        {
+            return View();
+        }
+
+        public ActionResult EditPackModel()
+        {
+            return View();
+        }
+
+        public ActionResult PromoCode()
+        {
+            return View();
+        }
 
         public ActionResult Webshop()
         {
