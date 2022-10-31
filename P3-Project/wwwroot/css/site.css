@@ -77,6 +77,51 @@ body {
     padding-left: 10vw;
 }
 
+.layoutBox {
+    box-sizing: border-box;
+    display: block;
+}
+
+#leftFooterBox {
+    min-height: 20px;
+    width: 50%;
+}
+
+#rightFooterBox {
+    margin-top: 22px;
+}
+
+#footerLayout {
+    padding: 38px 10px 38px 10px;
+    background: rgb(0,0,0) none;
+}
+
+#footerBox {
+    width: 100%;
+    max-width: 1228px;
+    min-height: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#textField {
+    padding-top: 20px;
+}
+
+#textLeft {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    line-height: 1em;
+    margin-right: 17px;
+    font-family: Bahnschrift;
+    /*DIN Schriff 1451 Mittelschriff */
+}
+
+#temp {
+    float: right;
+}
 
 
 /*#footerSlogan {
