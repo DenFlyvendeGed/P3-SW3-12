@@ -52,6 +52,11 @@ body {
     }
 }
 
+@font-face {
+    font-family: DINMittelschrift;
+    src: url(/Fonts/din1451mittelschrift.ttf);
+}
+
 .logo{
     padding-left: 8vw;
 }
@@ -145,8 +150,8 @@ body {
     color: white;
     line-height: 1em;
     margin-right: 17px;
-    font-family: Bahnschrift;
-    /*DIN Schriff 1451 Mittelschriff */
+    font-family: 'DINMittelschrift',sans-serif;
+    /*ASH font: DIN Schriff 1451 Mittelschriff */
 }
 
 #temp {
