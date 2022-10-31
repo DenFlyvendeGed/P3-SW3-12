@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Webshop</title>
-    
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/P3_Project.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -16,32 +16,42 @@
             <div class="container-fluid">
 
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/Pics/logo_2016.png" class="logo"></a>
-                
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+
+                <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon bg-white"></span>
                 </button>
-               
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between moveMenu">
                     <ul class="navbar-nav flex-grow-1 navBarPlacement">
                         <li class="nav-item navBarText">
-                            <a class="nav-link text-white"  asp-area="" asp-controller="Home" asp-action="Index">Tøj</a>
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="Stock">Lager oversigt</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PackModels">Pakker</a>
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="AddItemModel">Tilføj vare</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Accessoires">Tilbehør</a>
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Stock">Admin</a>
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="PromoCode">Rabat koder</a>
                         </li>
 
-                      
+
+
+
+                        <li class="nav-item navBarText">
+                            <a class="nav-link text-white navBarText" asp-area="" asp-controller="Admin" asp-action="Webshop">Testing</a>
+                        </li>
+                        <li class="nav-item navBarText">
+                            <a class="nav-link text-white navBarText" asp-area="" asp-controller="Home" asp-action="Index">Customer</a>
+                        </li>
+
                     </ul>
-                
+
                 </div>
+
+            
             </div>
         </nav>
     </header>

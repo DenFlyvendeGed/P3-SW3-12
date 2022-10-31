@@ -49,15 +49,24 @@ body {
     /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
 
-.navBarText{
+.navBarText {
     padding-top: 5px;
+    padding-left: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
+.activeTab{
+    background-color: red;
+}
 
 .navBarText:hover {
     background-color: rgb(59, 146, 178);
     transition: 0.7s;
 }
+
+
 
 
 

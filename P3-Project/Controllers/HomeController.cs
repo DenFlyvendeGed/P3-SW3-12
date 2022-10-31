@@ -18,7 +18,11 @@ namespace P3_Project.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult PackModels()
+        {
+            return View();
+        }
+        public ActionResult Accessoires()
         {
             return View();
         }
