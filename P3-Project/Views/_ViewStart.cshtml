@@ -1,3 +1,18 @@
 ﻿@{
-    Layout = "_Layout";
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    
+  
+    //dynamic Layout;
+    switch (controller)
+    {
+        case "Home":
+            Layout = "~/Views/Shared/_Layout.cshtml";
+            break;
+        default:
+            //Admin layout
+            Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+            break;
+    }
+    //Layout = "_Layout";
 }
