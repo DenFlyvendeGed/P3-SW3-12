@@ -1,0 +1,89 @@
+@model P3_Project.Models.PromoCode
+@{
+    Layout = "AdminLayout";
+    ViewData["Title"] = "Rediger pakker";
+
+	string before = "PriceBefore";
+	string after = "PriceAfter";
+}
+
+
+<style>
+	#editPromoCodeContent {
+		width: 100%;
+		padding: 10px;
+		background-color: var(--ash-green);
+		align-self: center;
+		margin: auto;
+
+	}
+
+	.edit-field {
+		display: flex;
+		justify-content:space-between;
+		background-color: var(--ash-light-blue);
+		margin: 4px;
+		padding: 5px;
+	}
+
+	.edit{
+		display: flex;
+		align-items: center;
+		height: inherit;
+		padding: 2px;
+		background-color: var(--ash-red);
+	}
+	.promo-code-price {
+		display: inline;
+	}
+</style>
+
+
+<h1>Edit Promo Code (@Model.Id)</h1>,
+
+<div id="editPromoCodeContent">
+	<div class="edit-field">
+		<div style="display: inline;">
+			<p><b>Navn/Kode:</b> <input/></p>
+		</div>
+		<div>
+			<p><b>Slutdato:</b> <input type="date"/></p>
+		</div>
+	</div>
+	<div class="edit-field">
+		<div class="edit">
+			<p><b>Rabat: </b> <input/>
+				<select>
+					<option value="percent"> Procent (%) </option>
+					<option value="fixed"> Fastsat (kr.)</option>
+				</select>
+			</p>
+		</div>
+		@{
+			void Edit(string front, string id){
+				<div class="edit">
+					<p class="promo-code-price"><b>@front: </b><p class="promo-code-price" id="@id"></p><p> kr.</p>
+				</div>
+				<script>
+					var @id = document.getElementById(@id);
+				</script>
+			}
+			Edit("Pris Før Rabat", "PriceBefore");
+			Edit("Pris Efter Rabat", "PriceAfter");
+		}
+	</div>
+	<div class="edit-field">
+		<p><b>Indhold</b></p>
+	</div>
+</div>
+
+<script>
+	let after = 0;
+	PriceAfter.innerHTML = after ;
+
+	let before = 0;
+	PriceBefore.innerHTML = before;
+</script>
+
+
+
