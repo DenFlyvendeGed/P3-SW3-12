@@ -188,18 +188,20 @@ body {
 
 .container {
     display: flex;
+    width: 100vm;
+
+    
 }
 
 .item {
     background: #ce8888;
-    flex-basis: 100px;
-    height: 100px;
     margin: 5px;
 }
 
 .CreateItemModel {
-    margin-top: 50px;
-    height: 50px;
+    margin-top: 30px;
+    height: 400px;
+    width: 80vw;
     border-style: solid;
     border-width: 1px;
     background-color: #D9D9D9;
