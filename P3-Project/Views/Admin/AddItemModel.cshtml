@@ -3,37 +3,194 @@
 
     ViewData["Title"] = "Tilføj vare";
 }
-<h3>Opret genstand</h3>
+<h4>Opret genstand</h4>
 
 
 <script>
     document.querySelector('#AddItemModelSite').style = ("color: rgb(59, 146, 178) !important");
+
+   
 </script>
 
 
 <div class="container">
 
-    <div id="imgBox" class="layoutBox">
-        <div id="img">
-            <img />
-        </div>
-        <div>
-            <buttons id="uploadButton" class="layoutBox">Upload Billed</buttons>
+    
+    <div id="imgBox" class="center">
+        <div id="img" class="center">
+            @*Billed placehodler*@
+            <img src=""/>
+            @*Upload knap*@
+            <button id ="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+            <input type="file" accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
         </div>
     </div>
 
 
+    <script>
+        const input = document.querySelector('input');
+        const log = document.getElementById('imgUp');
+
+        input.addEventListener('input', saveImg);
+
+        function saveImg(e){
+            log.textContent = e.target.value;
+            concole.log(log.textContent);
+        }
+    </script>
+
+
+    <div class="item CreateItemModel box">
+
+        @*Item model name and price*@
+        <div style="margin-left: 15px; margin-top: 10px;">
+            <p>Navn: <input type="text" id="ItemModelName" name="ItemModelName" /> Pris: <input type="text" id="ItemModelPrice" name="ItemModelPrice" /> </p>
+        </div>
+        
+        @*Item table*@
+        <div class="ItemTable">
+            
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                }
+            </style>
+
+                
+            <table id="tbl">
+                <tr id="itemColor">
+                    <th>&nbsp;</th>
+                    <th>Farve:</th>
+                    
+                </tr>
+
+                <tr>
+                    <th>Størrelse</th>
+                    <td></td>
+                    
+                </tr>
+
+
+                
+               
+            </table>
+            <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" /> 
+            <input type="submit" id="AddCol" class="button" value="Tilføj farve" /> 
+
+
+            <script>
+                let Cols = 1;
+                let Rows = 1;
+
+                //function addRow(table) {
+                    
+                //    var tableRef = document.getElementById(table);
+                //    var newRow = tableRef.insertRow(-1);
+                //    newRow.id = "Size" + Cols;
+
+                //    for(let i = 0; i < Rows + 1; i++){
+                //        var newCell = newRow.insertCell(i);
+                //        var newElem = document.createElement('input');
+                //        newElem.setAttribute("name", "size");
+                //        newElem.setAttribute("type", "text");
+                //        newElem.setAttribute("id", i);
+                //        newCell.appendChild(newElem);
+
+                //    }
+
+                //    Cols = Cols + 1;
+                //}
+
+                //function addCol(itemColor){
+                //    var tableRef = document.getElementById(itemColor);
+                //    var newCol = tableRef.insertCell(-1);
+                //    newCol.id = "Color" + Rows;
+                //    var newElem = document.createElement('input');
+                //    newElem.setAttribute("name", "color");
+                //    newCol.appendChild(newElem);
+
+                //    Rows = Rows + 1;
+
+                //}
+
+
+                function Grid() {
+                    this.Cols = 1;
+                    this.Rows = 1;
+                    const rowDom = document.getElementById('tbl');
+                    const colDom = document.getElementById('itemColor');
+
+                    this.addRow = (table) => {
+
+                     
+                        var newRow = rowDom.insertRow(-1);
+                        newRow.id = "Size" + this.Cols;
+
+                        for (let i = 0; i < this.Rows + 1; i++) {
+                            var newCell = newRow.insertCell(i);
+                            var newElem = document.createElement('input');
+                            newElem.setAttribute("name", "amount");
+                            newElem.setAttribute("type", "text");
+                            newElem.setAttribute("id", i);
+                            newCell.appendChild(newElem);
+
+                        }
+
+                        this.Cols += 1;
+                    }
+
+                    this.addCol = (itemColor) => {
+                        
+                        var newCol = colDom.insertCell(-1);
+                        newCol.id = "Color" + this.Rows;
+                        var newElem = document.createElement('input');
+                        newElem.setAttribute("name", "color");
+                        newCol.appendChild(newElem);
+                        for (let i = 0; i < this.Rows + 1; i++) {
+                            var newCell = newRow.insertCell(i);
+                            var newElem = document.createElement('input');
+                            newElem.setAttribute("name", "amount");
+                            newElem.setAttribute("type", "text");
+                            newElem.setAttribute("id", i);
+                            newCell.appendChild(newElem);
+
+                        }
+
+                        this.Rows += 1;
+
+                    }
+                    
+
+                }
+
+                let grid = new Grid();
+                document.querySelector("#AddRow").addEventListener("click", grid.addRow);
+                document.querySelector("#AddCol").addEventListener("click", grid.addCol);
+
+              
+
+            </script>
 
 
 
-    <div class="item CreateItemModel">
-        <p>hej</p>
+            
+        </div>
+
+        @*Notifikation ved lager*@
+        <div style="margin-left: 15px; margin-top: 5px;">
+            <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" /></p>
+        </div>
+
+
+
+
     </div>
-
-
-
 
     
-
+    
+</div>
+<div style="margin-left: 80vw;">
+    <button id="CreateItemModel" name="CreateItemModel" class="ASHButton">Opdater</button>
 </div>
 
