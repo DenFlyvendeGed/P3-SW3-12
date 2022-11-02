@@ -83,9 +83,15 @@ body {
     justify-content: center;
 }
 
-.activeTab{
-    background-color: red;
+.navBarText:hover {
+    padding-top: 5px;
+    padding-left: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(59, 146, 178);
 }
+
 
 #leftFooterBox {
     min-height: 20px;
@@ -154,10 +160,20 @@ body {
     /*ASH font: DIN Schriff 1451 Mittelschriff */
 }
 
-#temp {
-    float: right;
+#imgBox {
+    margin-top: 50px;
+    box-sizing: content-box;
+    width: 300px;
+    height: 200px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #000000;
+    background-color: #D9D9D9;
 }
 
+#uploadButton {
+    background-color: #D9D9D9;
+}
 
 /*#footerSlogan {
     margin-top: 9px;
@@ -165,9 +181,6 @@ body {
     float: left;
 }*/
 
-#temp {
- 
-}
 
 
 

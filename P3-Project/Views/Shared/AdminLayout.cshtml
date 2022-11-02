@@ -25,16 +25,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between moveMenu">
                     <ul class="navbar-nav flex-grow-1 navBarPlacement">
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="Stock">Lager oversigt</a>
+                            <a class="nav-link text-white" id="StockSite" asp-controller="Admin" asp-action="Stock">Lager oversigt</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="AddItemModel">Tilføj vare</a>
+                            <a class="nav-link text-white" id="AddItemModelSite" asp-area="" asp-controller="Admin" asp-action="AddItemModel">Tilføj vare</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
+                            <a class="nav-link text-white" id="EditPackModelSite" asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="PromoCode">Rabat koder</a>
+                            <a class="nav-link text-white" id="PromoCodeSite" asp-controller="Admin" asp-action="PromoCode">Rabat koder</a>
                         </li>
 
 
@@ -61,14 +61,41 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - P3_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer id="footerLayout" class="layoutBox">
+        <div id="footerBox" class="layoutBox">
+            <div id="leftFooterBox" class="layoutBox">
+                <img src="/Pics/logo_2016_footer.png" width="437" />
+                <div id="textField" class="layoutBox">
+                    <div id="textLeft" class="layoutBox">Annebergvej 55</div>
+                    <div id="textLeft" class="layoutBox">DK-9000 Aalborg</div>
+                    <div id="textLeft" class="layoutBox">Tlf.+ 45 98 13 13 11</div>
+                    <div id="textLeft" class="layoutBox">sph@sportshojskolen.dk</div>
+                </div>
+            </div>
+            @*<div id="rightFooterBox" class="layoutBox">
+            <div id="footerSlogan" class="layoutBox">
+            <img srcset="~/Pics/footer-slogan.png 2x" />
+            </div>
+            </div>*@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const links = document.querySelectorAll(".nav-link");
+        //console.log(links);
+        //console.log('@ViewContext.RouteData.Values["action"].ToString()');
+
+        links.forEach(link => {
+            if (link.href.includes('@ViewContext.RouteData.Values["action"].ToString()')) {
+                link.style = "color: rgb(59, 146, 178) !important";
+            }
+
+        })
+        if ('@ViewContext.RouteData.Values["action"].ToString()' == 'Index')
+            links[0].style = "color: rgb(59, 146, 178) !important";
+    </script>
 </body>
 </html>
