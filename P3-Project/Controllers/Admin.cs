@@ -64,6 +64,11 @@ namespace P3_Project.Controllers
             return View();
         }
 
+        public ActionResult CreatePackModel()
+        {
+            return View();
+        }
+
         public ActionResult PromoCode()
         {
             return View();

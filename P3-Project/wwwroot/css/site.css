@@ -169,6 +169,53 @@ body {
     background-color: #D9D9D9;
 }
 
+.packBox {
+    
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    min-width: 0px;
+    max-height: 237px;
+    min-height: 0px;
+    width: 286px;
+    height: 237px;
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.packBox:hover {
+    box-shadow: 2px 2px 5px black;
+}
+.packBox-bar {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    max-width: inherit;
+    max-height: inherit;
+    top: 174px;
+    right: 1px;
+    width: 286px;
+    height: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 64px;
+    background-color: #D9D9D9;
+    border: 2px solid #000000;
+    text-align: center;
+}
+.packBox-img {
+    position: absolute;
+    max-width: inherit;
+    max-height: inherit;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 98%;
+    height: 98%;
+    right: 1%;
+    top: 1%;
+    background-image: url('../pics/logo_2016.png');
+}
+
 /*#footerSlogan {
     margin-top: 9px;
     margin-right: 40px;
