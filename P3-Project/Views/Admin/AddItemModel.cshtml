@@ -139,7 +139,6 @@
             col.color = e.target.value;
         }
 
-
         //Add a row, which is size
         this.addRow = () => {
             let newRow = rowDom.insertRow(-1);
@@ -209,7 +208,6 @@
             //Update grid with rows
             if (this.rows != this.itemData.rows.amount) {
                 for (let i = 0; i < this.itemData.cols.amount; i++) {
-                    //Create field in html
 
                     let newCell = dom.insertCell(-1);
 
@@ -266,12 +264,7 @@
                 alert("fejl");
         }
 
-        //Save grid with item data in SQL database
-        this.saveGrid = () => {
-            console.log(this.itemData);
-        }
-
-
+        //Delete row with size
         this.delRow = (e) =>{
             let delRow = e.target.closest("tr").rowIndex;
             let rowId = e.target.closest("tr").id;
@@ -284,6 +277,7 @@
             
         }
 
+        //Delete col with color
         this.delCol = (e) =>{
             let colId = e.target.closest("td").id;
             let items = this.itemData.rows.itemSize;
@@ -306,24 +300,65 @@
             colData.splice(colData.indexOf(colCell), 1);
 
 
-           //document.getElementById("itemTable").querySelectorAll(".colId"+colId).forEach(cell => cell.deleteCell());
-
-
-
-
             this.itemData.cols.amount--;
             this.cols--;
 
         }
+        
+        //Save grid with item data in SQL database
+        this.saveGrid = () => {
 
+            const colNames = {};
+            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = color.color);
+
+            const rowNames = {};
+            this.itemData.rows.itemSize.forEach((size, index) => rowNames[++index] = size.size);
+            
+            const items = [];
+
+            this.itemData.rows.itemSize.forEach(row => {
+                const rowId = row.id;
+                row.items.forEach(item => {
+                    items.push({
+                        Color: colNames[item.colId],
+                        Size: rowNames[rowId],
+                        Stock: item.dom.children[0].value,
+                    })
+                })
+            });
+            return items;
+        }
+    }
+
+    //Create new grid
+    let grid = new Grid();
+
+    //Send table to SQL database
+    async function sendDataToDB() {
+
+        const itemModel = {
+            modelName: document.getElementById("ItemModelName").value,
+            modelPrice: document.getElementById("ItemModelPrice").value,
+            items: grid.saveGrid(),
+            notificationAt: document.getElementById("StockNotification").value,
+        }
+
+        const response = await fetch("/Admin/ItemModelTable", {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(itemModel) 
+        });
+        return response.json(); 
     }
 
 
 
-    //Create new grid
-    let grid = new Grid();
+
+
     document.querySelector("#AddRow").addEventListener("click", grid.addRow);
     document.querySelector("#AddCol").addEventListener("click", grid.addCol);
-    document.querySelector("#CreateItemModel").addEventListener("click", grid.saveGrid);
+    document.querySelector("#CreateItemModel").addEventListener("click", sendDataToDB);
 
 </script>
