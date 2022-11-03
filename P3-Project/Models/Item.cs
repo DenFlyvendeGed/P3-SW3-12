@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 
+using P3_Project.Models.DB;
+
 namespace P3_Project.Models
 {
     public class Item
@@ -44,13 +46,13 @@ namespace P3_Project.Models
         public void ChangeStock(int amount)
         {
             string table = "Item" + ModelId;
-            if (db.CheckRow(table, "Id", Id.ToString()))
+            if (db.DB.CheckRow(table, "Id", Id.ToString()))
             {
                 if(Stock + amount < 0)
                 {
                     throw new Exception("Cant reduce stock below 0");
                 }
-                db.UpdateField(table, "Id", Id.ToString(), "Stock", (Stock + amount).ToString());
+                db.DB.UpdateField(table, "Id", Id.ToString(), "Stock", (Stock + amount).ToString());
             }
             else
             {
@@ -60,14 +62,14 @@ namespace P3_Project.Models
 
         public void Create()
         {
-            string table = "item" + ModelId;
-            db.AddRowToTable(table, this);
+            string table = "Item" + ModelId;
+            db.DB.AddRowToTable(table, this);
 
         }
 
         public void Delete()
         {
-            db.RemoveRow("item" + ModelId, "Id", Id.ToString());
+            db.DB.RemoveRow("item" + ModelId, "Id", Id.ToString());
         }
 
     }
