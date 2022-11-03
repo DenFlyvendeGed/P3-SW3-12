@@ -63,6 +63,12 @@ namespace P3_Project.Controllers
         {
             return View();
         }
+        
+        public ActionResult EditPromoCode()
+        {
+            var model = new Models.PromoCode("It's a promo code");
+            return View(model);
+        }
 
         public ActionResult PromoCode()
         {
