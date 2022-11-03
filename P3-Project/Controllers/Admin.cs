@@ -67,7 +67,6 @@ namespace P3_Project.Controllers
         public ActionResult EditPromoCode()
         {
             var model = new Models.PromoCode("It's a promo code");
-            model.Code = "Hello World";
             return View(model);
         }
 
