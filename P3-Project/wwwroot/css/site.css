@@ -213,9 +213,20 @@ body {
     right: 1%;
     top: 1%;
     background-image: url('../pics/logo_2016.png');
+
+}
+.box {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+  
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
 }
 
-/*#footerSlogan {
+
+
+    /*#footerSlogan {
     margin-top: 9px;
     margin-right: 40px;
     float: left;

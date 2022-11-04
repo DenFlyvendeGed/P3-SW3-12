@@ -20,6 +20,7 @@ if (!app.Environment.IsDevelopment())
 //Endnu engang hej
 //farvel simon
 //Shut up!!
+//LoL
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
