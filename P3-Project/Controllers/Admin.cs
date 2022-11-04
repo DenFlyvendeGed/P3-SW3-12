@@ -59,12 +59,17 @@ namespace P3_Project.Controllers
             return View();
         }
 
-        public ActionResult EditPackModel()
+        public ActionResult PackViewModel()
         {
             return View();
         }
 
         public ActionResult CreatePackModel()
+        {
+            return View();
+        }
+
+        public ActionResult EditPackModel()
         {
             return View();
         }
