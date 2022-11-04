@@ -245,8 +245,18 @@ a.BoxLink:active {
     flex-wrap: wrap;
     padding: 10px;
 }
+.box {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+  
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
 
-/*#footerSlogan {
+
+
+    /*#footerSlogan {
     margin-top: 9px;
     margin-right: 40px;
     float: left;
