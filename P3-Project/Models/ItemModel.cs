@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
 using System.ComponentModel;
 
+using P3_Project.Models.DB;
+
 namespace P3_Project.Models
 {
  
@@ -32,13 +34,13 @@ namespace P3_Project.Models
         public void Create()
         {
             
-            if(db.CheckRow("ItemModels", "ModelName", ModelName)){
+            if(db.DB.CheckRow("ItemModels", "ModelName", ModelName)){
                 throw new Exception("Item already exist");
             }
-            db.AddRowToTable("ItemModels", this);
-            Id = int.Parse(db.GetField("modelName", this.ModelName, "ItemModels", "Id"));
+            db.DB.AddRowToTable("ItemModels", this);
+            Id = int.Parse(db.DB.GetField("modelName", this.ModelName, "ItemModels", "Id"));
             ItemTable = "Item" + Id;
-            db.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
         }
 
         //Create SQL table corresponding to the items in the ItemModel that is being created
@@ -46,7 +48,7 @@ namespace P3_Project.Models
         {
 
 
-            db.CreateTable(ItemTable, new Item());
+            db.DB.CreateTable(ItemTable, new Item());
         }
 
 
@@ -54,13 +56,13 @@ namespace P3_Project.Models
         public void AddItem(Item item)
         {
 
-            db.AddRowToTable(ItemTable, item);
+            db.DB.AddRowToTable(ItemTable, item);
         }
         
         public void Delete()
         {
-            db.DeleteTable(ItemTable);
-            db.RemoveRow("ItemModels", "Id", Id.ToString());
+            db.DB.DeleteTable(ItemTable);
+            db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
         }
     }
 }
