@@ -256,11 +256,11 @@ a.BoxLink:active {
 .topBar-Input {
     position: absolute;
     display: inline-block;
-    margin-left: 1%;
-    margin-top:auto;
-    margin-bottom:auto;
+    margin-left: 0.5%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
-
 
     /*#footerSlogan {
     margin-top: 9px;
