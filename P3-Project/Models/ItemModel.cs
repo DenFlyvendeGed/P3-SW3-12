@@ -13,6 +13,8 @@ namespace P3_Project.Models
         public string ModelName { get; set; }
         public string? ItemTable { get; set; }
         public string Description { get; set; }
+        public int ModelPrice { get; set; }
+        public int StockAlarm { get; set; }
         public string? Colors { get; set; }
         public string? Sizes { get; set; }
 
@@ -23,7 +25,8 @@ namespace P3_Project.Models
         {
             Id = 0;
             ModelName = "";
-            
+            ModelPrice = 0;
+            StockAlarm = 0;
             Description = "";
             
         }

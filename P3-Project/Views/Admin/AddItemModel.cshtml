@@ -1,4 +1,5 @@
-﻿@{
+﻿@model P3_Project.Models.ItemModel
+@{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Tilføj vare";
@@ -70,139 +71,307 @@
             </style>
 
                 
-            <table id="tbl">
-                <tr id="itemColor">
-                    <th>&nbsp;</th>
-                    <th>Farve:</th>
-                    
-                </tr>
+            <table id="itemTable">
+               <tbody id="itemSize">
+                   <tr id="itemColor">
+                        <th>Størrelse:\Farve:</th>
+                   </tr>
 
-                <tr>
-                    <th>Størrelse</th>
-                    <td></td>
-                    
-                </tr>
-
-
-                
-               
+               </tbody>
             </table>
+
             <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" /> 
             <input type="submit" id="AddCol" class="button" value="Tilføj farve" /> 
 
-
-            <script>
-                let Cols = 1;
-                let Rows = 1;
-
-                //function addRow(table) {
-                    
-                //    var tableRef = document.getElementById(table);
-                //    var newRow = tableRef.insertRow(-1);
-                //    newRow.id = "Size" + Cols;
-
-                //    for(let i = 0; i < Rows + 1; i++){
-                //        var newCell = newRow.insertCell(i);
-                //        var newElem = document.createElement('input');
-                //        newElem.setAttribute("name", "size");
-                //        newElem.setAttribute("type", "text");
-                //        newElem.setAttribute("id", i);
-                //        newCell.appendChild(newElem);
-
-                //    }
-
-                //    Cols = Cols + 1;
-                //}
-
-                //function addCol(itemColor){
-                //    var tableRef = document.getElementById(itemColor);
-                //    var newCol = tableRef.insertCell(-1);
-                //    newCol.id = "Color" + Rows;
-                //    var newElem = document.createElement('input');
-                //    newElem.setAttribute("name", "color");
-                //    newCol.appendChild(newElem);
-
-                //    Rows = Rows + 1;
-
-                //}
-
-
-                function Grid() {
-                    this.Cols = 1;
-                    this.Rows = 1;
-                    const rowDom = document.getElementById('tbl');
-                    const colDom = document.getElementById('itemColor');
-
-                    this.addRow = (table) => {
-
-                     
-                        var newRow = rowDom.insertRow(-1);
-                        newRow.id = "Size" + this.Cols;
-
-                        for (let i = 0; i < this.Rows + 1; i++) {
-                            var newCell = newRow.insertCell(i);
-                            var newElem = document.createElement('input');
-                            newElem.setAttribute("name", "amount");
-                            newElem.setAttribute("type", "text");
-                            newElem.setAttribute("id", i);
-                            newCell.appendChild(newElem);
-
-                        }
-
-                        this.Cols += 1;
-                    }
-
-                    this.addCol = (itemColor) => {
-                        
-                        var newCol = colDom.insertCell(-1);
-                        newCol.id = "Color" + this.Rows;
-                        var newElem = document.createElement('input');
-                        newElem.setAttribute("name", "color");
-                        newCol.appendChild(newElem);
-                        for (let i = 0; i < this.Rows + 1; i++) {
-                            var newCell = newRow.insertCell(i);
-                            var newElem = document.createElement('input');
-                            newElem.setAttribute("name", "amount");
-                            newElem.setAttribute("type", "text");
-                            newElem.setAttribute("id", i);
-                            newCell.appendChild(newElem);
-
-                        }
-
-                        this.Rows += 1;
-
-                    }
-                    
-
-                }
-
-                let grid = new Grid();
-                document.querySelector("#AddRow").addEventListener("click", grid.addRow);
-                document.querySelector("#AddCol").addEventListener("click", grid.addCol);
-
-              
-
-            </script>
-
-
-
-            
         </div>
 
         @*Notifikation ved lager*@
         <div style="margin-left: 15px; margin-top: 5px;">
+
             <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" /></p>
+
         </div>
 
-
-
-
     </div>
-
-    
     
 </div>
+
 <div style="margin-left: 80vw;">
-    <button id="CreateItemModel" name="CreateItemModel" class="ASHButton">Opdater</button>
+
+    <input type="submit" id="CreateItemModel" class="button" value="Opdater" />
+
 </div>
 
+
+<script>
+
+    function Grid() {
+        //Size = Row
+        //Color = Col
+        this.rowId = 1;
+        this.colId = 1;
+        this.rows = 0;
+        this.cols = 0;
+
+        //Define domaine for size and color
+        const rowDom = document.getElementById('itemSize');
+        const colDom = document.getElementById('itemColor');
+
+        //Create itemData for rows and cols
+        this.itemData = {};
+
+        this.itemData.rows = {
+            amount: 0,
+            itemSize: [],
+        }
+
+        this.itemData.cols = {
+            amount: 0,
+            itemColor: [],
+        }
+
+        //Check when data entered in table
+        this.updateRow = (e) => {
+            let id = e.target.id;
+            if (id.includes(",")) {
+                const ids = id.split(",");
+                let row = this.itemData.rows.itemSize.find(row => row.id == ids[0]);
+                let field = row.items.find(col => col.colId == ids[1]);
+                field.value = e.target.value;
+
+            }
+            else {
+                let row = this.itemData.rows.itemSize.find(row => row.id == id);
+                row.size = e.target.value;
+            }
+        }
+
+        this.updateCol = (e) => {
+            let id = e.target.id;
+            let col = this.itemData.cols.itemColor.find(col => col.id == id);
+            col.color = e.target.value;
+        }
+
+        //Add a row, which is size
+        this.addRow = () => {
+            let newRow = rowDom.insertRow(-1);
+            newRow.id = this.rowId;
+
+            newRow.addEventListener("change", grid.updateRow);
+            this.itemData.rows.itemSize.push(
+                {
+                    id: this.rowId,
+                    size: "",
+                    items: [],
+                    dom: newRow,
+                }
+            );
+
+            const container = newRow.insertCell(0);
+            let newElem = document.createElement('input');
+            newElem.id = this.rowId;
+            container.append(newElem);
+
+            let newBtn = document.createElement('input');
+            newBtn.type = "submit";
+            newBtn.value = " - ";
+            newBtn.addEventListener("click",grid.delRow);
+            container.append(newBtn);
+            
+
+            this.rowId++;
+            this.itemData.rows.amount++;
+            this.updateGrid(newRow);
+        }
+
+        //Add a col, which is color
+        this.addCol = () => {
+            let newCol = colDom.insertCell(-1);
+            newCol.id = this.colId;
+
+            newCol.addEventListener("change", grid.updateCol);
+            this.itemData.cols.itemColor.push(
+                {
+                    id: this.colId,
+                    color: "",
+                    dom: newCol,
+
+                }
+            );
+
+            let newElem = document.createElement('input');
+            newElem.id = this.colId;
+            newCol.append(newElem);
+            let newBtn = document.createElement('input');
+            newBtn.type = "submit";
+            newBtn.value = " - ";
+            newBtn.addEventListener("click", grid.delCol);
+
+            newCol.append(newBtn);
+          
+
+            this.colId++;
+            this.itemData.cols.amount++;
+            this.updateGrid(newCol);
+        }
+
+        //Check and update grid when either new col or row have been added
+        this.updateGrid = (dom) => {
+
+            //Update grid with rows
+            if (this.rows != this.itemData.rows.amount) {
+                for (let i = 0; i < this.itemData.cols.amount; i++) {
+
+                    let newCell = dom.insertCell(-1);
+
+                    const rowId = dom.id;
+                    const colId = this.itemData.cols.itemColor[i].id;
+
+                    const id = rowId + "," + colId;
+                    newCell.id = id;
+                    newCell.classList = "colId" + colId;
+                    let newElem = document.createElement('input');
+                    newElem.id = id;
+                    newCell.append(newElem);
+
+                    //Create field in itemData object
+                    let row = this.itemData.rows.itemSize.find(row => row.id == rowId);
+                    row.items.push({
+                        value: "",
+                        colId: colId,
+                        dom: newCell,
+
+                    })
+                }
+                this.rows++;
+
+            }
+            //Update grid with cols
+            else if (this.cols != this.itemData.cols.amount) {
+                for (let i = 0; i < this.itemData.rows.amount; i++) {
+                    //Create field in html
+                    let newCell = this.itemData.rows.itemSize[i].dom.insertCell(-1);
+
+                    const rowId = this.itemData.rows.itemSize[i].id;
+                    const colId = dom.id;
+
+                    const id = rowId + "," + colId;
+                    newCell.id = id;
+                    newCell.classList = "colId"+colId;
+                    let newElem = document.createElement('input');
+                    newElem.id = id;
+                    newCell.append(newElem);
+
+                    //Create field in itemData object
+                    let row = this.itemData.rows.itemSize.find(row => row.id == rowId);
+                    row.items.push({
+                        value: "",
+                        colId: colId,
+                        dom: newCell,
+
+                    });
+                }
+                this.cols++;
+            }
+            else
+                alert("fejl");
+        }
+
+        //Delete row with size
+        this.delRow = (e) =>{
+            let delRow = e.target.closest("tr").rowIndex;
+            let rowId = e.target.closest("tr").id;
+            document.getElementById("itemTable").deleteRow(delRow);
+
+            let items = this.itemData.rows.itemSize;
+            items.splice(items.indexOf(items.find(item => item.id == rowId)), 1);
+            this.itemData.rows.amount--;
+            this.rows--;
+            
+        }
+
+        //Delete col with color
+        this.delCol = (e) =>{
+            let colId = e.target.closest("td").id;
+            let items = this.itemData.rows.itemSize;
+
+            if(this.itemData.rows.amount > 0){
+                let cell = items[0].items.find(cell => cell.colId == colId);
+                const index = items[0].items.indexOf(cell);
+                const cellIndex = cell.dom.cellIndex;
+                
+
+                items.forEach(item => {
+                    item.items.splice(index,1)
+                    item.dom.deleteCell(cellIndex)
+                });
+            }
+
+            let colData = this.itemData.cols.itemColor;
+            let colCell = colData.find(col => col.id == colId);
+            document.querySelector("#itemColor").deleteCell(colCell.dom.cellIndex);
+            colData.splice(colData.indexOf(colCell), 1);
+
+
+            this.itemData.cols.amount--;
+            this.cols--;
+
+        }
+        
+        //Save grid with item data in SQL database
+        this.saveGrid = () => {
+
+            const colNames = {};
+            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = color.color);
+
+            const rowNames = {};
+            this.itemData.rows.itemSize.forEach((size, index) => rowNames[++index] = size.size);
+            
+            const items = [];
+
+            this.itemData.rows.itemSize.forEach(row => {
+                const rowId = row.id;
+                row.items.forEach(item => {
+                    items.push({
+                        Color: colNames[item.colId],
+                        Size: rowNames[rowId],
+                        Stock: item.dom.children[0].value,
+                    })
+                })
+            });
+            return items;
+        }
+    }
+
+    //Create new grid
+    let grid = new Grid();
+
+    //Send table to SQL database
+    async function sendDataToDB() {
+
+        const itemModel = {
+            ModelName: document.getElementById("ItemModelName").value,
+            ModelPrice: document.getElementById("ItemModelPrice").value,
+            items: grid.saveGrid(),
+            StockAlarm: document.getElementById("StockNotification").value,
+        }
+
+        const response = await fetch("/Admin/ItemModelTable", {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(itemModel) 
+        });
+        return response.json(); 
+    }
+
+
+
+
+
+    document.querySelector("#AddRow").addEventListener("click", grid.addRow);
+    document.querySelector("#AddCol").addEventListener("click", grid.addCol);
+    document.querySelector("#CreateItemModel").addEventListener("click", sendDataToDB);
+
+</script>
