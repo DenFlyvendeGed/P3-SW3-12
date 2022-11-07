@@ -245,9 +245,22 @@ a.BoxLink:active {
     flex-wrap: wrap;
     padding: 10px;
 }
-
-
-
+.box {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+  
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.topBar-Input {
+    position: absolute;
+    display: inline-block;
+    margin-left: 0.5%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
 
     /*#footerSlogan {
     margin-top: 9px;
