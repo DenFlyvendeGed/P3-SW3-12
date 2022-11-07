@@ -253,7 +253,13 @@ a.BoxLink:active {
     background-color: #D9D9D9;
     border: 1px solid #000000;
 }
-
+.topBar-Input {
+    position: absolute;
+    display: inline-block;
+    margin-left: 1%;
+    margin-top:auto;
+    margin-bottom:auto;
+}
 
 
     /*#footerSlogan {
