@@ -1,4 +1,5 @@
-﻿@{
+﻿@model P3_Project.Models.ItemModel
+@{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Tilføj vare";
@@ -337,10 +338,10 @@
     async function sendDataToDB() {
 
         const itemModel = {
-            modelName: document.getElementById("ItemModelName").value,
-            modelPrice: document.getElementById("ItemModelPrice").value,
+            ModelName: document.getElementById("ItemModelName").value,
+            ModelPrice: document.getElementById("ItemModelPrice").value,
             items: grid.saveGrid(),
-            notificationAt: document.getElementById("StockNotification").value,
+            StockAlarm: document.getElementById("StockNotification").value,
         }
 
         const response = await fetch("/Admin/ItemModelTable", {

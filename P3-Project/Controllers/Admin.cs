@@ -8,6 +8,8 @@ using P3_Project.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace P3_Project.Controllers
 {
@@ -109,6 +111,21 @@ namespace P3_Project.Controllers
             ViewBag.itemModels = itemModels;
             return View();
         }
+
+        [HttpPost]
+        async public void ItemModelTable()
+        {
+            
+            string body = string.Empty;
+            using (var reader = new StreamReader(Request.Body))
+            {
+                body = await reader.ReadToEndAsync();
+            }
+
+            Console.WriteLine(body);
+
+        }
+
 
 
         private void setup()
