@@ -9,8 +9,6 @@
 
 <script>
     document.querySelector('#AddItemModelSite').style = ("color: rgb(59, 146, 178) !important");
-
-   
 </script>
 
 
@@ -57,11 +55,14 @@
 
         @*Item model name and price*@
         <div style="margin-left: 15px; margin-top: 10px;">
-            <p>Navn: <input type="text" id="ItemModelName" name="ItemModelName" /> Pris: <input type="text" id="ItemModelPrice" name="ItemModelPrice" /> </p>
+            <p>
+                Navn: <input type="text" id="ItemModelName" name="ItemModelName"  placeholder="Model navn" @(ViewBag.model?.ModelName != null ?  "value = " + ViewBag.model.ModelName : "") required /> 
+                Pris: <input type="text" id="ItemModelPrice" name="ItemModelPrice" placeholder="Pris" @(ViewBag.model?.ModelPrice != null ? "value = " + ViewBag.model.ModelPrice : "") required />
+            </p>
         </div>
         
         @*Item table*@
-        <div class="ItemTable">
+        <div class="ItemTable" style="overflow:scroll;">
             
             <style>
                 table, th, td {
@@ -70,25 +71,23 @@
                 }
             </style>
 
-                
-            <table id="itemTable">
+            <table id="itemTable" ">
                <tbody id="itemSize">
-                   <tr id="itemColor">
-                        <th>Størrelse:\Farve:</th>
+                   <tr id="itemColor" >
+                        <th style="width: 134.18px;">Størrelse:\Farve:</th>
                    </tr>
 
                </tbody>
             </table>
 
-            <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" /> 
-            <input type="submit" id="AddCol" class="button" value="Tilføj farve" /> 
-
         </div>
 
-        @*Notifikation ved lager*@
-        <div style="margin-left: 15px; margin-top: 5px;">
 
-            <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" /></p>
+        @*Knapper: Tilføj farve, Fjern farve og Notifikation ved lager*@
+        <div style="margin-left: 30px; margin-top: 10px;">
+            <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" />
+            <input type="submit" id="AddCol" class="button" value="Tilføj farve" />
+            <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" placeholder="Antal" @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "") required/></p>
 
         </div>
 
@@ -144,12 +143,18 @@
                 let row = this.itemData.rows.itemSize.find(row => row.id == id);
                 row.size = e.target.value;
             }
+
+
         }
 
         this.updateCol = (e) => {
-            let id = e.target.id;
+            let id = e.target.parentElement.id;
             let col = this.itemData.cols.itemColor.find(col => col.id == id);
-            col.color = e.target.value;
+            if(e.target.id == "chosenColor"){
+                col.colorWheel = e.target.value;
+            }else{
+                col.color = e.target.value;
+            }
         }
 
         //Add a row, which is size
@@ -169,6 +174,8 @@
 
             const container = newRow.insertCell(0);
             let newElem = document.createElement('input');
+            newElem.style = "width: 100px;";
+            newElem.placeholder = "Størrelse";
             newElem.id = this.rowId;
             container.append(newElem);
 
@@ -195,18 +202,28 @@
                     id: this.colId,
                     color: "",
                     dom: newCol,
+                    colorWheel: "000000",
 
                 }
             );
 
             let newElem = document.createElement('input');
+            newElem.style = "width: 100px;";
+            newElem.placeholder = "Farve"
             newElem.id = this.colId;
             newCol.append(newElem);
             let newBtn = document.createElement('input');
+            let newColor = document.createElement('input')
+            newColor.type = "color";
+            newColor.id = "chosenColor";
+            newColor.name = "chosenColor";
+            
+            
             newBtn.type = "submit";
             newBtn.value = " - ";
             newBtn.addEventListener("click", grid.delCol);
 
+            newCol.append(newColor);
             newCol.append(newBtn);
           
 
@@ -231,6 +248,7 @@
                     newCell.id = id;
                     newCell.classList = "colId" + colId;
                     let newElem = document.createElement('input');
+                    newElem.placeholder="Antal";
                     newElem.id = id;
                     newCell.append(newElem);
 
@@ -259,6 +277,7 @@
                     newCell.id = id;
                     newCell.classList = "colId"+colId;
                     let newElem = document.createElement('input');
+                    newElem.placeholder="Antal";
                     newElem.id = id;
                     newCell.append(newElem);
 
@@ -317,12 +336,14 @@
             this.cols--;
 
         }
+
+
         
         //Save grid with item data in SQL database
         this.saveGrid = () => {
 
             const colNames = {};
-            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = color.color);
+            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = {color: color.color, colorWheel: color.colorWheel});
 
             const rowNames = {};
             this.itemData.rows.itemSize.forEach((size, index) => rowNames[++index] = size.size);
@@ -333,9 +354,10 @@
                 const rowId = row.id;
                 row.items.forEach(item => {
                     items.push({
-                        Color: colNames[item.colId],
+                        Color: colNames[item.colId].color,
+                        ColorWheel: colNames[item.colId].colorWheel,
                         Size: rowNames[rowId],
-                        Stock: item.dom.children[0].value,
+                        Stock: parseInt(item.dom.children[0].value),
                     })
                 })
             });
@@ -349,24 +371,32 @@
     //Send table to SQL database
     async function sendDataToDB() {
 
+
         const itemModel = {
             ModelName: document.getElementById("ItemModelName").value,
-            ModelPrice: document.getElementById("ItemModelPrice").value,
+            ModelPrice: parseInt(document.getElementById("ItemModelPrice").value),
             items: grid.saveGrid(),
-            StockAlarm: document.getElementById("StockNotification").value,
+            StockAlarm: parseInt(document.getElementById("StockNotification").value),
         }
 
-        const response = await fetch("/Admin/ItemModelTable", {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(itemModel) 
-        });
-        return response.json(); 
+        console.log(itemModel);
+        
+        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0){
+            alert("Pris eller notifikation ved lager skal være tal"); 
+        }
+        else if(itemModel.ModelName == ""){
+            alert("Mangler model navn");
+        }else{
+            const response = await fetch("/Admin/ItemModelTable", {
+                method: 'PUT', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(itemModel) 
+            });
+            return response.json(); 
+        }
     }
-
-
 
 
 

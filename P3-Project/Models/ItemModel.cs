@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
+using Newtonsoft.Json;
 using System.ComponentModel;
 
 namespace P3_Project.Models
@@ -10,15 +11,19 @@ namespace P3_Project.Models
     {
 
         public int Id { get; set; }
+        [JsonProperty("ModlelName")]
         public string ModelName { get; set; }
         public string? ItemTable { get; set; }
         public string Description { get; set; }
+        [JsonProperty("ModelPrice")]
         public int ModelPrice { get; set; }
         public int StockAlarm { get; set; }
         public string? Colors { get; set; }
         public string? Sizes { get; set; }
 
-        public List<Item>? items;
+        public List<Item>? items { get; set; }
+        public object[]? items2 { get; set; }
+
 
         StorageDB db = new StorageDB();
         public ItemModel()

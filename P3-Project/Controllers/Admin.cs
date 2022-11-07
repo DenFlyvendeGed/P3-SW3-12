@@ -8,8 +8,8 @@ using P3_Project.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
-using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
+
 
 namespace P3_Project.Controllers
 {
@@ -58,6 +58,10 @@ namespace P3_Project.Controllers
 
         public ActionResult AddItemModel()
         {
+            string jsonData = "{\"ModelName\":\"Bukser\",\"ModelPrice\":1000,\"items\":[{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"Stor\",\"Stock\":1},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"Stor\",\"Stock\":2},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"Stor\",\"Stock\":3},{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"Lille\",\"Stock\":4},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"Lille\",\"Stock\":5},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"Lille\",\"Stock\":6},{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"Simon\",\"Stock\":7},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"Simon\",\"Stock\":8},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"Simon\",\"Stock\":9}],\"StockAlarm\":111}";
+
+            ItemModel deptObj = JsonSerializer.Deserialize<ItemModel>(jsonData);
+            ViewBag.model = deptObj;
             return View();
         }
 
@@ -112,18 +116,19 @@ namespace P3_Project.Controllers
             return View();
         }
 
-        [HttpPost]
-        async public void ItemModelTable()
+        [HttpPut]
+        async public void ItemModelTable(ItemModel test)
         {
-            
-            string body = string.Empty;
+            string jsonData = string.Empty;
             using (var reader = new StreamReader(Request.Body))
             {
-                body = await reader.ReadToEndAsync();
+                jsonData = await reader.ReadToEndAsync();
             }
+            
+            ItemModel deptObj = JsonSerializer.Deserialize<ItemModel>(jsonData);
 
-            Console.WriteLine(body);
-
+            Console.WriteLine(deptObj);
+            
         }
 
 
