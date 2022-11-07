@@ -19,7 +19,7 @@
     <div id="imgBox" class="center">
         <div id="img" class="center">
             @*Billed placehodler*@
-            <img src=""/>
+            <img id="prodImg" src=""/>
             @*Upload knap*@
             <button id ="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
             <input type="file" accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
@@ -34,8 +34,20 @@
         input.addEventListener('input', saveImg);
 
         function saveImg(e){
-            log.textContent = e.target.value;
-            concole.log(log.textContent);
+            
+            let imgTag = document.querySelector('#img img');
+            let image = new Blob([log.textContent], { type: 'img' });
+
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                imgTag.setAttribute('src', e.target.result)
+
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+
+
         }
     </script>
 
