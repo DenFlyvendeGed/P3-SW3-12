@@ -10,7 +10,6 @@ namespace P3_Project.Models
  
     public class ItemModel
     {
-
         public int Id { get; set; }
         public string ModelName { get; set; }
         public string? ItemTable { get; set; }

@@ -29,6 +29,27 @@ public class MySqlDB : DataBase {
 		return rtn;
 	}
 
+	public IList<T> GetItems<T>(Func<IList<object>, T> initializer, string table, string? where = null){
+		var rtn = new List<T>();
+		cmd.CommandText = "SELECT * FROM " + table + (where == null ? "" : " WHERE " + where);
+
+		conn.Open();
+		try {
+			var sdr = cmd.ExecuteReader();
+			while(sdr.Read()){
+				var l = new List<object>();
+				for(int i = 0; i < sdr.FieldCount; i++){
+					l.Add(sdr.GetValue(i));
+				}
+				rtn.Add(initializer(l));
+			}
+		} finally {
+			conn.Close();
+		}
+		return rtn;
+
+	}
+
 	public List<string> GetAllElementsField(string tableName, string key){
 		var list = new List<string>();
 		cmd.CommandText = "SELECT * FROM " + tableName;

@@ -43,6 +43,26 @@ public class SqlDB : DataBase
 		conn.Close();
 		return Result;
 	}
+	public IList<T> GetItems<T>(Func<IList<object>, T> initializer, string table, string? where = null){
+		var rtn = new List<T>();
+		cmd.CommandText = "SELECT * FROM " + table + (where == null ? "" : " WHERE " + where);
+
+		conn.Open();
+		try {
+			var sdr = cmd.ExecuteReader();
+			while(sdr.Read()){
+				var l = new List<object>();
+				for(int i = 0; i < sdr.FieldCount; i++){
+					l.Add(sdr.GetValue(i));
+				}
+				rtn.Add(initializer(l));
+			}
+		} finally {
+			conn.Close();
+		}
+		return rtn;
+
+	}
 	public bool CheckRow(string table, string key, string value)
 	{
 

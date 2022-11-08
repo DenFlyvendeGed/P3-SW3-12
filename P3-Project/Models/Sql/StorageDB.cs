@@ -9,6 +9,7 @@ namespace P3_Project.Models.DB
 {
 	public interface DataBase{
 		string GetField(string key, string value, string table, string field);
+	    IList<T> GetItems<T>(Func<IList<object>, T> initializer, string table, string? where = null);
 		
 		List<string> GetAllElementsField(string tableName, string key);
 		List<T>      GetAllElements<T>(string tableName, T objectClass) where T: notnull;
@@ -44,8 +45,42 @@ namespace P3_Project.Models.DB
 			return DB.GetField("Id", ItemModelId.ToString(), "ItemModels", "ItemTable");
 		}
 
-		public void CreatePromoCode() {
+        // PROMO_CODES
+        const string PROMO_CODE_TABLE = "PromoCode";
+        PromoCode PROMO_CODE_INITIALIZER(IList<object> e) => new PromoCode((int)e[0], (string)e[1], (int)e[2], (DateTime)e[3]);
 
-		}
+        public void PushPromoCode(PromoCode code){
+            if (!DB.CheckTable(PROMO_CODE_TABLE))
+                DB.CreateTable(PROMO_CODE_TABLE, code);
+            DB.AddRowToTable(PROMO_CODE_TABLE, code);            
+        }
+
+		public bool ValidatePromoCode(string code) {
+            try {
+                return DB.GetItems(
+                    PROMO_CODE_INITIALIZER,
+                    PROMO_CODE_TABLE, 
+                    "Code=" + code
+                )[0].ExpirationDate > DateTime.Now;
+            } catch {
+                return false;
+            }
+        }
+        public PromoCode? GetSinglePromoCode(int id) {
+            try {
+                return DB.GetItems(
+                    PROMO_CODE_INITIALIZER,
+                    PROMO_CODE_TABLE, 
+                    "Id=" + id
+                )[0];
+            } catch {
+                return null;
+            }
+        }
+
+        public IList<PromoCode> GetAllPromoCodes() => DB.GetItems(
+            PROMO_CODE_INITIALIZER,
+            PROMO_CODE_TABLE
+        ); 
 	}
 }
