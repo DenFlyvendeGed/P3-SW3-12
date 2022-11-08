@@ -51,6 +51,11 @@ namespace P3_Project.Controllers
             return View();
         }
 
+        public void uploadItemModel()
+        {
+            Response.StatusCode = 200;
+            
+        }
         public ActionResult Stock()
         {
             return View();

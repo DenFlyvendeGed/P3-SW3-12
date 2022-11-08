@@ -21,34 +21,72 @@
         <div id="img" class="center">
             @*Billed placehodler*@
             <img id="prodImg" src=""/>
-            @*Upload knap*@
-            <button id ="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
-            <input type="file" accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+            @*Buttons*@
+            <div>
+                @*billed vælger*@
+                <button onclick="lastPic()">Tilbage</button>
+                <button onclick="nextPic()">Næste</button>
+                @*Upload knap*@
+                <button id="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+                <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+            </div>
         </div>
     </div>
 
 
     <script>
+        
+        let pictures = [];
+        let currentPic = 0;
         const input = document.querySelector('input');
         const log = document.getElementById('imgUp');
+        const imgTag = document.querySelector('#img img');
 
         input.addEventListener('input', saveImg);
 
-        function saveImg(e){
-            
-            let imgTag = document.querySelector('#img img');
-            let image = new Blob([log.textContent], { type: 'img' });
+        function lastPic() {
+            if(currentPic == 0){
+                currentPic = pictures.length;
+            }else{
+                currentPic--;
+            }
+            showImg(pictures[currentPic]);
+        }
 
+        function nextPic() {
+            if (currentPic == pictures.length) {
+                currentPic = 0;
+            } else {
+                currentPic++;
+            }
+            showImg(pictures[currentPic]);
+        }
+
+        function showImg(pic){
+            imgTag.setAttribute('src', pic);
+        }
+
+        async function saveImg(e){
+            
             var reader = new FileReader();
             
             reader.onload = function (e) {
-                imgTag.setAttribute('src', e.target.result)
-
+                imgTag.setAttribute('src', e.target.result);
+                pictures.push(e.target.result);
+                //fetch('/Admin/uploadItemModel', {
+                //    method: "Post",
+                //    body: JSON.stringify({img: e.target.result})
+                //})
+                //    .then(response => {
+                //        if (response.ok) {
+                //            console.log(e.target.result);
+                //        } else {
+                //            alert("HTTP-Error: " + response.status);
+                //        }
+                //    })
             }
-            
+
             reader.readAsDataURL(input.files[0]);
-
-
         }
     </script>
 
