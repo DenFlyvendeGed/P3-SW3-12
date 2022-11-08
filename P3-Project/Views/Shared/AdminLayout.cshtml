@@ -25,16 +25,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between moveMenu">
                     <ul class="navbar-nav flex-grow-1 navBarPlacement">
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="Stock">Lager oversigt</a>
+                            <a class="nav-link text-white" id="StockSite" asp-controller="Admin" asp-action="Stock">Lager oversigt</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="AddItemModel">Tilføj vare</a>
+                            <a class="nav-link text-white" id="AddItemModelSite" asp-area="" asp-controller="Admin" asp-action="AddItemModel">Tilføj vare</a>
                         </li>
                         <li class="nav-item navBarText">
                             <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="PackViewModel">Rediger pakker</a>
+                            <a class="nav-link text-white" id="EditPackModelSite" asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
                         </li>
                         <li class="nav-item navBarText">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Admin" asp-action="PromoCode">Rabat koder</a>
+                            <a class="nav-link text-white" id="PromoCodeSite" asp-controller="Admin" asp-action="PromoCode">Rabat koder</a>
                         </li>
 
 
@@ -83,5 +84,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const links = document.querySelectorAll(".nav-link");
+        //console.log(links);
+        //console.log('@ViewContext.RouteData.Values["action"].ToString()');
+
+        links.forEach(link => {
+            if (link.href.includes('@ViewContext.RouteData.Values["action"].ToString()')) {
+                link.style = "color: rgb(59, 146, 178) !important";
+            }
+
+        })
+        if ('@ViewContext.RouteData.Values["action"].ToString()' == 'Index')
+            links[0].style = "color: rgb(59, 146, 178) !important";
+    </script>
 </body>
 </html>

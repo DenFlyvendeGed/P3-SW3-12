@@ -1,3 +1,4 @@
+using P3_Project.Models.DB;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,14 +15,6 @@ if (!app.Environment.IsDevelopment())
     //test
 }
 
-//Haløjsa
-//hej simon
-//Hej med dig
-//Endnu engang hej
-//farvel simon
-//Shut up!!
-//LoL
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -34,3 +27,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
