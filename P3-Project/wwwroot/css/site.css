@@ -262,6 +262,27 @@ a.BoxLink:active {
     transform: translateY(-50%);
 }
 
+.valgmulighedPakke {
+    position: absolute;
+    
+    
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    width: 98%;
+    height: auto;
+    right: 1%;
+    top: 1%;
+
+
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+
+
+
+
     /*#footerSlogan {
     margin-top: 9px;
     margin-right: 40px;
