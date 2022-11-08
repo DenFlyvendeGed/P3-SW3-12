@@ -1,4 +1,7 @@
-﻿@{
+﻿@using P3_Project.Models
+@model PackModel
+
+@{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Rediger pakker";
@@ -13,51 +16,8 @@
 <a asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
 
 <div class="Flex-Container-PackBoxes">
-
+    @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Model)
 </div>
-
-<script>
-    for(i = 1; i <= 12; i++){
-        let text = "startpakke";
-
-        //creating link and appending it to existing flexbox
-    
-        const link = document.createElement("a");
-        link.id = `Linky_${i}`;
-        link.setAttribute("class", "BoxLink");
-
-        link.setAttribute("href", "/Admin/CreatePackModel");
-        let flexBox = document.querySelector(".Flex-Container-PackBoxes");
-
-        flexBox.appendChild(link);
-        
-
-        const mainBox = document.createElement("div");
-        mainBox.className = "packBox";
-        mainBox.id = `bigBox_${i}`;
-        let linkElement = document.querySelector(`#Linky_${i}`);
-
-        linkElement.appendChild(mainBox);
-        
-
-        //creating and appending image
-        let image = document.createElement("img");
-        image.setAttribute("class", "packBox-img");
-        image.setAttribute("src", "../favicon.ico");
-        let encapBox = document.querySelector(`#bigBox_${i}`);
-
-        encapBox.appendChild(image);
-
-        //creating and appending boxBar
-        let boxBar = document.createElement("div");
-        boxBar.setAttribute("class", "packBox-bar");
-        boxBar.id = `boxbar_${i}`;
-        encapBox.appendChild(boxBar);
-        let textNode = document.createTextNode(text);
-        let textBar = document.querySelector(`#boxbar_${i}`);
-        textBar.appendChild(textNode);
-    }
-</script>
 
 @*
 <div class="Flex-Container-PackBoxes">
@@ -152,6 +112,48 @@
     //appending link to existing flexbox
     document.querySelector(".Flex-Container-PackBoxes").appendChild.(myDiv);
 </script>
+
+
+
+let text = "@Model.Name";
+        console.log(text);
+
+        //creating link and appending it to existing flexbox
+
+        const link = document.createElement("a");
+        link.id = `Linky_${i}`;
+        link.setAttribute("class", "BoxLink");
+
+        link.setAttribute("href", "/Admin/CreatePackModel");
+        let flexBox = document.querySelector(".Flex-Container-PackBoxes");
+
+        flexBox.appendChild(link);
+
+
+        const mainBox = document.createElement("div");
+        mainBox.className = "packBox";
+        mainBox.id = `bigBox_${i}`;
+        let linkElement = document.querySelector(`#Linky_${i}`);
+
+        linkElement.appendChild(mainBox);
+
+
+        //creating and appending image
+        let image = document.createElement("img");
+        image.setAttribute("class", "packBox-img");
+        image.setAttribute("src", "../favicon.ico");
+        let encapBox = document.querySelector(`#bigBox_${i}`);
+
+        encapBox.appendChild(image);
+
+        //creating and appending boxBar
+        let boxBar = document.createElement("div");
+        boxBar.setAttribute("class", "packBox-bar");
+        boxBar.id = `boxbar_${i}`;
+        encapBox.appendChild(boxBar);
+        let textNode = document.createTextNode(text);
+        let textBar = document.querySelector(`#boxbar_${i}`);
+        textBar.appendChild(textNode);
 *@
 
 

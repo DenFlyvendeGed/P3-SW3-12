@@ -61,7 +61,15 @@ namespace P3_Project.Controllers
 
         public ActionResult PackViewModel()
         {
-            return View();
+            var x = 5;
+            PackModel test = new PackModel();
+            test.Name = "Test";
+            test.PackID = 1;
+            List<PackModel> Packs = new List<PackModel>();
+            for (int i = 0; i<x; i++) {
+                Packs.Add(32);
+            }
+            return View(test);
         }
 
         public ActionResult CreatePackModel()
