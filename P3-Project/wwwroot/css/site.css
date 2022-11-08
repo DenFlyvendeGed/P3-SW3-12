@@ -277,6 +277,27 @@ a.BoxLink:active {
     box-shadow: 2px 2px 5px black;
 }
 
+.valgmulighedPakke {
+    position: absolute;
+    
+    
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    width: 98%;
+    height: auto;
+    right: 1%;
+    top: 1%;
+
+
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+
+
+
+
 .flexbox-createPack {
     display: flex;
     flex-direction: row;
