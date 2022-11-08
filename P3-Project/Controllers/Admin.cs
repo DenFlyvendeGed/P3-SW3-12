@@ -5,6 +5,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using NuGet.ContentModel;
 using P3_Project.Models;
+using P3_Project.Models.DB;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
@@ -23,11 +24,11 @@ namespace P3_Project.Controllers
         // GET: Admin/Create
         public ActionResult Storage()
         {
-            StorageDB DB = new StorageDB();
+            StorageDB DB = new();
 
-            DB.getFieldType("Test", "Id");
+            //DB.GetFieldType("Test", "Id");
 
-            DB.GetField("Id", "1", "Test", "Id");
+            DB.DB.GetField("Id", "1", "Test", "Id");
             //DB.CreateItemTable("Test");
             //DB.CreateItemTable("Item");
             //DB.CreateItemTable("Slet");
@@ -73,6 +74,12 @@ namespace P3_Project.Controllers
         {
             return View();
         }
+        
+        public ActionResult EditPromoCode()
+        {
+            var model = new Models.PromoCode("It's a promo code");
+            return View(model);
+        }
 
         public ActionResult PromoCode()
         {
@@ -87,33 +94,16 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             
             
-            if(!db.CheckTable("ItemModels"))
+            if(!db.DB.CheckTable("ItemModels"))
                 setup();
 
-            List<ItemModel> itemModels = db.getAllElements("itemModels", new ItemModel());
+            List<ItemModel> itemModels = db.DB.GetAllElements("ItemModels", new ItemModel());
 
             foreach (ItemModel itemModel in itemModels)
             {
-                itemModel.items = db.getAllElements(itemModel.ItemTable, new Item());
+                itemModel.items = db.DB.GetAllElements(itemModel.ItemTable, new Item());
 
             };
-
-
-            //List<IDictionary<string, object>> itemModels2 = db.getAllElements("itemModels", new ItemModel());
-            //int i = 0;
-            //foreach (Dictionary<string, object> itemModel in itemModels2)
-            //{
-            //    List<IDictionary<string, object>> items = db.getAllElements((string)itemModel["itemTable"], new Item());
-            //    itemModels2[i].Add("items", items);
-            //    _ = items;
-            //    i++;
-            //};
-
-
-            //foreach(object obj in itemModels){
-            //    ItemModel item = (ItemModel)obj;
-            //    items.Add(db.getAllElements(item.itemTable , new Item()));
-            //}
 
 
             ViewBag.itemModels = itemModels;
@@ -137,7 +127,7 @@ namespace P3_Project.Controllers
 
             //db.CreateTable("ItemModels", param);
 
-            db.CreateTable("ItemModels", new ItemModel());
+            db.DB.CreateTable("ItemModels", new ItemModel());
         }
 
 
@@ -248,9 +238,9 @@ namespace P3_Project.Controllers
         {
 
             StorageDB db = new StorageDB();
-            string subTable = db.GetField("id", id, "ItemModels", "itemTable");
-            db.RemoveRow("ItemModels", "id", id);
-            db.DeleteTable(subTable);
+            string subTable = db.DB.GetField("id", id, "ItemModels", "itemTable");
+            db.DB.RemoveRow("ItemModels", "Id", id);
+            db.DB.DeleteTable(subTable);
             
             return RedirectToAction(nameof(Webshop));
         }
@@ -261,7 +251,7 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
 
            
-            db.RemoveRow("item" + modelId, "id", id);
+            db.DB.RemoveRow("item" + modelId, "id", id);
 
 
             return RedirectToAction(nameof(Webshop));
