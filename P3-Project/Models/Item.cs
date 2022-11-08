@@ -20,6 +20,7 @@ namespace P3_Project.Models
             }
         }
         public string Color { get; set; }
+        public string ColorWheel { get; set; }
         public string Size { get; set; }
         public int Stock { get; set; }
         private int Reserved { get; set; }
