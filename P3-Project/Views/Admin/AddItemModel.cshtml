@@ -1,4 +1,4 @@
-﻿@model P3_Project.Models.ItemModel
+﻿@*@model P3_Project.Models.ItemModel*@
 @{
     Layout = "AdminLayout";
 
@@ -20,12 +20,12 @@
             @*Billed placehodler*@
             <img id="prodImg" src=""/>
             @*Buttons*@
-            <div>
+            <div class="imageButtons">
                 @*billed vælger*@
                 <button onclick="lastPic()">Tilbage</button>
                 <button onclick="nextPic()">Næste</button>
                 @*Upload knap*@
-                <button id="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+                <button class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
                 <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
             </div>
         </div>
@@ -44,33 +44,39 @@
 
         function lastPic() {
             if(currentPic == 0){
-                currentPic = pictures.length;
+                currentPic = pictures.length-1;
             }else{
                 currentPic--;
             }
-            showImg(pictures[currentPic]);
+            showImg(currentPic);
         }
 
         function nextPic() {
-            if (currentPic == pictures.length) {
+            if (currentPic == pictures.length-1) {
                 currentPic = 0;
             } else {
                 currentPic++;
             }
-            showImg(pictures[currentPic]);
+            showImg(currentPic);
         }
 
         function showImg(pic){
-            imgTag.setAttribute('src', pic);
+            console.log(currentPic);
+            if(pictures[pic] != undefined)
+                imgTag.setAttribute('src', pictures[pic]);
         }
 
         async function saveImg(e){
             
             var reader = new FileReader();
             
-            reader.onload = function (e) {
+            reader.onload = async function (e) {
                 imgTag.setAttribute('src', e.target.result);
                 pictures.push(e.target.result);
+                currentPic = pictures.length-1;
+                console.log(currentPic);
+
+                
                 //fetch('/Admin/uploadItemModel', {
                 //    method: "Post",
                 //    body: JSON.stringify({img: e.target.result})
@@ -83,8 +89,14 @@
                 //        }
                 //    })
             }
+            //reader.readAsDataURL(input.files[0]);
 
-            reader.readAsDataURL(input.files[0]);
+            for( file of input.files){
+
+                reader.readAsDataURL(file);
+                
+            }
+
         }
     </script>
 

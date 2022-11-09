@@ -192,7 +192,7 @@ body {
     
 }
 
-#uploadButton {
+.imageButtons {
     margin: 70% auto;
     width: 165px;
     height: 50px;
