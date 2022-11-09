@@ -20,12 +20,12 @@
             @*Billed placehodler*@
             <img id="prodImg" src=""/>
             @*Buttons*@
-            <div class="imageButtons">
+            <div class="imageButtons center">
                 @*billed vælger*@
-                <button onclick="lastPic()">Tilbage</button>
-                <button onclick="nextPic()">Næste</button>
+                <button class="ASHButton" onclick="lastPic()">Tilbage</button>
+                <button class="ASHButton" onclick="nextPic()">Næste</button>
                 @*Upload knap*@
-                <button class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+                <button class="ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
                 <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
             </div>
         </div>
