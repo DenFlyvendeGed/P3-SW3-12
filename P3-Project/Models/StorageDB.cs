@@ -402,13 +402,17 @@ namespace P3_Project.Models
                 foreach (PropertyInfo property in Properties)
                 {
                     //if (!string.IsNullOrEmpty(property.GetValue(classObject).ToString()))
-                    if (property.GetValue(classObject) != null && property.Name != "Id")
+                    if (property.GetValue(classObject) != null && property.Name != "Id" && property.CustomAttributes.Count() == 0)//Nullable.GetUnderlyingType(property.PropertyType) != null) // Attribute.IsDefined(property,typeof(Nullable)) ) 
                     {
                         columns += property.Name + ", ";
                         values += "'" + property.GetValue(classObject).ToString().Replace("'","''") + "', ";
                     }
-                }
 
+                    //int test = property.CustomAttributes.Count();
+
+
+                }
+                
                         if (columns.EndsWith(", "))
                     columns = columns.Remove(columns.Length - 2);
 
@@ -506,15 +510,17 @@ namespace P3_Project.Models
                 {
                     try
                     {
-                        cmd.CommandText += (string)property.Name;
+                        
 
                         switch (property.PropertyType.Name)
                         {
                             case "String":
+                                cmd.CommandText += (string)property.Name;
                                 cmd.CommandText += " varchar(255), ";
                                 break;
 
                             case "Int32":
+                                cmd.CommandText += (string)property.Name;
                                 cmd.CommandText += " int, ";
                                 break;
                             default:

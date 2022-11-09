@@ -3,6 +3,7 @@
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Tilføj vare";
+
 }
 <h4>Opret genstand</h4>
 
@@ -14,13 +15,13 @@
 
 <div class="container">
 
-    
+
     <div id="imgBox" class="center">
         <div id="img" class="center">
             @*Billed placehodler*@
-            <img id="prodImg" src=""/>
+            <img id="prodImg" src="" />
             @*Upload knap*@
-            <button id ="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+            <button id="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
             <input type="file" accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
         </div>
     </div>
@@ -32,18 +33,18 @@
 
         input.addEventListener('input', saveImg);
 
-        function saveImg(e){
-            
+        function saveImg(e) {
+
             let imgTag = document.querySelector('#img img');
             let image = new Blob([log.textContent], { type: 'img' });
 
             var reader = new FileReader();
-            
+
             reader.onload = function (e) {
                 imgTag.setAttribute('src', e.target.result)
 
             }
-            
+
             reader.readAsDataURL(input.files[0]);
 
 
@@ -56,14 +57,20 @@
         @*Item model name and price*@
         <div style="margin-left: 15px; margin-top: 10px;">
             <p>
-                Navn: <input type="text" id="ItemModelName" name="ItemModelName"  placeholder="Model navn" @(ViewBag.model?.ModelName != null ?  "value = " + ViewBag.model.ModelName : "") required /> 
+                Navn: <input type="text" id="ItemModelName" name="ItemModelName" placeholder="Model navn" @(ViewBag.model?.ModelName != null ? "value = " + ViewBag.model.ModelName : "") required />
                 Pris: <input type="text" id="ItemModelPrice" name="ItemModelPrice" placeholder="Pris" @(ViewBag.model?.ModelPrice != null ? "value = " + ViewBag.model.ModelPrice : "") required />
             </p>
         </div>
-        
+
+        @*
+        //Tilføj td for hver farve
+        //Tilføj tr for hver størrelse
+        *@
+
+
         @*Item table*@
         <div class="ItemTable" style="overflow:scroll;">
-            
+
             <style>
                 table, th, td {
                     border: 1px solid black;
@@ -72,27 +79,115 @@
             </style>
 
             <table id="itemTable" ">
-               <tbody id="itemSize">
-                   <tr id="itemColor" >
+                <tbody id="itemSize">
+                    @*<------------------------------------- Create color headers --------------------------------------->*@                  
+                    <tr id="itemColor">
                         <th style="width: 134.18px;">Størrelse:\Farve:</th>
-                   </tr>
+                        @{
+                        if(ViewBag.model != null){
+                        int createIdColor = 1;
+                        List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+                        foreach((string, string) color in ViewBag.model.GetUniqueColor()){
+                                                                <td id="@createIdColor">
+                                                                    <input value="@color.Item1" id="@createIdColor" style="width: 100px;">
+                                                                    <input type="color" id="chosenColor" name="chosenColor" value="@color.Item2">
+                                                                    <input type="button" value="-">
+                                                                </td>
 
-               </tbody>
+                        data.Add(new Dictionary<string,object>{
+                        {"id",@createIdColor},
+                        {"color", @color.Item1},
+                        {"dom", ""},
+                        {"colorWheel",@color.Item2}
+                        });
+
+
+                        createIdColor+=1;
+                        }
+                        ViewBag.colorData = data;
+                        ViewBag.colors = createIdColor;
+                        }
+                        }
+
+                    </tr>
+
+                    @*<------------------------------------- Create Size headers and data--------------------------------------->*@
+                    @{
+                    if(ViewBag.model != null){
+
+                    //Data array for data on sizes and items
+                    List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+
+                    //Create size headers
+                    int createIdSize = 1;
+                    foreach(string size in ViewBag.model.GetUniqueSize()){
+                                                            <tr id="@createIdSize">
+                                                                <td>
+                                                                    <input value="@size" id="@createIdSize" style="width: 100px;">
+                                                                    <input type="button" value="-">
+                                                                </td>
+
+                                                                @{
+
+
+                        //Create Items for given header
+                        var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
+                        int colX = 1;
+
+                        List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
+                        foreach((string, string) color in ViewBag.model.GetUniqueColor()){
+                            int colId = colX;
+                                                                                                        <td id="@createIdSize,@colX" class="@colId">
+                                                                                                            <input type="number" min="0" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                                                                                        </td>
+                            colX+=1;
+
+                            //Item data object
+                            items.Add(new Dictionary<string,object>{
+                            {"value",sizeDict[color.Item1]},
+                            {"colId", colId},
+                            {"dom",""}
+                            });
+
+                        }
+
+                        //Header data object
+                        data.Add(new Dictionary<string,object>{
+                        {"id",createIdSize},
+                        {"size", size},
+                        {"items", items },
+                        {"dom",""}
+                        });
+
+                                                                }
+
+
+                                                            </tr>
+
+                        createIdSize+=1;
+                    }
+                    ViewBag.sizes = createIdSize;
+                    ViewBag.sizeData = data;
+
+                    }
+                    }
+
+                </tbody>
             </table>
 
         </div>
 
 
-        @*Knapper: Tilføj farve, Fjern farve og Notifikation ved lager*@
+        @*Buttons: Add size, Add color and Stock alarm*@
         <div style="margin-left: 30px; margin-top: 10px;">
             <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" />
             <input type="submit" id="AddCol" class="button" value="Tilføj farve" />
-            <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" placeholder="Antal" @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "") required/></p>
+            <p>Notifikation ved lager beholdning: <input type="text" id="StockNotification" name="StockNotification" placeholder="Antal" @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "") required /></p>
 
         </div>
 
     </div>
-    
+
 </div>
 
 <div style="margin-left: 80vw;">
@@ -107,10 +202,11 @@
     function Grid() {
         //Size = Row
         //Color = Col
-        this.rowId = 1;
-        this.colId = 1;
-        this.rows = 0;
-        this.cols = 0;
+
+        this.rowId = @(ViewBag.sizes != null ? @ViewBag.sizes : 1);
+        this.colId = @(ViewBag.colors!= null ? @ViewBag.colors : 1);
+        this.rows = this.rowId - 1;
+        this.cols = this.colId - 1;
 
         //Define domaine for size and color
         const rowDom = document.getElementById('itemSize');
@@ -120,14 +216,15 @@
         this.itemData = {};
 
         this.itemData.rows = {
-            amount: 0,
-            itemSize: [],
+            amount: this.rowId - 1,
+            itemSize: @(ViewBag.colors > 0 ? Html.Raw("JSON.parse('" + @Html.Raw(Json.Serialize(ViewBag.sizeData))+ "')") : Html.Raw("[]")),
         }
 
         this.itemData.cols = {
-            amount: 0,
-            itemColor: [],
+            amount: this.colId - 1,
+            itemColor: @(ViewBag.colors > 0 ? Html.Raw("JSON.parse('" + @Html.Raw(Json.Serialize(ViewBag.colorData)) + "')") : Html.Raw("[]")),
         }
+
 
         //Check when data entered in table
         this.updateRow = (e) => {
@@ -150,9 +247,9 @@
         this.updateCol = (e) => {
             let id = e.target.parentElement.id;
             let col = this.itemData.cols.itemColor.find(col => col.id == id);
-            if(e.target.id == "chosenColor"){
+            if (e.target.id == "chosenColor") {
                 col.colorWheel = e.target.value;
-            }else{
+            } else {
                 col.color = e.target.value;
             }
         }
@@ -182,9 +279,9 @@
             let newBtn = document.createElement('input');
             newBtn.type = "submit";
             newBtn.value = " - ";
-            newBtn.addEventListener("click",grid.delRow);
+            newBtn.addEventListener("click", grid.delRow);
             container.append(newBtn);
-            
+
 
             this.rowId++;
             this.itemData.rows.amount++;
@@ -217,15 +314,15 @@
             newColor.type = "color";
             newColor.id = "chosenColor";
             newColor.name = "chosenColor";
-            
-            
-            newBtn.type = "submit";
+
+
+            newBtn.type = "button";
             newBtn.value = " - ";
             newBtn.addEventListener("click", grid.delCol);
 
             newCol.append(newColor);
             newCol.append(newBtn);
-          
+
 
             this.colId++;
             this.itemData.cols.amount++;
@@ -246,9 +343,11 @@
 
                     const id = rowId + "," + colId;
                     newCell.id = id;
-                    newCell.classList = "colId" + colId;
+                    newCell.classList = colId;
                     let newElem = document.createElement('input');
-                    newElem.placeholder="Antal";
+                    newElem.type = "number";
+                    newElem.min = "0";
+                    newElem.placeholder = "Antal";
                     newElem.id = id;
                     newCell.append(newElem);
 
@@ -275,9 +374,11 @@
 
                     const id = rowId + "," + colId;
                     newCell.id = id;
-                    newCell.classList = "colId"+colId;
+                    newCell.classList = colId;
                     let newElem = document.createElement('input');
-                    newElem.placeholder="Antal";
+                    newElem.type = "number";
+                    newElem.min = "0";
+                    newElem.placeholder = "Antal";
                     newElem.id = id;
                     newCell.append(newElem);
 
@@ -297,7 +398,7 @@
         }
 
         //Delete row with size
-        this.delRow = (e) =>{
+        this.delRow = (e) => {
             let delRow = e.target.closest("tr").rowIndex;
             let rowId = e.target.closest("tr").id;
             document.getElementById("itemTable").deleteRow(delRow);
@@ -306,22 +407,22 @@
             items.splice(items.indexOf(items.find(item => item.id == rowId)), 1);
             this.itemData.rows.amount--;
             this.rows--;
-            
+
         }
 
         //Delete col with color
-        this.delCol = (e) =>{
+        this.delCol = (e) => {
             let colId = e.target.closest("td").id;
             let items = this.itemData.rows.itemSize;
 
-            if(this.itemData.rows.amount > 0){
+            if (this.itemData.rows.amount > 0) {
                 let cell = items[0].items.find(cell => cell.colId == colId);
                 const index = items[0].items.indexOf(cell);
                 const cellIndex = cell.dom.cellIndex;
-                
+
 
                 items.forEach(item => {
-                    item.items.splice(index,1)
+                    item.items.splice(index, 1)
                     item.dom.deleteCell(cellIndex)
                 });
             }
@@ -337,17 +438,15 @@
 
         }
 
-
-        
         //Save grid with item data in SQL database
         this.saveGrid = () => {
 
             const colNames = {};
-            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = {color: color.color, colorWheel: color.colorWheel});
+            this.itemData.cols.itemColor.forEach((color) => colNames[color.id] = { color: color.color, colorWheel: color.colorWheel });
 
             const rowNames = {};
             this.itemData.rows.itemSize.forEach((size, index) => rowNames[++index] = size.size);
-            
+
             const items = [];
 
             this.itemData.rows.itemSize.forEach(row => {
@@ -368,33 +467,56 @@
     //Create new grid
     let grid = new Grid();
 
+    //Update grid if backend data is loaded
+    const rowDom = document.getElementById('itemSize');
+    const colDom = document.getElementById('itemColor');
+
+    grid.itemData.cols.itemColor.forEach((col) => {
+        col.dom = colDom.children[col.id];
+        col.dom.addEventListener("change", grid.updateCol);
+        col.dom.querySelector("[type='button']").addEventListener("click", grid.delCol);
+    });
+
+    grid.itemData.rows.itemSize.forEach((row) => {
+        row.dom = rowDom.children[row.id];
+        row.dom.addEventListener("change", grid.updateRow);
+        row.dom.querySelector("[type='button']").addEventListener("click", grid.delRow);
+        
+        row.items.forEach(item => {
+            item.dom = row.dom.querySelector("[id*=',"+ item.colId + "']");
+            item.dom.addEventListener("change", grid.updateRow);
+        })
+    });
+
+
     //Send table to SQL database
     async function sendDataToDB() {
 
 
         const itemModel = {
+            Id: @(ViewBag?.model!= null ? ViewBag.model.Id : 0),
             ModelName: document.getElementById("ItemModelName").value,
             ModelPrice: parseInt(document.getElementById("ItemModelPrice").value),
             items: grid.saveGrid(),
             StockAlarm: parseInt(document.getElementById("StockNotification").value),
         }
 
-        console.log(itemModel);
-        
-        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0){
-            alert("Pris eller notifikation ved lager skal være tal"); 
+        console.log(grid.itemData);
+
+        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0) {
+            alert("Pris eller notifikation ved lager skal være tal");
         }
-        else if(itemModel.ModelName == ""){
+        else if (itemModel.ModelName == "") {
             alert("Mangler model navn");
-        }else{
+        } else {
             const response = await fetch("/Admin/ItemModelTable", {
-                method: 'PUT', 
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(itemModel) 
+                body: JSON.stringify(itemModel)
             });
-            return response.json(); 
+            //return response.json();
         }
     }
 

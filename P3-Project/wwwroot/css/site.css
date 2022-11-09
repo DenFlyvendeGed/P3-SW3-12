@@ -239,6 +239,16 @@ body {
     border-width: 1px;
 }
 
+.stockBox{
+    width: 100%;
+    height: 150px;
+    margin-top: 20px;
+}
+
+.editStockBtn{
+    margin-top:19px;
+    margin-left: 80%;
+}
 
 
 
