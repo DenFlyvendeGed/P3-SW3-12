@@ -60,6 +60,23 @@ namespace P3_Project.Controllers
             return View();
         }
 
+        public ActionResult PackViewModel()
+        {
+            var x = 5;
+            PackModel test = new PackModel(1);
+            test.Name = "Test";
+            List<PackModel> Packs = new List<PackModel>();
+            for (int i = 0; i<x; i++) {
+                Packs.Add(test);
+            }
+            return View(test);
+        }
+
+        public ActionResult CreatePackModel()
+        {
+            return View();
+        }
+
         public ActionResult EditPackModel()
         {
             return View();
