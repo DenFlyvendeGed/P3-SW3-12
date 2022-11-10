@@ -1,4 +1,7 @@
 using P3_Project.Models.DB;
+using P3_Project.Models;
+using P3_Project.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

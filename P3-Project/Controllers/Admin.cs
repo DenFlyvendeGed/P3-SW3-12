@@ -63,12 +63,11 @@ namespace P3_Project.Controllers
         public ActionResult PackViewModel()
         {
             var x = 5;
-            PackModel test = new PackModel();
+            PackModel test = new PackModel(1);
             test.Name = "Test";
-            test.PackID = 1;
             List<PackModel> Packs = new List<PackModel>();
             for (int i = 0; i<x; i++) {
-                Packs.Add(32);
+                Packs.Add(test);
             }
             return View(test);
         }
