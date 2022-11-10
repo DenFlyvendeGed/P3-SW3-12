@@ -8,7 +8,7 @@ using System;
 namespace P3_Project.Models.DB
 {
 	public enum SQLType{
-		Small, Int, Large, IntAutoIncrement,
+		Small, Int, Large, IntAutoIncrement, Bool,
 		Float,
 		Char, String8, String16, String32, String64, String128, String256, String512,
 		Date
@@ -63,43 +63,5 @@ namespace P3_Project.Models.DB
 		public string GetItemTable(int ItemModelId){
 			return DB.GetField("Id", ItemModelId.ToString(), "ItemModels", "ItemTable");
 		}
-
-        // PROMO_CODES
-        const string PROMO_CODE_TABLE = "PromoCode";
-        PromoCode PROMO_CODE_INITIALIZER(IList<object> e) => new PromoCode((int)e[0], (string)e[1], (int)e[2], (DateTime)e[3]);
-
-        public void PushPromoCode(PromoCode code){
-            if (!DB.CheckTable(PROMO_CODE_TABLE))
-                DB.CreateTable(PROMO_CODE_TABLE, code);
-            DB.AddRowToTable(PROMO_CODE_TABLE, code);            
-        }
-
-		public bool ValidatePromoCode(string code) {
-            try {
-                return DB.GetItems(
-                    PROMO_CODE_INITIALIZER,
-                    PROMO_CODE_TABLE, 
-                    "Code=" + code
-                )[0].ExpirationDate > DateTime.Now;
-            } catch {
-                return false;
-            }
-        }
-        public PromoCode? GetSinglePromoCode(int id) {
-            try {
-                return DB.GetItems(
-                    PROMO_CODE_INITIALIZER,
-                    PROMO_CODE_TABLE, 
-                    "Id=" + id
-                )[0];
-            } catch {
-                return null;
-            }
-        }
-
-        public IList<PromoCode> GetAllPromoCodes() => DB.GetItems(
-            PROMO_CODE_INITIALIZER,
-            PROMO_CODE_TABLE
-        ); 
 	}
 }

@@ -49,13 +49,6 @@ namespace P3_Project.Controllers
             return new string[] { "test" };
         }
 
-        // PromoCode
-        [HttpGet]
-        [Route("ValidatePromoCode")]
-        public bool ValidatePromoCode([FromQuery]  string code){
-            var db = new StorageDB();
-            return db.ValidatePromoCode(code);
-        }
     }
 
     [Route("api/Admin")]
@@ -68,32 +61,6 @@ namespace P3_Project.Controllers
             return new string[] { "test" };
         }
 
-        // PromoCode
-        [HttpPost]
-        [Route("CreatePromoCode")]
-        public void CreatePromoCode(
-            [FromQuery] string code,
-            [FromQuery] int promoCodeType,
-            [FromQuery] string expirationDate
-        ){
-            Console.WriteLine("Hello " + code + " " + promoCodeType + " " + expirationDate);
-            var db = new StorageDB();
-            var date = expirationDate.Split('-');
-            db.PushPromoCode(
-                new PromoCode(
-                    0, code, promoCodeType,
-                    new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]))
-                )
-            );
-        }
 
-        [HttpGet]
-        [Route("GetSinglePromoCode")]
-        public PromoCode? GetSinglePromoCode(
-            [FromQuery] int id
-        ){
-            var db = new StorageDB();
-            return db.GetSinglePromoCode(id); 
-        }
     }
 }

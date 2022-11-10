@@ -63,7 +63,7 @@ namespace P3_Project.Controllers
         public ActionResult PackViewModel()
         {
             var x = 5;
-            PackModel test = new PackModel(1);
+            PackModel test = new PackModel(1, new StorageDB());
             test.Name = "Test";
             List<PackModel> Packs = new List<PackModel>();
             for (int i = 0; i<x; i++) {
@@ -84,7 +84,7 @@ namespace P3_Project.Controllers
         
         public ActionResult EditPromoCode()
         {
-            var model = new Models.PromoCode(3);
+            var model = new Models.PromoCode();
             return View(model);
         }
 

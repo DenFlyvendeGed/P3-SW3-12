@@ -27,10 +27,6 @@ namespace P3_Project.Models
 			PackID = null;
 		}
 
-		public PackModel(int? id){
-			PackID = id;
-		}
-		
 		public PackModel (int id, StorageDB db){
 			this.PackID = id;
 			var table_data = ((int, string, string, short))db.DB.ReadFromTable(TABLE_NAME, $"Id={this.PackID}", (l) => (l[0], l[1], l[2], l[3]))[0];
@@ -65,7 +61,7 @@ namespace P3_Project.Models
 				});
 				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0])[0];
 			} else {
-				db.DB.RemoveRow(TABLE_NAME, "Id", $"{PackID}");
+				this.DeleteFromDB(db);
 				db.DB.PushToTable(TABLE_NAME,  new (string, object)[] {
 					("Id", PackID),
 					("Name", Name),
@@ -75,8 +71,6 @@ namespace P3_Project.Models
 			}
 
 			foreach(var (i, option) in new Enumerate<List<List<(int, string)>>, List<(int, string)>>(Options)){
-				if(db.DB.CheckTable($"{TABLE_NAME}_{PackID}_{i}"))
-					db.DB.DeleteTable($"{TABLE_NAME}_{PackID}_{i}");
 				db.DB.CreateTable($"{TABLE_NAME}_{PackID}_{i}",(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {("ItemModelId", SQLType.Int)});
 
 				foreach(var item in option) {
@@ -87,10 +81,8 @@ namespace P3_Project.Models
 
 
 		public void DeleteFromDB(StorageDB db){
-			foreach(var i in new Counter(this.Options.Count)){
-				Console.WriteLine($"{TABLE_NAME}_{this.PackID}_{i}");
+			for(int i = 0; db.DB.CheckTable($"{TABLE_NAME}_{this.PackID}_{i}"); i++)
 				db.DB.DeleteTable($"{TABLE_NAME}_{this.PackID}_{i}");
-			}
 			db.DB.RemoveRow($"{TABLE_NAME}", "Id", (this.PackID ?? throw new Exception("Item Pack isn't saved")).ToString());
 		}
     }

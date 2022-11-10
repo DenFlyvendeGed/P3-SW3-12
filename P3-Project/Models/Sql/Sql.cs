@@ -603,6 +603,7 @@ public class SqlDB : DataBase
 				case SQLType.Int              : cmd.CommandText += "INT"; break;
 				case SQLType.Large            : cmd.CommandText += "BIGINT"; break;
 				case SQLType.IntAutoIncrement : cmd.CommandText += "INT IDENTITY(1,1) PRIMARY KEY"; break;
+				case SQLType.Bool             : cmd.CommandText += "BIT"; break;
 				
 				case SQLType.Char             : cmd.CommandText += "char(1)"; break;
 				case SQLType.String8          : cmd.CommandText += "varchar(8)"; break;
@@ -627,7 +628,7 @@ public class SqlDB : DataBase
 	public void PushToTable(string name, IEnumerable<object> values){
 		var l = new List<string>();
 		foreach(var s in values) l.Add($"'{s.ToString()}'");
-		cmd.CommandText= $"INSERT INTO {name}({string.Join(',', l)})";
+		cmd.CommandText= $"INSERT INTO {name} VALUES ({string.Join(',', l)})";
 
 		conn.Open();
 		cmd.ExecuteReader();
@@ -640,7 +641,7 @@ public class SqlDB : DataBase
 			field.Add(f);
 			vals.Add($"'{v.ToString()}'");
 		};
-		cmd.CommandText= $"INSERT INTO {string.Join(',', field)} {name}({string.Join(',', vals)})";
+		cmd.CommandText= $"INSERT INTO {name} ({string.Join(',', field)}) VALUES ({string.Join(',', vals)})";
 
 		conn.Open();
 		cmd.ExecuteReader();
