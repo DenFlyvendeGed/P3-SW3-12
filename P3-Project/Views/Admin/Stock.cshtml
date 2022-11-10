@@ -11,14 +11,16 @@
 
 <div style="width: 80vw;">
 
-    <div class="stockBox box"> 
-        <p>Bukser</p>
-        <input type="button" class="editStockBtn" value="Rediger lagerbeholdning" />
-    </div>
+    @{
+        foreach(ItemModel item in ViewBag.model){
+            <div class="stockBox box container">
+                <div class="item box" style="width:200px;height:80%; margin-top:14px;"></div>
+                <p class="item" style="margin-top: 57px; width: 80%;">@(item.ModelName)</p>
+                <a href="\admin\AddItemModel?id=@(item.Id)" class="item"><input type="button" class="editStockBtn item" style="margin-top: 57px;" value="Rediger lagerbeholdning" /> </a>
+            </div>
+        }
+    }
 
-    <div class="stockBox box">
-        <p>Simon</p>
-        <input type="button" class="editStockBtn" value="Rediger lagerbeholdning" />
-    </div>
-
+    <a href="\admin\AddItemModel" style="float:right"><input type="button" style="margin-top:10px; float:right" value="Tilføj ny vare" /></a>
 </div>
+

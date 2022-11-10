@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace P3_Project.Models
 {
@@ -26,7 +29,7 @@ namespace P3_Project.Models
         public List<Item>? items { get; set; }
 
 
-        StorageDB db = new StorageDB();
+        static StorageDB db = new StorageDB();
         public ItemModel()
         {
             Id = 0;
@@ -62,38 +65,40 @@ namespace P3_Project.Models
            
         }
 
-        //Skal fikses, der er placeholders i
+        //Get unique colors from given item model
         public List<(string, string)> GetUniqueColor()
         {
             var list = new List<(string, string)>();
-            //Sql til at hente data her...
-            list.Add(("Rød", "#ff0000"));
-            list.Add(("Blå", "#0008ff"));
-            list.Add(("Sort", "000000"));
+
+            List<Item> uniqueColors = items.GroupBy(i => i.Color).Select(grp => grp.First()).ToList();
+
+            foreach (Item item in uniqueColors)
+            {
+                list.Add((item.Color, item.ColorWheel));
+            }
+           
             return list;
         }
 
-        //Skal fikses, der er placeholders i
+        //Get unique sizes from given item model
         public List<string> GetUniqueSize()
         {
-            var list = new List<string>();
-            //Sql til at hente data her...
-
-            list.Add("S");
-            list.Add("M");
-            list.Add("L");
-            return list;
+            List<string> uniqueSizes = items.GroupBy(i => i.Size).Select(grp => grp.First()).Select(str => str.Size).ToList();
+            
+            return uniqueSizes;
         }
 
-        //Skal fikses, der er placeholders i
+        //Get all items of a given size on an item model
         public Dictionary<string, int> GetAllItemsOfSize(string size)
         {
-            
+
             var dict = new Dictionary<string, int>();
 
-            dict.Add("Rød", 1);
-            dict.Add("Blå", 2);
-            dict.Add("Sort", 3);
+            List<string> columns = new List<string>() { "Color", "Stock" };
+            List<List<string>> items = db.GetSortedList(ItemTable, columns, "Size", size);
+
+            items.ForEach(item => dict.Add(item[0], int.Parse(item[1])));
+
 
             return dict;
         }
@@ -108,14 +113,40 @@ namespace P3_Project.Models
             db.CreateTable(ItemTable, new Item());
         }
 
+        public static ItemModel LoadModel(string id)
+        {
+            return db.GetRow("ItemModels", new ItemModel(), id);
+        }
 
-
+        public void LoadItems()
+        {
+            
+            items = db.getAllElements(ItemTable, new Item());
+        }
+       
         public void AddItem(Item item)
         {
 
             db.AddRowToTable(ItemTable, item);
         }
         
+        //Update exsisting item model values
+        public void Update()
+        {
+            ItemTable = "Item" + Id;
+            db.DeleteTable(ItemTable);
+            CreateItemTable();
+            if (items != null)
+            {
+                foreach (Item item in items)
+                {
+                    item.ModelId = Id.ToString();
+                    AddItem(item);
+                }
+            }
+
+        }
+
         public void Delete()
         {
             db.DeleteTable(ItemTable);

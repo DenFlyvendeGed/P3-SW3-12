@@ -34,18 +34,26 @@ namespace P3_Project.Controllers
 
         public ActionResult Stock()
         {
+            StorageDB db = new StorageDB();
+            if (!db.CheckTable("ItemModels"))
+                setup();
+            
+            List<ItemModel> models = db.getAllElements("ItemModels", new ItemModel());
+
+            ViewBag.model = models;
             return View();
         }
 
-        public ActionResult AddItemModel()
+        public ActionResult AddItemModel(string id)
         {
-            /*
-            string jsonData = "{\"ModelName\":\"Bukser\",\"ModelPrice\":1000,\"items\":[{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"S\",\"Stock\":1},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"S\",\"Stock\":2},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"S\",\"Stock\":3},{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"M\",\"Stock\":4},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"M\",\"Stock\":5},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"M\",\"Stock\":6},{\"Color\":\"Rød\",\"ColorWheel\":\"#ff0000\",\"Size\":\"L\",\"Stock\":7},{\"Color\":\"Blå\",\"ColorWheel\":\"#0008ff\",\"Size\":\"L\",\"Stock\":8},{\"Color\":\"Sort\",\"ColorWheel\":\"000000\",\"Size\":\"L\",\"Stock\":9}],\"StockAlarm\":111}";
+            Console.WriteLine(id);
+            if (!string.IsNullOrEmpty(id)) { 
+                ItemModel model = ItemModel.LoadModel(id);
+                model.LoadItems();
 
-            ItemModel deptObj = JsonSerializer.Deserialize<ItemModel>(jsonData);
-            ViewBag.model = deptObj;
-            */
-            
+                ViewBag.model = model;
+            }
+
             return View();
         }
 
@@ -90,7 +98,19 @@ namespace P3_Project.Controllers
             Console.WriteLine(jsonData);
 
             ItemModel itemModel = JsonSerializer.Deserialize<ItemModel>(jsonData);
-            itemModel.Create();
+            if (itemModel.Id == 0)
+            {
+                itemModel.Create();
+            }
+            else
+            {
+
+                itemModel.Update();
+
+
+            }
+
+
         }
 
 
@@ -121,11 +141,15 @@ namespace P3_Project.Controllers
             }
             else
             {
-                throw new NotImplementedException();
+
+                model.Update();
+                
+
             }
 
             return Redirect("Webshop");
         }
+
 
 
         //[HttpPost]

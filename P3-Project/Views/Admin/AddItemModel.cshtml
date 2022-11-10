@@ -88,11 +88,11 @@
                         int createIdColor = 1;
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
-                                                                <td id="@createIdColor">
-                                                                    <input value="@color.Item1" id="@createIdColor" style="width: 100px;">
-                                                                    <input type="color" id="chosenColor" name="chosenColor" value="@color.Item2">
-                                                                    <input type="button" value="-">
-                                                                </td>
+                                <td id="@createIdColor">
+                                    <input value="@color.Item1" id="@createIdColor" style="width: 100px;">
+                                    <input type="color" id="chosenColor" name="chosenColor" value="@color.Item2">
+                                    <input type="button" value="-">
+                                </td>
 
                         data.Add(new Dictionary<string,object>{
                         {"id",@createIdColor},
@@ -121,48 +121,46 @@
                     //Create size headers
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
-                                                            <tr id="@createIdSize">
-                                                                <td>
-                                                                    <input value="@size" id="@createIdSize" style="width: 100px;">
-                                                                    <input type="button" value="-">
-                                                                </td>
+                        <tr id="@createIdSize">
+                            <td>
+                                <input value="@size" id="@createIdSize" style="width: 100px;">
+                                <input type="button" value="-">
+                            </td>
 
-                                                                @{
+                            @{
+                                //Create Items for given header
+                                var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
+                                int colX = 1;
 
+                                List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
+                                foreach((string, string) color in ViewBag.model.GetUniqueColor()){
+                                    int colId = colX;
+                                    <td id="@createIdSize,@colX" class="@colId">
+                                        <input type="number" min="0" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                    </td>
+                                    colX+=1;
 
-                        //Create Items for given header
-                        var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
-                        int colX = 1;
+                                    //Item data object
+                                    items.Add(new Dictionary<string,object>{
+                                    {"value",sizeDict[color.Item1]},
+                                    {"colId", colId},
+                                    {"dom",""}
+                                    });
 
-                        List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
-                        foreach((string, string) color in ViewBag.model.GetUniqueColor()){
-                            int colId = colX;
-                                                                                                        <td id="@createIdSize,@colX" class="@colId">
-                                                                                                            <input type="number" min="0" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
-                                                                                                        </td>
-                            colX+=1;
+                                }
 
-                            //Item data object
-                            items.Add(new Dictionary<string,object>{
-                            {"value",sizeDict[color.Item1]},
-                            {"colId", colId},
-                            {"dom",""}
-                            });
+                                //Header data object
+                                data.Add(new Dictionary<string,object>{
+                                {"id",createIdSize},
+                                {"size", size},
+                                {"items", items },
+                                {"dom",""}
+                                });
 
-                        }
-
-                        //Header data object
-                        data.Add(new Dictionary<string,object>{
-                        {"id",createIdSize},
-                        {"size", size},
-                        {"items", items },
-                        {"dom",""}
-                        });
-
-                                                                }
+                            }
 
 
-                                                            </tr>
+                        </tr>
 
                         createIdSize+=1;
                     }

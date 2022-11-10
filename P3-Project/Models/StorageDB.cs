@@ -23,6 +23,7 @@ namespace P3_Project.Models
 {
     public class StorageDB
     {
+
         private SqlConnection conn = new SqlConnection();
         private SqlCommand cmd = new SqlCommand();
         private string sqlType = "SQLServer";
@@ -120,8 +121,6 @@ namespace P3_Project.Models
         }
 
         ///int currentAmount = int.Parse(GetField(selectorKey, selectorValue, table, field));
-
-
 
         public string getFieldType(string table, string column)
         {
@@ -439,6 +438,60 @@ namespace P3_Project.Models
             }
         }
 
+        public T GetRow<T>(string tableName, T objectClass, string id)
+        {
+
+            cmd.CommandText = "SELECT * FROM " + tableName + " WHERE Id = " + id;
+
+
+
+            PropertyInfo[] Properties = objectClass.GetType().GetProperties();
+            // open database connection.
+            conn.Open();
+
+            FieldInfo[] fields = objectClass.GetType().GetFields();
+
+
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            ////Retrieve data from table and Display result
+            while (sdr.Read())
+            {
+                T classInstance = (T)Activator.CreateInstance(typeof(T));
+
+                foreach (PropertyInfo property in Properties)
+                {
+                    try
+                    {
+                        property.SetValue(classInstance, sdr[property.Name]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine(property.Name + " Cant be set");
+                    }
+                    //instance.Add(field.Name, sdr[field.Name].ToString());
+                }
+                foreach (FieldInfo field in fields)
+                {
+                    try
+                    {
+                        field.SetValue(classInstance, sdr[field.Name]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine(field.Name + " Cant be set");
+                    }
+                    //instance.Add(field.Name, sdr[field.Name].ToString());
+                }
+                objectClass = classInstance;
+            }
+            //Close the connection
+            conn.Close();
+
+            return objectClass;
+        }
         public string GetItemTable(int ItemModelId)
         {
             return GetField("Id", ItemModelId.ToString(), "ItemModels", "ItemTable");
@@ -581,6 +634,40 @@ namespace P3_Project.Models
             conn.Close();
             return;
 
+        }
+
+        public List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue)
+        {
+
+            cmd.CommandText = "SELECT ";
+            columns.ForEach(column => cmd.CommandText += column + ",");
+            cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.Length - 1);
+            cmd.CommandText += " FROM " + tableName + " WHERE " + sortkey + " = '" + sortValue +"'";
+
+
+            // open database connection.
+            conn.Open();
+
+            //Execute the query 
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            List<List<string>> Result = new List<List<string>>();
+            ////Retrieve data from table and Display result
+            while (sdr.Read())
+            {
+
+                List<string> list = new List<string>();
+                foreach (string column in columns)
+                {
+
+                    list.Add(sdr[column].ToString());
+                }
+                Result.Add(list);
+            }
+            //Close the connection
+            conn.Close();
+
+            return Result;
         }
     } 
 }
