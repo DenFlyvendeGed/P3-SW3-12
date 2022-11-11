@@ -14,13 +14,6 @@ if (!app.Environment.IsDevelopment())
     //test
 }
 
-//Haløjsa
-//hej simon
-//Hej med dig
-//Endnu engang hej
-//farvel simon
-//Shut up!!
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -33,3 +26,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+

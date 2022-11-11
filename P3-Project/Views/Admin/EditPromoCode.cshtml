@@ -1,0 +1,103 @@
+@model P3_Project.Models.PromoCode
+@{
+    Layout = "AdminLayout";
+    ViewData["Title"] = "Rediger Rabat Kode";
+
+	string before = "PriceBefore";
+	string after = "PriceAfter";
+
+	string isModel() {
+		if(Model.Code == "")
+			return "";
+		return "(" + Model.Id + ")";
+	}
+}
+
+
+<style>
+	#editPromoCodeContent {
+		width: 100%;
+		margin: auto;
+
+	}
+
+	.edit-field {
+		display: flex;
+		background-color: #a9a9a9;
+		align-self: center;
+		justify-content:space-between;
+		margin-top: 4px;
+		margin-bottom: 4px;
+		margin-left: 0px;
+		margin-right: 0px;
+		padding: 5px;
+	}
+
+	.edit{
+		display: flex;
+		align-items: center;
+		height: inherit;
+		padding: 2px;
+	}
+	.promo-code-price {
+		display: inline;
+	}
+
+	.edit > p {
+		margin: 0px;
+	}
+</style>
+
+
+<h1>Redigér Rabatkode @isModel()</h1>
+
+<div id="editPromoCodeContent">
+	<div class="edit-field">
+		<div class="edit">
+			<p><b>Navn/Kode:</b> <input id="promo-code-code" value=@Model.Code/></p>
+		</div>
+		<div class="edit">
+			<p><b>Slutdato:</b> <input id="promo-code-date" type="date"/></p>
+		</div>
+	</div>
+	<div class="edit-field">
+		<div class="edit">
+			<p><b>Rabat: </b> <input/>
+				<select>
+					<option value="percent"> Procent (%) </option>
+					<option value="fixed"> Fastsat (kr.)</option>
+				</select>
+			</p>
+		</div>
+		@{
+			void Edit(string front, string id){
+				<div class="edit">
+					<p class="promo-code-price" style="margin-right: .3em;"><b>@front: </b> <p class="promo-code-price" id="@id"></p><p> kr.</p>
+				</div>
+			}
+			Edit("Pris Før Rabat", before);
+			Edit("Pris Efter Rabat", after);
+		}
+	</div>
+	<div class="edit-field">
+		<p><b>Indhold</b></p>
+	</div>
+</div>
+
+<script>
+	let after = 0;
+	let after_dom = document.getElementById("@after");
+
+	let code_dom = document.getElementById("promo-code-code");
+	code_dom.onchange = () => {
+		after_dom.innerHTML = code_dom.value ;
+		
+	}
+
+	let before = 0;
+	let before_dom = document.getElementById("@before");
+	PriceBefore.innerHTML = before;
+</script>
+
+
+
