@@ -42,12 +42,7 @@ namespace P3_Project.Controllers
         {
         }
 
-        [Route("Test")]
-        public IEnumerable<string> Test()
-        {
-            Console.WriteLine("Hello World");
-            return new string[] { "test" };
-        }
+       
 
     }
 
