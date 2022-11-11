@@ -32,6 +32,9 @@ namespace P3_Project.Models.DB
 
 		void PushToTable(string name, IEnumerable<object> values);
 		void PushToTable(string name, IEnumerable<(string, object)> values);
+	
+		List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue);
+		T GetRow<T>(string tableName, T objectClass, string id);
 
 		List<T> ReadFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull;
 		List<T> ReadFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull;

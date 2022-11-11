@@ -196,6 +196,93 @@ public class MySqlDB : DataBase {
 
 		return rtn;
 	}
+	public T GetRow<T>(string tableName, T objectClass, string id)
+	{
+
+		cmd.CommandText = "SELECT * FROM " + tableName + " WHERE Id = " + id;
+
+
+
+		var Properties = objectClass.GetType().GetProperties();
+		// open database connection.
+		conn.Open();
+
+		var fields = objectClass.GetType().GetFields();
+
+
+
+		//Execute the query 
+		var sdr = cmd.ExecuteReader();
+
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+			T classInstance = (T)Activator.CreateInstance(typeof(T));
+
+			foreach (var property in Properties)
+			{
+				try
+				{
+					property.SetValue(classInstance, sdr[property.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(property.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			foreach (var field in fields)
+			{
+				try
+				{
+					field.SetValue(classInstance, sdr[field.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(field.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			objectClass = classInstance;
+		}
+		//Close the connection
+		conn.Close();
+
+		return objectClass;
+	}
+	public List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue)
+	{
+
+		cmd.CommandText = "SELECT ";
+		columns.ForEach(column => cmd.CommandText += column + ",");
+		cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.Length - 1);
+		cmd.CommandText += " FROM " + tableName + " WHERE " + sortkey + " = '" + sortValue +"'";
+
+
+		// open database connection.
+		conn.Open();
+
+		//Execute the query 
+		var sdr = cmd.ExecuteReader();
+
+		List<List<string>> Result = new List<List<string>>();
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+
+			List<string> list = new List<string>();
+			foreach (string column in columns)
+			{
+
+				list.Add(sdr[column].ToString());
+			}
+			Result.Add(list);
+		}
+		//Close the connection
+		conn.Close();
+
+		return Result;
+	}
 
 	public void CreateTable(string name, IEnumerable<(string, SQLType)> columns){
 		if(this.CheckTable(name)) throw new Exception("Table Already exists");

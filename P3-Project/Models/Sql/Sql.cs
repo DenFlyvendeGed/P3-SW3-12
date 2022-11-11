@@ -400,7 +400,7 @@ public class SqlDB : DataBase
 			foreach (PropertyInfo property in Properties)
 			{
 				//if (!string.IsNullOrEmpty(property.GetValue(classObject).ToString()))
-				if (property.GetValue(classObject) != null && property.Name != "Id")
+				if (property.GetValue(classObject) != null && property.Name != "Id" && property.CustomAttributes.Count() == 0)
 				{
 					columns += property.Name + ", ";
 					values += "'" + property.GetValue(classObject).ToString().Replace("'","''") + "', ";
@@ -488,60 +488,16 @@ public class SqlDB : DataBase
 	public void CreateTable<T>(string name, T obj) where T : notnull
 	{
 
-		if (CheckTable(name))
-		{
-			throw new Exception("Table already exist");
-		}
-		else
-		{
-			cmd.CommandText = "CREATE TABLE " + name + "(";
+		cmd.CommandText = Helper.CreateTableCreationQuery(this, name, obj); 
+		cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int IDENTITY(1,1) PRIMARY KEY, ");
 
-			
+		// open database connection.
+		conn.Open();
 
-			PropertyInfo[] Properties = obj.GetType().GetProperties();
+		//Execute the query 
+		SqlDataReader sdr = cmd.ExecuteReader();
 
-			foreach (PropertyInfo property in Properties)
-			{
-				try
-				{
-					cmd.CommandText += (string)property.Name;
-
-					switch (property.PropertyType.Name)
-					{
-						case "String":
-							cmd.CommandText += " varchar(255), ";
-							break;
-
-						case "Int32":
-							cmd.CommandText += " int, ";
-							break;
-						default:
-							throw new NotImplementedException();
-					}
-						
-						
-				}
-				catch
-				{
-					Console.WriteLine(property.Name + " failed to read in storageDB");
-				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
-			}
-
-			if (sqlType == "mySQL")
-				cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id), ") ;
-			else
-				cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int IDENTITY(1,1) PRIMARY KEY, ");
-
-			cmd.CommandText += ")";
-			// open database connection.
-			conn.Open();
-
-			//Execute the query 
-			SqlDataReader sdr = cmd.ExecuteReader();
-
-			conn.Close();
-		}
+		conn.Close();
 	}
 
 
@@ -573,6 +529,93 @@ public class SqlDB : DataBase
 		conn.Close();
 		return;
 
+	}
+	public T GetRow<T>(string tableName, T objectClass, string id)
+	{
+
+		cmd.CommandText = "SELECT * FROM " + tableName + " WHERE Id = " + id;
+
+
+
+		PropertyInfo[] Properties = objectClass.GetType().GetProperties();
+		// open database connection.
+		conn.Open();
+
+		FieldInfo[] fields = objectClass.GetType().GetFields();
+
+
+
+		//Execute the query 
+		SqlDataReader sdr = cmd.ExecuteReader();
+
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+			T classInstance = (T)Activator.CreateInstance(typeof(T));
+
+			foreach (PropertyInfo property in Properties)
+			{
+				try
+				{
+					property.SetValue(classInstance, sdr[property.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(property.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			foreach (FieldInfo field in fields)
+			{
+				try
+				{
+					field.SetValue(classInstance, sdr[field.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(field.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			objectClass = classInstance;
+		}
+		//Close the connection
+		conn.Close();
+
+		return objectClass;
+	}
+	public List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue)
+	{
+
+		cmd.CommandText = "SELECT ";
+		columns.ForEach(column => cmd.CommandText += column + ",");
+		cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.Length - 1);
+		cmd.CommandText += " FROM " + tableName + " WHERE " + sortkey + " = '" + sortValue +"'";
+
+
+		// open database connection.
+		conn.Open();
+
+		//Execute the query 
+		SqlDataReader sdr = cmd.ExecuteReader();
+
+		List<List<string>> Result = new List<List<string>>();
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+
+			List<string> list = new List<string>();
+			foreach (string column in columns)
+			{
+
+				list.Add(sdr[column].ToString());
+			}
+			Result.Add(list);
+		}
+		//Close the connection
+		conn.Close();
+
+		return Result;
 	}
 	List<List<object>> RunCommand(string command){
 		cmd.CommandText = command;

@@ -24,16 +24,20 @@ public class Helper {
 		BeginLoop:
 			var property = properties[i++];
 			try {
-				cmd += (string)property.Name;
-				cmd += " ";
 				switch(property.PropertyType.Name){
 					case "String":
+						cmd += (string)property.Name;
+						cmd += " ";
 						cmd += "varchar(255)";
 						break;
 					case "Int32":
+						cmd += (string)property.Name;
+						cmd += " ";
 						cmd += "int";
 						break;
 					case "DateTime":
+						cmd += (string)property.Name;
+						cmd += " ";
 						cmd += "date";
 						break;
 					default:
