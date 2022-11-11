@@ -17,6 +17,7 @@
                 <div class="item box" style="width:200px;height:80%; margin-top:14px;"></div>
                 <p class="item" style="margin-top: 57px; width: 80%;">@(item.ModelName)</p>
                 <a href="\admin\AddItemModel?id=@(item.Id)" class="item"><input type="button" class="editStockBtn item" style="margin-top: 57px;" value="Rediger lagerbeholdning" /> </a>
+                <a href="\admin\deleteModel?id=@(item.Id)"><input type="button" value="Slet model"> </a>
             </div>
         }
     }

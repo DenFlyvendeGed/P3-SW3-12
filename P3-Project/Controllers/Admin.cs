@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
 using System.Text.Json;
-
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace P3_Project.Controllers
 {
@@ -104,22 +104,22 @@ namespace P3_Project.Controllers
             }
             else
             {
-
                 itemModel.Update();
-
-
             }
-
 
         }
 
+        public ActionResult deleteModel(int Id)
+        {
+            ItemModel.Delete(Id);
+            return RedirectToAction(nameof(Stock));
+        }
 
         private void setup()
         {
             StorageDB db = new StorageDB();
             db.CreateTable("ItemModels", new ItemModel());
         }
-
 
         public ActionResult CreateItemModel()
         {
@@ -141,16 +141,11 @@ namespace P3_Project.Controllers
             }
             else
             {
-
                 model.Update();
-                
-
             }
 
             return Redirect("Webshop");
         }
-
-
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -182,7 +177,6 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             try
             {
-
                 item.ChangeStock(-1);
             }
             catch (Exception ex)
@@ -222,6 +216,7 @@ namespace P3_Project.Controllers
 
             return RedirectToAction(nameof(Webshop));
         }
+
         public ActionResult ItemShowCase(string id)
         {
             StorageDB db = new StorageDB();

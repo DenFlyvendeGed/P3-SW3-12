@@ -103,8 +103,6 @@ namespace P3_Project.Models
             return dict;
         }
 
-
-
         //Create SQL table corresponding to the items in the ItemModel that is being created
         public void CreateItemTable()
         {
@@ -134,6 +132,9 @@ namespace P3_Project.Models
         public void Update()
         {
             ItemTable = "Item" + Id;
+            db.RemoveRow("ItemModels", "Id", Id.ToString());
+            db.AddRowToTable("ItemModels", this);
+            
             db.DeleteTable(ItemTable);
             CreateItemTable();
             if (items != null)
@@ -147,8 +148,18 @@ namespace P3_Project.Models
 
         }
 
+        //Delete exsisting table
         public void Delete()
         {
+            db.DeleteTable(ItemTable);
+            db.RemoveRow("ItemModels", "Id", Id.ToString());
+
+
+        }
+
+        public static void Delete(int Id)
+        {
+            string ItemTable = db.GetField("Id", Id.ToString(), "ItemModels", "ItemTable");
             db.DeleteTable(ItemTable);
             db.RemoveRow("ItemModels", "Id", Id.ToString());
         }
