@@ -25,12 +25,16 @@ public class Helper {
 			var property = properties[i++];
 			try {
 				cmd += (string)property.Name;
+				cmd += " ";
 				switch(property.PropertyType.Name){
 					case "String":
-						cmd += " varchar(255)";
+						cmd += "varchar(255)";
 						break;
 					case "Int32":
-						cmd += " int";
+						cmd += "int";
+						break;
+					case "DateTime":
+						cmd += "date";
 						break;
 					default:
 						throw new NotImplementedException();
@@ -55,11 +59,17 @@ public class Helper {
 			var val = property.GetValue(classObjet);
 			if(val != null && property.Name != "Id") {
 				columns += property.Name + ", ";
-				values += "'" + val.ToString().Replace("'", "''") + "', ";
+				string value = "";
+				switch(property.Name){
+					case "DateTime": value = ((DateTime)val).ToString("yyyy-MM-dd"); break;
+					default: value = val.ToString(); break;
+				}
+				values += "'" + value.Replace("'", "''") + "', ";
 			}
 		}
 
-		cmd += columns.Remove(columns.Length - 2) + ") VALUES (" + values.Remove(values.Length - 2) + ")";
+		cmd += columns.Remove(columns.Length - 2) + ") VALUES (" 
+			 + values .Remove(values .Length - 2) + ")";
 
 		return cmd;
 	}

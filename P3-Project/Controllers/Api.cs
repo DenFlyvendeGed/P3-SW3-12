@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using P3_Project.Models.DB;
+using P3_Project.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -40,14 +42,7 @@ namespace P3_Project.Controllers
         {
         }
 
-        [Route("Test")]
-        public IEnumerable<string> Test()
-        {
-            return new string[] { "test" };
-        }
-
-
-
+       
 
     }
 
@@ -60,5 +55,7 @@ namespace P3_Project.Controllers
         {
             return new string[] { "test" };
         }
+
+
     }
 }

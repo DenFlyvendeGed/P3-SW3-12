@@ -10,7 +10,6 @@ namespace P3_Project.Models
  
     public class ItemModel
     {
-
         public int Id { get; set; }
         public string ModelName { get; set; }
         public string? ItemTable { get; set; }
@@ -25,9 +24,7 @@ namespace P3_Project.Models
         {
             Id = 0;
             ModelName = "";
-            
-            Description = "";
-            
+            Description = ""; 
         }
 
         //Adds the ItemModel instance to the list of Itemmodel's int the SQL table
