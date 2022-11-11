@@ -1,4 +1,4 @@
-﻿@model P3_Project.Models.ItemModel
+﻿@*@model P3_Project.Models.ItemModel*@
 @{
     Layout = "AdminLayout";
 
@@ -19,34 +19,84 @@
     <div id="imgBox" class="center">
         <div id="img" class="center">
             @*Billed placehodler*@
-            <img id="prodImg" src="" />
-            @*Upload knap*@
-            <button id="uploadButton" class="center ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
-            <input type="file" accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+            <img id="prodImg" src=""/>
+            @*Buttons*@
+            <div class="imageButtons center">
+                @*billed vælger*@
+                <button class="ASHButton" onclick="lastPic()">Tilbage</button>
+                <button class="ASHButton" onclick="nextPic()">Næste</button>
+                @*Upload knap*@
+                <button class="ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
+                <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+            </div>
         </div>
     </div>
 
 
     <script>
+        
+        let pictures = [];
+        let currentPic = 0;
         const input = document.querySelector('input');
         const log = document.getElementById('imgUp');
+        const imgTag = document.querySelector('#img img');
 
         input.addEventListener('input', saveImg);
 
-        function saveImg(e) {
-
-            let imgTag = document.querySelector('#img img');
-            let image = new Blob([log.textContent], { type: 'img' });
-
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imgTag.setAttribute('src', e.target.result)
-
+        function lastPic() {
+            if(currentPic == 0){
+                currentPic = pictures.length-1;
+            }else{
+                currentPic--;
             }
+            showImg(currentPic);
+        }
 
-            reader.readAsDataURL(input.files[0]);
+        function nextPic() {
+            if (currentPic == pictures.length-1) {
+                currentPic = 0;
+            } else {
+                currentPic++;
+            }
+            showImg(currentPic);
+        }
 
+        function showImg(pic){
+            console.log(currentPic);
+            if(pictures[pic] != undefined)
+                imgTag.setAttribute('src', pictures[pic]);
+        }
+
+        async function saveImg(e){
+            
+            var reader = new FileReader();
+            
+            reader.onload = async function (e) {
+                imgTag.setAttribute('src', e.target.result);
+                pictures.push(e.target.result);
+                currentPic = pictures.length-1;
+                console.log(currentPic);
+
+                
+                //fetch('/Admin/uploadItemModel', {
+                //    method: "Post",
+                //    body: JSON.stringify({img: e.target.result})
+                //})
+                //    .then(response => {
+                //        if (response.ok) {
+                //            console.log(e.target.result);
+                //        } else {
+                //            alert("HTTP-Error: " + response.status);
+                //        }
+                //    })
+            }
+            //reader.readAsDataURL(input.files[0]);
+
+            for( file of input.files){
+
+                reader.readAsDataURL(file);
+                
+            }
 
         }
     </script>
