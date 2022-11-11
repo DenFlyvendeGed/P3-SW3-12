@@ -1,4 +1,5 @@
-﻿
+﻿@using P3_Project.Models
+@model List<PackModel>
 @{
     Layout = "AdminLayout";
 
@@ -9,36 +10,86 @@
 
 <div class="flexbox-createPack">
     <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%);
-    transform: translateY(30%);">
-        Angiv navn: <input type="text" class="topBar-Input">
+    transform: translateY(25%);">
+        Angiv navn: <input type="text" class="topBar-Input" id="LeftInput">
     </h5>
-    <h5 style="margin-left:1%; display:inline; font-weight: bolder; -ms-transform: translateY(25%);
-    transform: translateY(30%);">
-        Angiv pris: <input type="text" class="topBar-Input">
+    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%);
+    transform: translateY(25%);">
+        Angiv pris: <input type="text" class="topBar-Input" id="RightInput">
     </h5>
 </div>
 
 <h3 style="margin-top: 25px"> Valgmulighed 1: </h3>
-<div class="box" style="margin-bottom: 5px">
+<div class="Box-Minus" style="position: absolute; left: 4vw; top: 480px; width: 41px; height: 41px;">
+    <img class="Minus" src="../Pics/minus-svgrepo-com.svg" />
+</div>
 
- 
-    <div class="valgmulighedPakke"> 
-        <h7> Tilføj pakke</h7>
+<div class="flexBox-Packcreator" style="margin-bottom: 5px">
+    
+    @await Html.PartialAsync("../Shared/Pack-CreateEdit.cshtml")
+    
+    <div class="OptionBox" id="AddOption" style="left: 60px; top:20px; height: 138px; width:180px; border: 4px solid #000000;">
+        <h2>
+            <strong style="position: absolute; display: block; margin: auto; left: 50px; top: 30px;">Tilføj Vare</strong>
+        </h2>
     </div>
-
 </div>
+<p class="buttonBox" style="top: 10px;">Tilføj valgmulighed</p>
+
+<p class="buttonBox" style="top: 30px; left: 91%;">Opret pakke</p>
 
 
-<h3 style="margin-top: 25px"> Valgmulighed 2:</h3>
-<div class="box" style="margin-bottom: 5px">
+<script>
 
-    <h2>Paris</h2>
-    <p>Paris is the capital of France.</p>
-    <script>  </script>
 
+    const node = document.createElement("h1");
+    const textnode = document.createTextNode("Water");
+    node.appendChild(textnode);
+    document.querySelector(".flexBox-Packcreator").appendChild(node);
+        /*
+        const LargeDiv = document.createElement("div");
+        LargeDiv.className = "LargeDiv";
+        document.querySelector(".flexBox-Packcreator").appendChild(LargeDiv);
+
+        let Options = document.createElement("div");
+        Options.setAttribute("class", "OptionBox");
+        Options.setAttribute("style", "left: 65px; height: 158px; width:120px;");
+        LargeDiv.appendChild(Options);
+        let DropDown = document.createElement("select");
+        LargeDiv.appendChild(Options);
+        DropDown.setAttribute("class", "Dropdown-Option");
+        DropDown.setAttribute("style", "left:40px;");
+        let Option1 = document.createElement("option").setAttribute("value", "hættetrøje-uden-lynlås")
+        DropDown.appendChild(Option1);
+        Option1.appendChild(document.createTextNode(Hættetrøje u.lynlås));
+        let MinusBox = document.createElement("div");
+        MinusBox.setAttribute("class", "Box-Minus");
+        MinusBox.setAttribute("style", "position: relative; left: 200px; bottom: 80px; width: 31px; height: 31px;");
+        LargeDiv.appendChild(MinusBox);
+        let Minus = document.createElement("img");
+        Minus.setAttribute("class", "Minus");
+        Minus.setAttribute("src", "../Pics/minus-svgrepo-com.svg");
+        MinusBox.appendChild(Minus);
+</script>
+
+@*
+pack element thing
+<div>
+    <div class="OptionBox" style="left: 65px; height: 158px; width:120px;">
+    </div>
+    <select class="Dropdown-Option" style="left:40px;">
+        <option value="hættetrøje-uden-lynlås">Hættetrøje u. lynlås</option>
+        <option value="t-shirt">T-shirt</option>
+        <option value="puma-sportstaske">Puma sportstaske</option>
+        <option value="puma-rygsæk">Puma rygsæk</option>
+        <option value="drikkeflaske">Drikkeflaske</option>
+        <option value="sweatpants">Sweatpants</option>
+        <option value="bukser-uden-logo">Bukser u. logo</option>
+        <option value="bukser-med-logo">Bukser m. logo</</option>
+    </select>
+    <div class="Box-Minus" style="position: relative; left: 200px; bottom: 80px; width: 31px; height: 31px;">
+        <img class="Minus" src="../Pics/minus-svgrepo-com.svg" />
+    </div>
 </div>
-
-
-<p class="buttonBox">Opret pakke</p>
-
+*@
     

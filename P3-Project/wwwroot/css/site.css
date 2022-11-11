@@ -81,6 +81,7 @@ body {
     text-align: center;
     display: flex;
     justify-content: center;
+    
 }
 
 .navBarText:hover {
@@ -227,6 +228,17 @@ a.BoxLink:link {
     text-decoration: none;
     font-weight: normal;
 }
+.packBox-plus {
+    position: absolute;
+    max-width: inherit;
+    max-height: 237px;
+    display: block;
+    margin:auto;
+    width: 40%;
+    height: 40%;
+    right: 30%;
+    top: 30%;
+}
 
 a.BoxLink:visited {
     color: black;
@@ -261,15 +273,12 @@ a.BoxLink:active {
 }
 .topBar-Input {
     display: inline-block;
-    margin-left: 32%;
     -ms-transform: translateY(-80%);
     transform: translateY(-80%);
 }
 .buttonBox {
     display: block;
     position: relative;
-    top: 30px;
-    left: 91%;
     background-color: #D9D9D9;
     border: 1px solid #000000;
     padding: 2pt;
@@ -300,7 +309,12 @@ a.BoxLink:active {
     background-color: #D9D9D9;
     border: 1px solid #000000;
 }
-
+#LeftInput {
+    margin-left: 50%;
+}
+#RightInput {
+    margin-left: 46%;
+}
 
 
 
@@ -313,6 +327,76 @@ a.BoxLink:active {
     .flexbox-createPack {
         flex-direction: column;
     }
+    #LeftInput {
+        margin-left: 26%;
+    }
+
+    #RightInput {
+        margin-left: 24%;
+    }
+
+}
+@media (max-width: 768px) {
+    .flexbox-createPack {
+        flex-direction: column;
+    }
+
+    #LeftInput {
+        margin-left: 34%;
+    }
+
+    #RightInput {
+        margin-left: 32%;
+    }
+}
+
+.OptionBox {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    margin-right: 120px;
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.Dropdown-Option {
+    position: relative;
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+.Box-Minus {
+    margin-left: 2px;
+    margin-right: 2px;
+    box-sizing: content-box;
+    display: block;
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.Box-Minus:hover {
+    box-shadow: 2px 2px 5px black;
+}
+.Minus {
+    position: absolute;
+    max-width: inherit;
+    max-height: 237px;
+    display: block;
+    margin: auto;
+    width: 40%;
+    height: 40%;
+    right: 30%;
+    top: 30%;
+}
+.flexBox-Packcreator {
+    display: flex;
+    flex-direction: row;
+    box-sizing: content-box;
+    position: relative;
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+#AddOption:hover {
+    box-shadow: 2px 2px 5px black;
 }
     /*#footerSlogan {
     margin-top: 9px;
