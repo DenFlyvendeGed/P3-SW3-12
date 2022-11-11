@@ -1,0 +1,20 @@
+﻿@using P3_Project.Models
+@model PackModel
+
+@{
+    Layout = "AdminLayout";
+
+    ViewData["Title"] = "Rediger pakker";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Rediger pakker.</p>
+
+<p id="demo"></p>
+
+<a asp-area="" asp-controller="Admin" asp-action="EditPackModel">Rediger pakker</a>
+
+<div class="Flex-Container-PackBoxes">
+    @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Model)
+</div>

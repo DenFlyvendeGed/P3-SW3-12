@@ -1,4 +1,5 @@
 .vs
 bin
 obj
-app.config
+App.Config
+/P3-Project/Properties

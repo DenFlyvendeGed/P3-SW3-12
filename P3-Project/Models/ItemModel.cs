@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 
+using P3_Project.Models.DB;
+
 namespace P3_Project.Models
 {
  
     public class ItemModel
     {
-
         public int Id { get; set; }
 
         public string ModelName { get; set; }
@@ -40,19 +41,20 @@ namespace P3_Project.Models
             ItemTable = "";
 
 
+            Description = ""; 
         }
 
         //Adds the ItemModel instance to the list of Itemmodel's int the SQL table
         public void Create()
         {
             
-            if(db.CheckRow("ItemModels", "ModelName", ModelName)){
+            if(db.DB.CheckRow("ItemModels", "ModelName", ModelName)){
                 throw new Exception("Item already exist");
             }
-            db.AddRowToTable("ItemModels", this);
-            Id = int.Parse(db.GetField("modelName", this.ModelName, "ItemModels", "Id"));
+            db.DB.AddRowToTable("ItemModels", this);
+            Id = int.Parse(db.DB.GetField("modelName", this.ModelName, "ItemModels", "Id"));
             ItemTable = "Item" + Id;
-            db.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
             CreateItemTable();
             if(items != null)
             {
@@ -95,7 +97,7 @@ namespace P3_Project.Models
             var dict = new Dictionary<string, int>();
 
             List<string> columns = new List<string>() { "Color", "Stock" };
-            List<List<string>> items = db.GetSortedList(ItemTable, columns, "Size", size);
+            List<List<string>> items = db.DB.GetSortedList(ItemTable, columns, "Size", size);
 
             items.ForEach(item => dict.Add(item[0], int.Parse(item[1])));
 
@@ -108,34 +110,34 @@ namespace P3_Project.Models
         {
 
 
-            db.CreateTable(ItemTable, new Item());
+            db.DB.CreateTable(ItemTable, new Item());
         }
 
         public static ItemModel LoadModel(string id)
         {
-            return db.GetRow("ItemModels", new ItemModel(), id);
+            return db.DB.GetRow("ItemModels", new ItemModel(), id);
         }
 
         public void LoadItems()
         {
             
-            items = db.getAllElements(ItemTable, new Item());
+            items = db.DB.getAllElements(ItemTable, new Item());
         }
        
         public void AddItem(Item item)
         {
 
-            db.AddRowToTable(ItemTable, item);
+            db.DB.AddRowToTable(ItemTable, item);
         }
         
         //Update exsisting item model values
         public void Update()
         {
             ItemTable = "Item" + Id;
-            db.RemoveRow("ItemModels", "Id", Id.ToString());
-            db.AddRowToTable("ItemModels", this);
+            db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
+            db.DB.AddRowToTable("ItemModels", this);
             
-            db.DeleteTable(ItemTable);
+            db.DB.DeleteTable(ItemTable);
             CreateItemTable();
             if (items != null)
             {
@@ -151,17 +153,17 @@ namespace P3_Project.Models
         //Delete exsisting table
         public void Delete()
         {
-            db.DeleteTable(ItemTable);
-            db.RemoveRow("ItemModels", "Id", Id.ToString());
+            db.DB.DeleteTable(ItemTable);
+            db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
 
         }
 
         public static void Delete(int Id)
         {
-            string ItemTable = db.GetField("Id", Id.ToString(), "ItemModels", "ItemTable");
-            db.DeleteTable(ItemTable);
-            db.RemoveRow("ItemModels", "Id", Id.ToString());
+            string ItemTable = db.DB.GetField("Id", Id.ToString(), "ItemModels", "ItemTable");
+            db.DB.DeleteTable(ItemTable);
+            db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
         }
     }
 }

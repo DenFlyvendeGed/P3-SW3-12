@@ -5,6 +5,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using NuGet.ContentModel;
 using P3_Project.Models;
+using P3_Project.Models.DB;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
@@ -24,11 +25,11 @@ namespace P3_Project.Controllers
         // GET: Admin/Create
         public ActionResult Storage()
         {
-            StorageDB DB = new StorageDB();
+            StorageDB DB = new();
 
-            DB.getFieldType("Test", "Id");
+            //DB.GetFieldType("Test", "Id");
 
-            DB.GetField("Id", "1", "Test", "Id");
+            DB.DB.GetField("Id", "1", "Test", "Id");
             return View();
         }
 
@@ -62,9 +63,32 @@ namespace P3_Project.Controllers
             return View();
         }
 
+        public ActionResult PackViewModel()
+        {
+            var x = 5;
+            PackModel test = new PackModel(1, new StorageDB());
+            test.Name = "Test";
+            List<PackModel> Packs = new List<PackModel>();
+            for (int i = 0; i<x; i++) {
+                Packs.Add(test);
+            }
+            return View(test);
+        }
+
+        public ActionResult CreatePackModel()
+        {
+            return View();
+        }
+
         public ActionResult EditPackModel()
         {
             return View();
+        }
+        
+        public ActionResult EditPromoCode()
+        {
+            var model = new Models.PromoCode();
+            return View(model);
         }
 
         public ActionResult PromoCode()
@@ -76,14 +100,15 @@ namespace P3_Project.Controllers
         {
             StorageDB db = new StorageDB();
             
-            if(!db.CheckTable("ItemModels"))
+            
+            if(!db.DB.CheckTable("ItemModels"))
                 setup();
 
-            List<ItemModel> itemModels = db.getAllElements("itemModels", new ItemModel());
+            List<ItemModel> itemModels = db.DB.GetAllElements("ItemModels", new ItemModel());
 
             foreach (ItemModel itemModel in itemModels)
             {
-                itemModel.items = db.getAllElements(itemModel.ItemTable, new Item());
+                itemModel.items = db.DB.GetAllElements(itemModel.ItemTable, new Item());
 
             };
 
@@ -123,7 +148,8 @@ namespace P3_Project.Controllers
         private void setup()
         {
             StorageDB db = new StorageDB();
-            db.CreateTable("ItemModels", new ItemModel());
+
+            db.DB.CreateTable("ItemModels", new ItemModel());
         }
 
         public ActionResult CreateItemModel()
@@ -206,9 +232,9 @@ namespace P3_Project.Controllers
         public ActionResult Delete(string id, Item item)
         {
             StorageDB db = new StorageDB();
-            string subTable = db.GetField("id", id, "ItemModels", "itemTable");
-            db.RemoveRow("ItemModels", "id", id);
-            db.DeleteTable(subTable);
+            string subTable = db.DB.GetField("id", id, "ItemModels", "itemTable");
+            db.DB.RemoveRow("ItemModels", "Id", id);
+            db.DB.DeleteTable(subTable);
             
             return RedirectToAction(nameof(Webshop));
         }
@@ -216,8 +242,8 @@ namespace P3_Project.Controllers
         public ActionResult DeleteItem(string modelId, string id)
         {
             StorageDB db = new StorageDB();
-
-            db.RemoveRow("item" + modelId, "id", id);
+           
+            db.DB.RemoveRow("item" + modelId, "id", id);
 
             return RedirectToAction(nameof(Webshop));
         }
