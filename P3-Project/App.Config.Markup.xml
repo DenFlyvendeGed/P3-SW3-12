@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<!-- EMAIL <DON'T TOUCH> -->
+	<appSettings>
+		<!-- What is the smtp.server for the email -->
+		<add key="email-server"   value="smtp.gmail.com"/>
+
+		<!-- What is the email that should be sent from -->
+		<add key="email-username" value="stud.sw312e22@gmail.com"/>
+
+		<!-- What is the password of the email -->
+		<add key="email-password" value="crxygpmhabehdvmz"/>
+	</appSettings>
+	<!-- END OF EMAIL -->
+
+	<!-- SQL Database -->
+	<appSettings>
+		<!-- What database are you using (SQL OR MySQL)-->
+		<add key="database" value="<!-- YOUR DATABASE TYPE HERE -->"/>
+	</appSettings>
+	<connectionStrings>
+		<!-- The connectionString is the SQL or MySQL connection string-->
+		<add 
+			name="String"
+			connectionString="<!-- YOUR CONNECTION STRING HERE -->" 
+		/>
+	</connectionStrings>
+	<!-- END OF SQL Database -->
+</configuration>
