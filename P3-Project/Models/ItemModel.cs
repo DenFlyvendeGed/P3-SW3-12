@@ -121,7 +121,7 @@ namespace P3_Project.Models
         public void LoadItems()
         {
             
-            items = db.DB.getAllElements(ItemTable, new Item());
+            items = db.DB.GetAllElements(ItemTable, new Item());
         }
        
         public void AddItem(Item item)

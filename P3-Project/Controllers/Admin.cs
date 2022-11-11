@@ -41,10 +41,10 @@ namespace P3_Project.Controllers
         public ActionResult Stock()
         {
             StorageDB db = new StorageDB();
-            if (!db.CheckTable("ItemModels"))
+            if (!db.DB.CheckTable("ItemModels"))
                 setup();
             
-            List<ItemModel> models = db.getAllElements("ItemModels", new ItemModel());
+            List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
 
             ViewBag.model = models;
             return View();
