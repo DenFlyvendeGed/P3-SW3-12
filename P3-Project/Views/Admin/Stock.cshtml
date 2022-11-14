@@ -3,7 +3,9 @@
 
     ViewData["Title"] = "Lager oversigt";
 }
+
 <h4>@ViewData["Title"]</h4>
+
 
 <script>
     document.querySelector('#StockSite').style = ("color: rgb(59, 146, 178) !important");
@@ -13,6 +15,7 @@
 
     @{
         foreach(ItemModel item in ViewBag.model){
+
             <div class="stockBox  box container">
                 <div class="item box stockPicBox" ></div>
                 <p class="item stockItemName">@(item.ModelName)</p>
@@ -46,3 +49,4 @@
     });
 
 </script>
+

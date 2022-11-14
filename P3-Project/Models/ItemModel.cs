@@ -135,11 +135,11 @@ namespace P3_Project.Models
         {
             ItemTable = "Item" + Id;
 
-
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ModelPrice", ModelPrice.ToString());
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ModelName", ModelName);
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "StockAlarm", StockAlarm.ToString());
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "Description", Description);
+
             db.DB.DeleteTable(ItemTable);
             CreateItemTable();
             if (items != null)

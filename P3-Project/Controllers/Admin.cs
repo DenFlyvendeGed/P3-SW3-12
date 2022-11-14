@@ -11,10 +11,12 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+
 using System.Web.Http;
 
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
+
 
 namespace P3_Project.Controllers
 {
@@ -26,6 +28,7 @@ namespace P3_Project.Controllers
             return View("Stock");
         }
 
+
         //Create starting database
         private void setup()
         {
@@ -36,6 +39,7 @@ namespace P3_Project.Controllers
 
         #region ItemModel
         //Load stock page
+
         public ActionResult Stock()
         {
             StorageDB db = new StorageDB();
@@ -49,6 +53,7 @@ namespace P3_Project.Controllers
         }
 
         //Add or edit item model
+
         public ActionResult AddItemModel(string id)
         {
             Console.WriteLine(id);
@@ -102,6 +107,7 @@ namespace P3_Project.Controllers
         }
 
         #endregion
+
 
        
     }

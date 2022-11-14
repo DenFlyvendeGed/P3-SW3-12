@@ -6,7 +6,9 @@
 
 }
 
+
 <h4>@(ViewBag.model == null? "Opret " : "Opdater ") genstand</h4>
+
 
 
 <script>
@@ -126,8 +128,10 @@
                 table, th, td {
                     border: 1px solid black;
                     border-collapse: collapse;
+
                     margin-left: -1px;
                     margin-top: -1px;
+
                 }
             </style>
 
@@ -135,17 +139,21 @@
                 <tbody id="itemSize">
                     @*<------------------------------------- Create color headers --------------------------------------->*@                  
                     <tr id="itemColor">
+
                         <th class="headerStyle">Størrelse:\Farve:</th>
+
                         @{
                         if(ViewBag.model != null){
                         int createIdColor = 1;
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
+
                             <td id="@createIdColor" class="colStyle">
                                 <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
                                 <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
                                 <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
                             </td>
+
 
                         data.Add(new Dictionary<string,object>{
                         {"id",@createIdColor},
@@ -174,10 +182,12 @@
                     //Create size headers
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
+
                         <tr id="@createIdSize" class="headerStyle">
                             <td>
                                 <input value="@size" id="@createIdSize" style="width: 100px;">
                                 <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
+
                             </td>
 
                             @{
@@ -189,7 +199,9 @@
                                 foreach((string, string) color in ViewBag.model.GetUniqueColor()){
                                     int colId = colX;
                                     <td id="@createIdSize,@colX" class="@colId">
+
                                         <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+
                                     </td>
                                     colX+=1;
 
@@ -243,7 +255,9 @@
 
 <div style="margin-left: 80vw;">
 
+
     <input type="submit" id="CreateItemModel" class="button" value=@(ViewBag.model == null? "Opret " : "Opdater ")/>
+
 
 </div>
 
@@ -342,7 +356,9 @@
         //Add a col, which is color
         this.addCol = () => {
             let newCol = colDom.insertCell(-1);
+
             newCol.classList = "colStyle";
+
             newCol.id = this.colId;
 
             newCol.addEventListener("change", grid.updateCol);
@@ -357,6 +373,7 @@
             );
 
             let newElem = document.createElement('input');
+
             newElem.style = "width: 103px;";
             newElem.placeholder = "Farve"
             newElem.id = this.colId;
@@ -372,6 +389,7 @@
             newBtn.type = "button";
             newBtn.value = " - ";
             newBtn.classList = "removeAttributeBTN";
+
             newBtn.addEventListener("click", grid.delCol);
 
             newCol.append(newColor);
@@ -399,7 +417,9 @@
                     newCell.id = id;
                     newCell.classList = colId;
                     let newElem = document.createElement('input');
+
                     newElem.classList = "elemStyle";
+
                     newElem.type = "number";
                     newElem.min = "0";
                     newElem.placeholder = "Antal";
@@ -431,7 +451,9 @@
                     newCell.id = id;
                     newCell.classList = colId;
                     let newElem = document.createElement('input');
+
                     newElem.classList = "elemStyle"
+
                     newElem.type = "number";
                     newElem.min = "0";
                     newElem.placeholder = "Antal";
@@ -565,13 +587,16 @@
         else if (itemModel.ModelName == "") {
             alert("Mangler model navn");
         } else {
+
             const response = await fetch("../api/Admin/ItemModelTable", {
                 method: 'PUT',
                 redirect: 'follow',
+
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(itemModel)
+
             })
             .then(response => {
                 if (response.redirected) {
@@ -580,6 +605,7 @@
             });
            
             
+
         }
     }
 
