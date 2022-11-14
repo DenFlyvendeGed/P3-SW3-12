@@ -8,14 +8,18 @@ public enum PromoCodeItemType {
 	All, AllPacks, AllItems, Some
 }
 
+public class PromoCodeSomeItemType {
+	public int Id{get; set;} = 0;
+	public bool IsPack{get; set;} = false;
+}
+
 public class PromoCode
 {
-	// THE ORDER OF FIELDS MATTERS FOR THE DATABASE!!
 	public int? Id { get; private set;} = null;
 	public string Code {get; set;} = "";
 	public PromoCodeDiscountType DiscountType{ get; set; }
 	public PromoCodeItemType     ItemType { get; set; }
-	public List<(bool, int)>     Items{get; set;} = new();
+	public List<PromoCodeSomeItemType>  Items{get; set;} = new();
 	public DateTime ExpirationDate{get; set;}
 
 	const string TABLE_NAME = "PromoCode";
@@ -32,7 +36,8 @@ public class PromoCode
 		});
 
 		if(this.ItemType == PromoCodeItemType.Some){
-			Items = db.DB.ReadFromTable($"{TABLE_NAME}_{Id}", (r) => (r[0].ToString() == "T" ? true : false, (int)r[1]));
+			Items = db.DB.ReadFromTable($"{TABLE_NAME}_{Id}", 
+				(r) => new PromoCodeSomeItemType(){IsPack = r[0].ToString() == "T" ? true : false, Id = (int)r[1]});
 		}
 	}
 
@@ -83,8 +88,8 @@ public class PromoCode
 
 			foreach(var item in Items) {
 				db.DB.PushToTable($"{TABLE_NAME}_{Id}", new object[] {
-					item.Item1 ? 'T' : 'F',
-					item.Item2
+					item.IsPack ? 'T' : 'F',
+					item.Id
 				});
 			}
 		}
