@@ -5,7 +5,8 @@
     ViewData["Title"] = "Tilføj vare";
 
 }
-<h4>Opret genstand</h4>
+
+<h4>@(ViewBag.model == null? "Opret " : "Opdater ") genstand</h4>
 
 
 <script>
@@ -125,6 +126,8 @@
                 table, th, td {
                     border: 1px solid black;
                     border-collapse: collapse;
+                    margin-left: -1px;
+                    margin-top: -1px;
                 }
             </style>
 
@@ -138,11 +141,11 @@
                         int createIdColor = 1;
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
-                                        <td id="@createIdColor" class="colStyle">
-                                            <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
-                                            <input type="color" class="colorWheel" id="chosenColor" name="chosenColor" value="@color.Item2">
-                                    <input type="button" style="height:30px;" value="-">
-                                        </td>
+                            <td id="@createIdColor" class="colStyle">
+                                <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
+                                <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+                                <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
+                            </td>
 
                         data.Add(new Dictionary<string,object>{
                         {"id",@createIdColor},
@@ -171,13 +174,13 @@
                     //Create size headers
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
-                            <tr id="@createIdSize" class="headerStyle">
-                                <td>
-                                    <input value="@size" id="@createIdSize" style="width: 100px;">
-                                    <input type="button" value="-">
-                                </td>
+                        <tr id="@createIdSize" class="headerStyle">
+                            <td>
+                                <input value="@size" id="@createIdSize" style="width: 100px;">
+                                <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
+                            </td>
 
-                                                                        @{
+                            @{
                                 //Create Items for given header
                                 var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
                                 int colX = 1;
@@ -185,9 +188,9 @@
                                 List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
                                 foreach((string, string) color in ViewBag.model.GetUniqueColor()){
                                     int colId = colX;
-                                                                                                                            <td id="@createIdSize,@colX" class="@colId">
-                                                                                                                                <input type="number" min="0" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
-                                                                                                                            </td>
+                                    <td id="@createIdSize,@colX" class="@colId">
+                                        <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                    </td>
                                     colX+=1;
 
                                     //Item data object
@@ -207,10 +210,10 @@
                                 {"dom",""}
                                 });
 
-                                                                        }
+                            }
 
 
-                                                                    </tr>
+                        </tr>
 
                         createIdSize+=1;
                     }
@@ -240,7 +243,7 @@
 
 <div style="margin-left: 80vw;">
 
-    <input type="submit" id="CreateItemModel" class="button" value="Opdater"/>
+    <input type="submit" id="CreateItemModel" class="button" value=@(ViewBag.model == null? "Opret " : "Opdater ")/>
 
 </div>
 
@@ -368,7 +371,7 @@
             let newBtn = document.createElement('input');
             newBtn.type = "button";
             newBtn.value = " - ";
-            newBtn.style = "height:30px;";
+            newBtn.classList = "removeAttributeBTN";
             newBtn.addEventListener("click", grid.delCol);
 
             newCol.append(newColor);
@@ -428,7 +431,7 @@
                     newCell.id = id;
                     newCell.classList = colId;
                     let newElem = document.createElement('input');
-                    newElem.style = "width:180px; min-width:180px"
+                    newElem.classList = "elemStyle"
                     newElem.type = "number";
                     newElem.min = "0";
                     newElem.placeholder = "Antal";
@@ -562,14 +565,21 @@
         else if (itemModel.ModelName == "") {
             alert("Mangler model navn");
         } else {
-            const response = await fetch("/Admin/ItemModelTable", {
+            const response = await fetch("../api/Admin/ItemModelTable", {
                 method: 'PUT',
+                redirect: 'follow',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(itemModel)
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
             });
-            //return response.json();
+           
+            
         }
     }
 

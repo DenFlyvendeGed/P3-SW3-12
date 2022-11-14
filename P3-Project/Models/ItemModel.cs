@@ -134,9 +134,12 @@ namespace P3_Project.Models
         public void Update()
         {
             ItemTable = "Item" + Id;
-            db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
-            db.DB.AddRowToTable("ItemModels", this);
-            
+
+
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ModelPrice", ModelPrice.ToString());
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ModelName", ModelName);
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "StockAlarm", StockAlarm.ToString());
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "Description", Description);
             db.DB.DeleteTable(ItemTable);
             CreateItemTable();
             if (items != null)
