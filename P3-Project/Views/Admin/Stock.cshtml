@@ -14,31 +14,32 @@
 <div style="width: 80vw;">
 
     @{
-        foreach(ItemModel item in ViewBag.model){
+        foreach (ItemModel item in ViewBag.model)
+        {
 
-            <div class="stockBox  box container">
-                <div class="item box stockPicBox" ></div>
+            <div class="stockBox  box containerBox">
+                <div class="item box stockPicBox"></div>
                 <p class="item stockItemName">@(item.ModelName)</p>
                 <div class="item" id="@(item.Id)">
                     <a href="\admin\AddItemModel?id=@(item.Id)"><input type="button" class="editStockBtn" value="Rediger lagerbeholdning" /> </a>
                     <input type="button" class="deleteModelBTN" value="Slet model" name="@(item.ModelName)">
                     <a href="..\api\admin\deleteModel?id=@(item.Id)"></a>
                 </div>
-                                                                                                
+
             </div>
-               
-        }   
-    }   
+
+        }
+    }
 
     <a href="\admin\AddItemModel" style="float:right"><input type="button" style="margin-top:10px; float:right" value="Tilføj ny vare" /></a>
 </div>
 
 <script>
 
-    function confirmationPopUp(e){
+    function confirmationPopUp(e) {
         let model = e.target.name;
-        let content = confirm("Du er ved at slette: " +model+ "\n Er du sikker?");
-        if(content == true){
+        let content = confirm("Du er ved at slette: " + model + "\n Er du sikker?");
+        if (content == true) {
             console.log(e);
             e.target.nextElementSibling.click();
         }

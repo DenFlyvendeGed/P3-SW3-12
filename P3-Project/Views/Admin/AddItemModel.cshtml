@@ -7,7 +7,7 @@
 }
 
 
-<h4>@(ViewBag.model == null? "Opret " : "Opdater ") genstand</h4>
+<h4>@(ViewBag.model == null ? "Opret " : "Opdater ") genstand</h4>
 
 
 
@@ -16,93 +16,28 @@
 </script>
 
 
-<div class="container">
+<div class="containerBox">
 
 
-    <div id="imgBox" class="center">
-        <div id="img" class="center">
+    <div id="imgBox" class="item center ">
+        <div id="img" class="center" style="display:grid;">
+
             @*Billed placehodler*@
-            <img id="prodImg" src=""/>
-            @*Buttons*@
-            <div class="imageButtons center">
-                @*billed vælger*@
-                <button class="ASHButton" onclick="lastPic()">Tilbage</button>
-                <button class="ASHButton" onclick="nextPic()">Næste</button>
-                @*Upload knap*@
-                <button class="ASHButton" onclick="document.getElementById('imgUp').click();">Upload Billed</button>
-                <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
-            </div>
+            <img id="prodImg" class="picSize" src="" />
+
+        </div>
+
+        @*Buttons*@
+        <div class="imageButtons center">
+            @*billed vælger*@
+            <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+            <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+            @*Upload knap*@
+            <button class="ASHButton" onclick="document.getElementById('imgUp').click();" style="margin-top:1px;">Upload Billed</button>
+            <input type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
         </div>
     </div>
 
-
-    <script>
-        
-        let pictures = [];
-        let currentPic = 0;
-        const input = document.querySelector('input');
-        const log = document.getElementById('imgUp');
-        const imgTag = document.querySelector('#img img');
-
-        input.addEventListener('input', saveImg);
-
-        function lastPic() {
-            if(currentPic == 0){
-                currentPic = pictures.length-1;
-            }else{
-                currentPic--;
-            }
-            showImg(currentPic);
-        }
-
-        function nextPic() {
-            if (currentPic == pictures.length-1) {
-                currentPic = 0;
-            } else {
-                currentPic++;
-            }
-            showImg(currentPic);
-        }
-
-        function showImg(pic){
-            console.log(currentPic);
-            if(pictures[pic] != undefined)
-                imgTag.setAttribute('src', pictures[pic]);
-        }
-
-        async function saveImg(e){
-            
-            var reader = new FileReader();
-            
-            reader.onload = async function (e) {
-                imgTag.setAttribute('src', e.target.result);
-                pictures.push(e.target.result);
-                currentPic = pictures.length-1;
-                console.log(currentPic);
-
-                
-                //fetch('/Admin/uploadItemModel', {
-                //    method: "Post",
-                //    body: JSON.stringify({img: e.target.result})
-                //})
-                //    .then(response => {
-                //        if (response.ok) {
-                //            console.log(e.target.result);
-                //        } else {
-                //            alert("HTTP-Error: " + response.status);
-                //        }
-                //    })
-            }
-            //reader.readAsDataURL(input.files[0]);
-
-            for( file of input.files){
-
-                reader.readAsDataURL(file);
-                
-            }
-
-        }
-    </script>
 
 
     <div class="item CreateItemModel box">
@@ -122,22 +57,20 @@
 
 
         @*Item table*@
-        <div class="ItemTable" style="overflow:scroll;">
+        <div class="ItemTable" style="overflow:auto;">
 
             <style>
                 table, th, td {
                     border: 1px solid black;
                     border-collapse: collapse;
-
                     margin-left: -1px;
                     margin-top: -1px;
-
                 }
             </style>
 
             <table id="itemTable" ">
                 <tbody id="itemSize">
-                    @*<------------------------------------- Create color headers --------------------------------------->*@                  
+                    @*<------------------------------------- Create color headers --------------------------------------->*@
                     <tr id="itemColor">
 
                         <th class="headerStyle">Størrelse:\Farve:</th>
@@ -148,11 +81,11 @@
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
 
-                            <td id="@createIdColor" class="colStyle">
-                                <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
-                                <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
-                                <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
-                            </td>
+                                                        <td id="@createIdColor" class="colStyle">
+                                                            <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
+                                                            <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
+                                                        </td>
 
 
                         data.Add(new Dictionary<string,object>{
@@ -183,51 +116,51 @@
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
 
-                        <tr id="@createIdSize" class="headerStyle">
-                            <td>
-                                <input value="@size" id="@createIdSize" style="width: 100px;">
-                                <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
+                                                    <tr id="@createIdSize" class="headerStyle">
+                                                        <td>
+                                                            <input value="@size" id="@createIdSize" style="width: 100px;">
+                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
 
-                            </td>
+                                                        </td>
 
-                            @{
-                                //Create Items for given header
-                                var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
-                                int colX = 1;
+                                                        @{
+                        //Create Items for given header
+                        var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
+                        int colX = 1;
 
-                                List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
-                                foreach((string, string) color in ViewBag.model.GetUniqueColor()){
-                                    int colId = colX;
-                                    <td id="@createIdSize,@colX" class="@colId">
+                        List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
+                        foreach((string, string) color in ViewBag.model.GetUniqueColor()){
+                        int colId = colX;
+                                                                                        <td id="@createIdSize,@colX" class="@colId">
 
-                                        <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                                                                            <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
 
-                                    </td>
-                                    colX+=1;
+                                                                                        </td>
+                        colX+=1;
 
-                                    //Item data object
-                                    items.Add(new Dictionary<string,object>{
-                                    {"value",sizeDict[color.Item1]},
-                                    {"colId", colId},
-                                    {"dom",""}
-                                    });
+                        //Item data object
+                        items.Add(new Dictionary<string,object>{
+                        {"value",sizeDict[color.Item1]},
+                        {"colId", colId},
+                        {"dom",""}
+                        });
 
-                                }
+                        }
 
-                                //Header data object
-                                data.Add(new Dictionary<string,object>{
-                                {"id",createIdSize},
-                                {"size", size},
-                                {"items", items },
-                                {"dom",""}
-                                });
+                        //Header data object
+                        data.Add(new Dictionary<string,object>{
+                        {"id",createIdSize},
+                        {"size", size},
+                        {"items", items },
+                        {"dom",""}
+                        });
 
-                            }
+                                                        }
 
 
-                        </tr>
+                                                    </tr>
 
-                        createIdSize+=1;
+                    createIdSize+=1;
                     }
                     ViewBag.sizes = createIdSize;
                     ViewBag.sizeData = data;
@@ -254,11 +187,7 @@
 </div>
 
 <div style="margin-left: 80vw;">
-
-
-    <input type="submit" id="CreateItemModel" class="button" value=@(ViewBag.model == null? "Opret " : "Opdater ")/>
-
-
+    <input type="submit" id="CreateItemModel" class="button"  value=@(ViewBag.model == null? "Opret " : "Opdater ") />
 </div>
 
 
@@ -378,7 +307,7 @@
             newElem.placeholder = "Farve"
             newElem.id = this.colId;
             newCol.append(newElem);
-            
+
             let newColor = document.createElement('input')
             newColor.type = "color";
             newColor.classList = "colorWheel";
@@ -559,9 +488,9 @@
         row.dom = rowDom.children[row.id];
         row.dom.addEventListener("change", grid.updateRow);
         row.dom.querySelector("[type='button']").addEventListener("click", grid.delRow);
-        
+
         row.items.forEach(item => {
-            item.dom = row.dom.querySelector("[id*=',"+ item.colId + "']");
+            item.dom = row.dom.querySelector("[id*='," + item.colId + "']");
             item.dom.addEventListener("change", grid.updateRow);
         })
     });
@@ -577,8 +506,9 @@
             ModelPrice: parseInt(document.getElementById("ItemModelPrice").value),
             items: grid.saveGrid(),
             StockAlarm: parseInt(document.getElementById("StockNotification").value),
+            Pictures: fileArray,
         }
-
+        const data = JSON.stringify(itemModel);
         console.log(grid.itemData);
 
         if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0) {
@@ -595,18 +525,90 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(itemModel)
+                body: data
 
             })
-            .then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                }
-            });
-           
-            
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
+
+
 
         }
+    }
+
+
+    //Initiate picture
+    let pictures = [];
+    let toBeLoaded = [];
+    let currentPic = 0;
+    let fileArray = [];
+    const input = document.querySelector('input');
+    const log = document.getElementById('imgUp');
+    const imgTag = document.querySelector('#img img');
+
+    //Scroll last picture
+    function lastPic() {
+        if (currentPic == 0) {
+            currentPic = pictures.length - 1;
+        } else {
+            currentPic--;
+        }
+        showImg(currentPic);
+    }
+
+    //Scroll next picture
+    function nextPic() {
+        if (currentPic == pictures.length - 1) {
+            currentPic = 0;
+        } else {
+            currentPic++;
+        }
+        showImg(currentPic);
+    }
+
+    //Display picture in box
+    function showImg(pic) {
+        console.log(currentPic);
+        if (pictures[pic] != undefined)
+            imgTag.setAttribute('src', pictures[pic]);
+    }
+
+    //Save picture in list
+    async function saveImg(e) {
+
+        const reader = new FileReader();
+
+        reader.onload = async function (e) {
+
+            imgTag.setAttribute('src', e.target.result);
+            pictures.push(e.target.result);
+            currentPic = pictures.length - 1;
+            console.log(currentPic);
+
+            if (toBeLoaded.length != 0) {
+                reader.readAsDataURL(toBeLoaded.pop());
+            }
+        }
+
+        for (file of input.files) {
+            toBeLoaded.push(file);
+            fileArray.push(
+                {
+                    Name: file.name,
+                    Size: file.size,
+                    Type: file.type,
+                }
+            );
+            
+        }
+
+        if (toBeLoaded.length != 0) {
+            reader.readAsDataURL(toBeLoaded.pop());
+        }
+
     }
 
 
@@ -614,5 +616,7 @@
     document.querySelector("#AddRow").addEventListener("click", grid.addRow);
     document.querySelector("#AddCol").addEventListener("click", grid.addCol);
     document.querySelector("#CreateItemModel").addEventListener("click", sendDataToDB);
+    input.addEventListener('input', saveImg);
+
 
 </script>

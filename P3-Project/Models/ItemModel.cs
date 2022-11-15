@@ -12,7 +12,7 @@ using P3_Project.Models.DB;
 
 namespace P3_Project.Models
 {
- 
+
     public class ItemModel
     {
         public int Id { get; set; }
@@ -20,17 +20,17 @@ namespace P3_Project.Models
         public string ModelName { get; set; }
         public string ItemTable { get; set; }
         public string Description { get; set; }
-
         public int ModelPrice { get; set; }
         public int StockAlarm { get; set; }
-        //public string? Colors { get; set; }
-        //public string? Sizes { get; set; }
-
-
         public List<Item>? items { get; set; }
 
+        public List<Picture>? Pictures { get; set; }
+       
 
         static StorageDB db = new StorageDB();
+        
+
+        
         public ItemModel()
         {
             Id = 0;
@@ -41,14 +41,15 @@ namespace P3_Project.Models
             ItemTable = "";
 
 
-            Description = ""; 
+            Description = "";
         }
 
         //Adds the ItemModel instance to the list of Itemmodel's int the SQL table
         public void Create()
         {
-            
-            if(db.DB.CheckRow("ItemModels", "ModelName", ModelName)){
+
+            if (db.DB.CheckRow("ItemModels", "ModelName", ModelName))
+            {
                 throw new Exception("Item already exist");
             }
             db.DB.AddRowToTable("ItemModels", this);
@@ -56,7 +57,7 @@ namespace P3_Project.Models
             ItemTable = "Item" + Id;
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
             CreateItemTable();
-            if(items != null)
+            if (items != null)
             {
                 foreach (Item item in items)
                 {
@@ -64,7 +65,7 @@ namespace P3_Project.Models
                     AddItem(item);
                 }
             }
-           
+
         }
 
         //Get unique colors from given item model
@@ -78,7 +79,7 @@ namespace P3_Project.Models
             {
                 list.Add((item.Color, item.ColorWheel));
             }
-           
+
             return list;
         }
 
@@ -86,7 +87,7 @@ namespace P3_Project.Models
         public List<string> GetUniqueSize()
         {
             List<string> uniqueSizes = items.GroupBy(i => i.Size).Select(grp => grp.First()).Select(str => str.Size).ToList();
-            
+
             return uniqueSizes;
         }
 
@@ -120,16 +121,16 @@ namespace P3_Project.Models
 
         public void LoadItems()
         {
-            
+
             items = db.DB.GetAllElements(ItemTable, new Item());
         }
-       
+
         public void AddItem(Item item)
         {
 
             db.DB.AddRowToTable(ItemTable, item);
         }
-        
+
         //Update exsisting item model values
         public void Update()
         {
@@ -169,4 +170,6 @@ namespace P3_Project.Models
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
         }
     }
+
+    
 }
