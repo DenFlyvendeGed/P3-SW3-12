@@ -17,6 +17,7 @@ public class PromoCode
 {
 	public int? Id { get; private set;} = null;
 	public string Code {get; set;} = "";
+	public int Value {get; set;}= 0;
 	public PromoCodeDiscountType DiscountType{ get; set; }
 	public PromoCodeItemType     ItemType { get; set; }
 	public List<PromoCodeSomeItemType>  Items{get; set;} = new();
@@ -29,9 +30,10 @@ public class PromoCode
 		 db.DB.ReadFromTable(TABLE_NAME, $"Id={id}", (r) => {
 			Id = (int)r[0];
 			Code = (string)r[1];
-			DiscountType = (PromoCodeDiscountType)(short)r[2];
-			ItemType = (PromoCodeItemType)(short)r[3];
-			ExpirationDate = (DateTime)r[4];
+			Value = (int)r[2];
+			DiscountType = (PromoCodeDiscountType)(short)r[3];
+			ItemType = (PromoCodeItemType)(short)r[4];
+			ExpirationDate = (DateTime)r[5];
 			return 0;
 		});
 
@@ -56,6 +58,7 @@ public class PromoCode
 			db.DB.CreateTable(TABLE_NAME, (IEnumerable<(string, SQLType)>) new(string, SQLType)[]{
 				("Id",             SQLType.IntAutoIncrement),
 				("Code",           SQLType.String32),
+				("Value",          SQLType.Int),
 				("DiscountType",   SQLType.Small),
 				("ItemType",       SQLType.Small),
 				("ExpirationDate", SQLType.Date)
@@ -66,6 +69,7 @@ public class PromoCode
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Id", Id),
 				("Code", Code),
+				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
@@ -73,6 +77,7 @@ public class PromoCode
 		} else {
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Code", Code),
+				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))

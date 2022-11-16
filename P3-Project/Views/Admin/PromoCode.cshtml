@@ -1,13 +1,20 @@
-﻿@{
+﻿@model List<(int, string, DateTime)>
+@{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Rabat koder";
 }
 <h1>@ViewData["Title"]</h1>
-
-
-<p>Rabat koder.</p>
+<script>
+	function callbackEdit(id){window.location.href = "/admin/EditPromoCode?Id";}
+	function callbackDelete(){} 
+</script>
+<div>
+	<input type="button" value="Opret Rabatkode" />
+	@foreach((int, string, DateTime) code in Model){
+		@await Html.PartialAsync("./PromoCodeOverviewItem.cshtml", code)
+	}
+</div>
 
 <script>
-    document.querySelector('#PromoCodeSite').style = ("color: rgb(59, 146, 178) !important");
 </script>

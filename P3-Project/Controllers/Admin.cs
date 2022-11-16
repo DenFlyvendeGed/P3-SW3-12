@@ -84,16 +84,17 @@ namespace P3_Project.Controllers
         {
             return View();
         }
-        
-        public ActionResult EditPromoCode()
+       
+        public ActionResult EditPromoCode([FromQuery] int? Id)
         {
-            var model = new Models.PromoCode();
+            var model = Id != null ? new PromoCode((int)Id, new StorageDB()) : new PromoCode();
             return View(model);
         }
 
         public ActionResult PromoCode()
         {
-            return View();
+			var psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+            return View(psudoCodes);
         }
 
         public ActionResult Webshop()
@@ -223,9 +224,7 @@ namespace P3_Project.Controllers
         {
             if (!ModelState.IsValid )
                 BadRequest("Form has to be filled out");
-
             item.Create();
-
             Redirect("Webshop");
         }
 
@@ -253,6 +252,5 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             return View();
         }
-       
     }
 }
