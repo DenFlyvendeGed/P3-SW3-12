@@ -7,47 +7,29 @@ public class Helper {
 			: throw new Exception("Table Already exists");
 
 		var properties = obj.GetType().GetProperties();
-		int i = 0;
 
-		// If empty just end
-		if(properties.Count() == 0)
-			goto TailOfLoop;
-
-		// Start loop, it is not empty so first field is good and don't write a comma
-		goto BeginLoop;
-		HeadOfLoop:
-			// If no more elements don't write comma and quit
-			if(i == properties.Count()){
-				goto TailOfLoop;
-			}
-			cmd += ", ";
-		BeginLoop:
-			var property = properties[i++];
+		for (int i = 0; i < properties.Count(); i++){
+			var property = properties[i];
+			string type;
 			try {
 				switch(property.PropertyType.Name){
 					case "String":
-						cmd += (string)property.Name;
-						cmd += " ";
-						cmd += "varchar(255)";
+						type = "varchar(255)";
 						break;
 					case "Int32":
-						cmd += (string)property.Name;
-						cmd += " ";
-						cmd += "int";
+						type = "int";
 						break;
 					case "DateTime":
-						cmd += (string)property.Name;
-						cmd += " ";
-						cmd += "date";
+						type = "date";
 						break;
 					default:
-						throw new NotImplementedException();
+						continue;
 				}
+				cmd += (string)property.Name + " " + type + ", ";
 			}
 			catch{Console.WriteLine(property.Name + " Failed to read in storageDB");}
-			goto HeadOfLoop;
-		TailOfLoop:
-		return cmd + ");";
+		}
+		return cmd.Remove(cmd.Length - 2) + ");";
 	}
 
 	public static string AddRowToTableQuryCreator<T>(DataBase db, string table, T classObjet) where T: notnull{
@@ -61,7 +43,7 @@ public class Helper {
 
 		foreach(var property in properties) {
 			var val = property.GetValue(classObjet);
-			if(val != null && property.Name != "Id") {
+			if(val != null && property.Name != "Id" && property.CustomAttributes.Count() == 0) {
 				columns += property.Name + ", ";
 				string value = "";
 				switch(property.Name){

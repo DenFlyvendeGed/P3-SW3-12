@@ -8,14 +8,19 @@ public enum PromoCodeItemType {
 	All, AllPacks, AllItems, Some
 }
 
+public class PromoCodeSomeItemType {
+	public int Id{get; set;} = 0;
+	public bool IsPack{get; set;} = false;
+}
+
 public class PromoCode
 {
-	// THE ORDER OF FIELDS MATTERS FOR THE DATABASE!!
 	public int? Id { get; private set;} = null;
 	public string Code {get; set;} = "";
+	public int Value {get; set;}= 0;
 	public PromoCodeDiscountType DiscountType{ get; set; }
 	public PromoCodeItemType     ItemType { get; set; }
-	public List<(bool, int)>     Items{get; set;} = new();
+	public List<PromoCodeSomeItemType>  Items{get; set;} = new();
 	public DateTime ExpirationDate{get; set;}
 
 	const string TABLE_NAME = "PromoCode";
@@ -25,14 +30,16 @@ public class PromoCode
 		 db.DB.ReadFromTable(TABLE_NAME, $"Id={id}", (r) => {
 			Id = (int)r[0];
 			Code = (string)r[1];
-			DiscountType = (PromoCodeDiscountType)(short)r[2];
-			ItemType = (PromoCodeItemType)(short)r[3];
-			ExpirationDate = (DateTime)r[4];
+			Value = (int)r[2];
+			DiscountType = (PromoCodeDiscountType)(short)r[3];
+			ItemType = (PromoCodeItemType)(short)r[4];
+			ExpirationDate = (DateTime)r[5];
 			return 0;
 		});
 
 		if(this.ItemType == PromoCodeItemType.Some){
-			Items = db.DB.ReadFromTable($"{TABLE_NAME}_{Id}", (r) => (r[0].ToString() == "T" ? true : false, (int)r[1]));
+			Items = db.DB.ReadFromTable($"{TABLE_NAME}_{Id}", 
+				(r) => new PromoCodeSomeItemType(){IsPack = r[0].ToString() == "T" ? true : false, Id = (int)r[1]});
 		}
 	}
 
@@ -51,6 +58,7 @@ public class PromoCode
 			db.DB.CreateTable(TABLE_NAME, (IEnumerable<(string, SQLType)>) new(string, SQLType)[]{
 				("Id",             SQLType.IntAutoIncrement),
 				("Code",           SQLType.String32),
+				("Value",          SQLType.Int),
 				("DiscountType",   SQLType.Small),
 				("ItemType",       SQLType.Small),
 				("ExpirationDate", SQLType.Date)
@@ -61,6 +69,7 @@ public class PromoCode
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Id", Id),
 				("Code", Code),
+				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
@@ -68,6 +77,7 @@ public class PromoCode
 		} else {
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Code", Code),
+				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
@@ -83,8 +93,8 @@ public class PromoCode
 
 			foreach(var item in Items) {
 				db.DB.PushToTable($"{TABLE_NAME}_{Id}", new object[] {
-					item.Item1 ? 'T' : 'F',
-					item.Item2
+					item.IsPack ? 'T' : 'F',
+					item.Id
 				});
 			}
 		}

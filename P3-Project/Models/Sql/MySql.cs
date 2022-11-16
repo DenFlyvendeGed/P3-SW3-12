@@ -161,6 +161,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = Helper.CreateTableCreationQuery(this, name, obj); 
 		cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id),");
 
+		Console.WriteLine(cmd.CommandText);
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
