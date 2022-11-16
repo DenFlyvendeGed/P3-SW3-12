@@ -61,7 +61,6 @@ namespace P3_Project.Controllers
         public async void CreatePromoCode() {
 			string json;
 			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
 			if(code == null) return;
 			code.PushToDB(new StorageDB());
@@ -96,10 +95,6 @@ namespace P3_Project.Controllers
 			new PromoCode(id, db).DeleteFromDB(db);	
 		}
 
-        [HttpPost]
-        public void GetPromoCode() {
-
-        }
 
         [HttpGet]
         public IEnumerable<string> GetAdmin()
