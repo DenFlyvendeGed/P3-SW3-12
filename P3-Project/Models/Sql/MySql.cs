@@ -161,6 +161,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = Helper.CreateTableCreationQuery(this, name, obj); 
 		cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id),");
 
+		Console.WriteLine(cmd.CommandText);
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -341,6 +342,19 @@ public class MySqlDB : DataBase {
 		conn.Close();
 
 	}
+	public void UpdateTable(string name, IEnumerable<(string, object)> values, string where){
+		var fields  = new List<string>();
+		foreach(var (f, v) in values){
+			fields.Add($"{f} = '{v.ToString()}'");
+		};
+
+		cmd.CommandText = $"UPDATE {name} SET {string.Join(',', fields)} WHERE {where}";
+
+		conn.Open();
+		cmd.ExecuteReader();
+		conn.Close();
+	}
+
 
 	void ReadToArrayFunc<T>(MySqlDataReader sdr, List<T> rtn, Func<IList<object>, T>initializer) where T : notnull{
 		while(sdr.Read()){

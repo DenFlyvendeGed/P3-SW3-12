@@ -91,24 +91,32 @@ namespace P3_Project.Controllers
         {
             return View();
         }
-
         #endregion
 
         #region PromoCode
-        public ActionResult EditPromoCode()
+       
+        public ActionResult EditPromoCode([FromQuery] int? Id)
         {
-            var model = new Models.PromoCode();
+            var model = Id != null ? new PromoCode((int)Id, new StorageDB()) : new PromoCode();
             return View(model);
         }
 
         public ActionResult PromoCode()
         {
+			List<(int, string, DateTime)> psudoCodes;
+			try {
+				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+			} catch {
+				psudoCodes = new();
+			}
+            return View(psudoCodes);
+        }
+        
+		public ActionResult Settings()
+        {
             return View();
         }
 
         #endregion
-
-
-       
     }
 }
