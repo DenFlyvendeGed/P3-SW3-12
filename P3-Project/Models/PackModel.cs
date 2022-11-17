@@ -67,8 +67,8 @@ namespace P3_Project.Models
 					("NOptions", Options.Count)
 				}, $"Id = {PackID}");
 			}
-
-			foreach(var (i, option) in new Enumerate<List<List<(int, string)>>, List<(int, string)>>(Options)){
+			int i;
+			foreach()(Options)){
 				db.DB.CreateTable($"{TABLE_NAME}_{PackID}_{i}",(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {("ItemModelId", SQLType.Int)});
 
 				foreach(var item in option) {

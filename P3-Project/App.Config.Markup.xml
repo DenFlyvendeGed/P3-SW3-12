@@ -10,11 +10,11 @@
 
 		<!-- What is the password of the email -->
 		<add key="email-password" value="crxygpmhabehdvmz"/>
-	</appSettings>
 	<!-- END OF EMAIL -->
+	<!-- LATEX FOLDER -->
+		<add key="latex-folder" value="/home/kamya/AAU/Projecter/P3/latex_compile/" />
 
 	<!-- SQL Database -->
-	<appSettings>
 		<!-- What database are you using (SQL OR MySQL)-->
 		<add key="database" value="<!-- YOUR DATABASE TYPE HERE -->"/>
 	</appSettings>
