@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
+using P3_Project.Models.Mail;
 using P3_Project.Models.DB;
 using P3_Project.Models;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -61,7 +63,6 @@ namespace P3_Project.Controllers
         public async void CreatePromoCode() {
 			string json;
 			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
 			if(code == null) return;
 			code.PushToDB(new StorageDB());
@@ -96,15 +97,57 @@ namespace P3_Project.Controllers
 			new PromoCode(id, db).DeleteFromDB(db);	
 		}
 
-        [HttpPost]
-        public void GetPromoCode() {
 
-        }
-
+		[HttpGet("NotificationEmails")]
+		public ActionResult NotificationEmails() {
+			try {
+				return Ok(JsonSerializer.Serialize(new MailList(new StorageDB()).List));
+			} catch {
+				return Ok("[]");
+			}
+		}
+		[HttpPut("NotificationEmails")]
+		public async void PutNotificationEmails() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var list = JsonSerializer.Deserialize<List<string>>(json);
+			if(list == null) return;
+			new MailList(){ List = list }.PushToDB(new StorageDB());
+		}
         [HttpGet]
         public IEnumerable<string> GetAdmin()
         {
             return new string[] { "test" };
         }
+
+        #region ItemModel
+
+        //Create item model
+        [HttpPut("ItemModelTable")]
+        public  ActionResult ItemModelTable(ItemModel test)
+        {
+            ItemModel itemModel = test;
+            if (itemModel.Id == 0)
+            {
+                itemModel.Create();
+            }
+            else
+            {
+                itemModel.Update();
+            }
+            return RedirectToActionPermanent("Stock", "Admin");
+        }
+
+        //Delete item model
+        [HttpGet("deleteModel")]
+        public ActionResult deleteModel(int Id)
+        {
+            ItemModel.Delete(Id);
+            return RedirectToAction("Stock","Admin");
+        }
+
+
+
+        #endregion
     }
 }
