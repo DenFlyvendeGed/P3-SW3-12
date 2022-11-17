@@ -11,6 +11,7 @@
 
 <p>Rediger pakker.</p>
 
+<p id="demo"></p>
 
 <div class="Flex-Container-PackBoxes">
 
@@ -23,6 +24,8 @@
         </div>
     </a>
 
+<div class="Flex-Container-PackBoxes">
+    @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Model)
 </div>
 
 

@@ -17,6 +17,8 @@
     --ash-turquoise   : #83d0f5;
     --ash-light-yellow: #fffe6a;
     --ash-pink        : #f29fc5;
+    /*Our colors*/
+    --ash-gray        : #D9D9D9;
 }
 
 html {
@@ -66,13 +68,10 @@ body {
         padding-left: 0vw;
     }
 }
-    
 
-
-.navBarPlacement{
-    font-family: Bahnschrift;
+.navBarPlacement {
+    font-family: 'DINMittelschrift',sans-serif;
     font-size: 90%;
-    /*ASH font  :   DIN Schriff 30640 Neurzeit Grotesk Bold / Print*/
 }
 
 .navBarText {
@@ -93,6 +92,21 @@ body {
     background-color: rgb(59, 146, 178);
 }
 
+/*centers some elements*/
+.center { 
+    display: flex;
+    justify-content: center;
+}
+
+.ASHButton {
+    font-family: Arial,Helvetica,Sans-Serif;
+    background-color: var(--ash-orange);
+    border-width: 0px;
+}
+
+.ASHButton:hover {
+    text-decoration: underline;
+}
 
 #leftFooterBox {
     min-height: 20px;
@@ -100,11 +114,11 @@ body {
     width: 50%;
 }
 
-#rightFooterBox {
+/*#rightFooterBox {
     width: 50%;
     margin-top: 22px;
     float: left;
-}
+}*/
 
 #footerLayout {
     height: 110px;
@@ -112,8 +126,6 @@ body {
     padding: 38px 10px 38px 10px;
     background: rgb(0,0,0) none;
 }
-
-
 
 .moveMenu {
     padding-left: 10vw;
@@ -129,9 +141,9 @@ body {
     width: 50%;
 }
 
-#rightFooterBox {
+/*#rightFooterBox {
     margin-top: 22px;
-}
+}*/
 
 #footerLayout {
     padding: 38px 10px 38px 10px;
@@ -158,21 +170,130 @@ body {
     line-height: 1em;
     margin-right: 17px;
     font-family: 'DINMittelschrift',sans-serif;
-    /*ASH font: DIN Schriff 1451 Mittelschriff */
 }
 
-#imgBox {
-    margin-top: 50px;
+.packBox {
+    margin-bottom: 4%;
+    margin-right: 1vw;
+    margin-left: 1vw;
+    margin-top: 2%;
     box-sizing: content-box;
-    width: 300px;
-    height: 200px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #000000;
+    display: block;
+    position: relative;
+    min-width: 0px;
+    max-height: 237px;
+    min-height: 0px;
+    width: 286px;
+    height: 237px;
     background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.packBox:hover {
+    box-shadow: 2px 2px 5px black;
+}
+.packBox-bar {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    max-width: inherit;
+    max-height: inherit;
+    top: 174px;
+    right: 1px;
+    width: 286px;
+    height: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 64px;
+    background-color: #D9D9D9;
+    border: 2px solid #000000;
+    text-align: center;
+}
+.packBox-img {
+    position: absolute;
+    max-width: inherit;
+    max-height: 170px;
+    display: block;
+    margin: auto;
+    width: 98%;
+    height: auto;
+    right: 1%;
+    top: 1%;
+}
+a.BoxLink:link {
+    color: black;
+    text-decoration: none;
+    font-weight: normal;
 }
 
-#uploadButton {
+a.BoxLink:visited {
+    color: black;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a.BoxLink:hover {
+    color: black;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a.BoxLink:active {
+    color: black;
+    text-decoration: none;
+    font-weight: normal;
+}
+.Flex-Container-PackBoxes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.box {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+  
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+}
+.topBar-Input {
+    display: inline-block;
+    margin-left: 32%;
+    -ms-transform: translateY(-80%);
+    transform: translateY(-80%);
+}
+.buttonBox {
+    display: block;
+    position: relative;
+    top: 30px;
+    left: 91%;
+    background-color: #D9D9D9;
+    border: 1px solid #000000;
+    padding: 2pt;
+    margin-top: 26px;
+    margin-bottom: 26px;
+    width: 9%;
+    height: 11%;
+    text-align: center;
+}
+.buttonBox:hover {
+    box-shadow: 2px 2px 5px black;
+}
+
+.valgmulighedPakke {
+    position: absolute;
+    
+    
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    width: 98%;
+    height: auto;
+    right: 1%;
+    top: 1%;
+
+
     background-color: #D9D9D9;
 }
 
@@ -415,6 +536,77 @@ a.BoxLink:active {
     float: left;
 }*/
 
+#imgBox {
+    margin-top: 50px;
+    height: 100%;
+}
+
+#img {
+    width: 300px;
+    height: 200px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--ash-black);
+    background-color: var(--ash-gray);
+    
+}
+
+.imageButtons {
+    margin: 70% auto;
+    width: 165px;
+    height: 50px;
+    text-align: center;
+    font-size: 15px;
+    align-items: center;
+}
+
+
+.container {
+    display: flex;
+    width: 100vw;
+}
+
+.item {
+    margin: 10px;
+}
+
+
+.box {
+    background-color: #D9D9D9;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.CreateItemModel {
+    height: 450px;
+    width: 60vw;
+    
+}
+
+.ItemTable {
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    height: 70%;
+    margin-left: 2.61%;
+    margin-right: 2.61%
+}
+
+.tableStyle{
+    border-style: solid;
+    border-width: 1px;
+}
+
+.stockBox{
+    width: 100%;
+    height: 150px;
+    margin-top: 20px;
+}
+
+.editStockBtn{
+    margin-top:19px;
+    margin-left: 5%;
+}
 
 
 
