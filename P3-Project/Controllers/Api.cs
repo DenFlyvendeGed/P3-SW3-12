@@ -4,6 +4,7 @@ using System.Text.Json;
 using P3_Project.Models.Mail;
 using P3_Project.Models.DB;
 using P3_Project.Models;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -114,5 +115,35 @@ namespace P3_Project.Controllers
         {
             return new string[] { "test" };
         }
+
+        #region ItemModel
+
+        //Create item model
+        [HttpPut("ItemModelTable")]
+        public  ActionResult ItemModelTable(ItemModel test)
+        {
+            ItemModel itemModel = test;
+            if (itemModel.Id == 0)
+            {
+                itemModel.Create();
+            }
+            else
+            {
+                itemModel.Update();
+            }
+            return RedirectToActionPermanent("Stock", "Admin");
+        }
+
+        //Delete item model
+        [HttpGet("deleteModel")]
+        public ActionResult deleteModel(int Id)
+        {
+            ItemModel.Delete(Id);
+            return RedirectToAction("Stock","Admin");
+        }
+
+
+
+        #endregion
     }
 }
