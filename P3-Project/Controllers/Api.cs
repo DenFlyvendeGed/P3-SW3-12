@@ -98,9 +98,13 @@ namespace P3_Project.Controllers
 		}
 
 
-		[HttpGet]
+		[HttpGet("NotificationEmails")]
 		public ActionResult NotificationEmails() {
-			return Ok(JsonSerializer.Serialize(new MailList(new StorageDB()).List));
+			try {
+				return Ok(JsonSerializer.Serialize(new MailList(new StorageDB()).List));
+			} catch {
+				return Ok("[]");
+			}
 		}
 		[HttpPut("NotificationEmails")]
 		public async void PutNotificationEmails() {

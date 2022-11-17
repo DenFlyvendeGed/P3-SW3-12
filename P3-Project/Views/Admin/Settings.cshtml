@@ -6,8 +6,63 @@
 	}
 </style>
 <div class="box setting">
-	<h2>E-mailliste</h2>
+	<h2>E-mailliste til notifikationer</h2>
+	<input type="button" value="Tilføj ny E-mail" onclick="addEmail()"/>
+	<input type="button" value="Update E-mail-liste" onclick="update()"/>
+	<table id="setting-email-table">
+	</table>
 </div>
+<script>
+	function onInit() {
+		// Email
+		fetch("/api/admin/NotificationEmails")
+			.then((r) => r.json())
+			.then((j) => {for(let item of j){
+				addEmail(item);
+			}})
+	}
+	let emailFields = 0;
+	let emailTable = document.getElementById("setting-email-table");
+	function addEmail(value = "") {
+		let input = document.createElement("input");
+		input.id = `setting-email-input-${emailFields}`;
+		input.value = value;
+		let rmButton = document.createElement("input");
+		rmButton.type = "button";
+		rmButton.value = "-";
+		rmButton.addEventListener("click", (e) => removeEmail(e, input.id));
+		
+		let td = document.createElement("td");
+		td.appendChild(input);
+		td.appendChild(rmButton);
+		let tr = document.createElement("tr");
+		tr.appendChild(td);
+		emailTable.appendChild(tr);
+		emailFields += 1;
+	}
+	
+	function removeEmail(el, value){ 
+		let e = document.getElementById(value);
+		e.parentElement.removeChild(e);
+		el.target.parentElement.removeChild(el.target);
+	}
+
+	function update() {
+		let l = [];
+		for(let i = 0; i < emailFields; i++){
+			try {
+				let e = document.getElementById(`setting-email-input-${i}`);
+				if(e.value != "") l.push(e.value);
+			} catch {}
+		}
+		fetch("/api/admin/NotificationEmails", {
+			method : "PUT",
+			body : JSON.stringify(l)
+		})
+	}
+
+	onInit()
+</script>
 
 
-
+ 

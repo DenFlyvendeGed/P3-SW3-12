@@ -13,7 +13,9 @@ public class MailList : IEnumerable<string> {
 	public void PushToDB(StorageDB db){
 		if( db.DB.CheckTable(TABLE_NAME) ) db.DB.DeleteTable(TABLE_NAME);
 		db.DB.CreateTable(TABLE_NAME, (IEnumerable<(string, SQLType)>) new (string, SQLType)[] { ( "Mail", SQLType.String64 ) });
-		db.DB.PushToTable(TABLE_NAME, List);
+		foreach(var l in this) {
+			db.DB.PushToTable(TABLE_NAME, new List<object>(){l});	
+		}
 	}
 
 	public IEnumerator<string> GetEnumerator() => List.GetEnumerator();
