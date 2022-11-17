@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
+using P3_Project.Models.Mail;
 using P3_Project.Models.DB;
 using P3_Project.Models;
 
@@ -96,6 +97,18 @@ namespace P3_Project.Controllers
 		}
 
 
+		[HttpGet]
+		public ActionResult NotificationEmails() {
+			return Ok(JsonSerializer.Serialize(new MailList(new StorageDB()).List));
+		}
+		[HttpPut("NotificationEmails")]
+		public async void PutNotificationEmails() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var list = JsonSerializer.Deserialize<List<string>>(json);
+			if(list == null) return;
+			new MailList(){ List = list }.PushToDB(new StorageDB());
+		}
         [HttpGet]
         public IEnumerable<string> GetAdmin()
         {

@@ -96,6 +96,11 @@ namespace P3_Project.Controllers
 			var psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
             return View(psudoCodes);
         }
+        
+		public ActionResult Settings()
+        {
+            return View();
+        }
 
         public ActionResult Webshop()
         {

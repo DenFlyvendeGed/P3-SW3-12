@@ -37,6 +37,11 @@ public class MailClient {
 		return this;
 	}
 
+	public MailClient ToList(MailList list) {
+		foreach(var address in list) this.To(address);	
+		return this;
+	}
+
 	public MailClient Subject(string subject){
 		this.message.Subject = subject;
 		return this;
