@@ -8,62 +8,69 @@
     @{
         ItemModel item = ViewBag.item;
 
-            <div class="displayItem box">
-                Picture box
+        <div class="displayItem box">
+            @{
+                Image img = item.GetFirstImg();
+                if (img != null)
+                {
+
+                    <img class="picSize" src='@img.FilePath' />
+                }
+            }
+        </div>
+
+
+        <div class="displayItem">
+            @*<------------------ModelName and price--------------------->*@
+            <div class="grid-containerTop">
+                <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
+                <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
             </div>
 
 
-            <div class="displayItem">
-                @*<------------------ModelName and price--------------------->*@
-                <div class="grid-containerTop">
-                    <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
-                    <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
-                </div>
+            @*<------------------Size--------------------->*@
+            <div class="box modelAttributes">
+                <div>Størrelse:</div>
+                <div class="grid-containerShowcase" id="sizeChoices">
 
-
-                @*<------------------Size--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Størrelse:</div>
-                    <div class="grid-containerShowcase" id="sizeChoices">
-
-                        @{
+                    @{
                         int sizeIndex = 1;
                         foreach (string size in ViewBag.item.GetUniqueSize())
                         {
-                                    <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
+                            <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
                             sizeIndex += 1;
                         }
-                        }
-                    </div>
+                    }
                 </div>
+            </div>
 
-                @*<------------------Color--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Farve:</div>
-                    <div class="grid-containerShowcase" id="colorChoices">
-                        @{
+            @*<------------------Color--------------------->*@
+            <div class="box modelAttributes">
+                <div>Farve:</div>
+                <div class="grid-containerShowcase" id="colorChoices">
+                    @{
                         int colorIndex = 1;
                         foreach ((string, string) color in ViewBag.item.GetUniqueColor())
                         {
-                                    <div class="grid-itemShowcase itemColor" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)"></div>
+                            <div class="grid-itemShowcase itemColor" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)"></div>
                             colorIndex += 1;
                         }
-                        }
-                    </div>
-                </div>
-
-                @*<------------------Description--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Beskrivesle:</div>
-                    <div>@(item.Description)</div>
-                </div>
-
-
-                @*<------------------Cart--------------------->*@
-                <div class="box grid-containerShowcase modelAttributes">
-                    <input type="submit" value="Tilføj til kurv" id="addToCart">
+                    }
                 </div>
             </div>
+
+            @*<------------------Description--------------------->*@
+            <div class="box modelAttributes">
+                <div>Beskrivesle:</div>
+                <div>@(item.Description)</div>
+            </div>
+
+
+            @*<------------------Cart--------------------->*@
+            <div class="box grid-containerShowcase modelAttributes">
+                <input type="submit" value="Tilføj til kurv" id="addToCart">
+            </div>
+        </div>
     }
 
 
@@ -132,7 +139,9 @@
 
             console.log(itemData);
         }
-        console.log("intet valgt");
+        else {
+            console.log("intet valgt");
+        }
     }
 
     document.getElementById("colorChoices").addEventListener("click", toggleColor);

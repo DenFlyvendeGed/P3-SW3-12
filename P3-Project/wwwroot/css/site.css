@@ -292,11 +292,7 @@ a.BoxLink:active {
     position: absolute;
     justify-self: end;
 }
-img {
-    max-height: -webkit-fill-available;
-    vertical-align: middle;
-    max-width: -webkit-fill-available;
-}
+
 
 .flexbox-createPack {
     display: flex;
@@ -329,17 +325,27 @@ img {
     
 }
 
-.picSize {
+img {
+    max-width: -webkit-fill-available;
+    max-height: -webkit-fill-available;
+}
+
+/*.picSize {
     max-width: 100%;
     max-height: 200px;
     box-sizing: border-box;
     padding: 5px;
     margin: auto;
+}*/
+
+.picSize {
+    box-sizing: border-box;
+    padding: 5px;
+
 }
 
 .imageButtons {
     margin:auto;
-    margin-top: -100px;
     width: 165px;
     height: 50px;
     text-align: center;
@@ -469,33 +475,34 @@ img {
 }
 
 .itemShowCase {
-    width: 250px;
-    height: 300px;
+    width: 20vw;
+    height: 25vw;
     border-style: solid;
     border-width: 1px;
+    margin-top: 2%;
     box-sizing: border-box;
 }
 
 .itemShowCaseName {
-    height: 20.4%;
-    width: 248.5px;
+    height: 20%;
+    width: 100%;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    font-size: 20px;
+    font-size: 1.3vw;
     text-align: center;
+
 }
 .itemShowCasePic {
-    width: 248.5px;
+    width: 100%;
     height: 80%;
     background-color: lightgray;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 300px 300px 300px;
-    gap: 40px;
-    margin-left:200px;
+    grid-template-columns: 25vw 25vw 25vw;
+    margin-left:4%;
 }
 
 .item1 {
@@ -606,12 +613,50 @@ div.modelAttributes {
     box-sizing: border-box;
 }
 
-@media only screen and (max-width: 490) {
-    .headerStyle {
+div.tagBox{
+    width: 15vw;
+    height:25vw;
+}
+
+div.createTaxBox{
+    margin-top: 2vw;
+    height: 10vw;
+    width: 20vw;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 70vw;
+    }
+
+    .itemShowCase {
         width: 100%;
-        min-width: 134.18px;
-        max-width: 134.18px;
-        height: 33.4px;
-        min-height: 33.4px;
+        height: 100%;
+        border-style: solid;
+        border-width: 1px;
+        margin-top: 4%;
+        box-sizing: border-box;
+    }
+
+    .itemShowCaseName {
+        height: 20%;
+        width: 100%;
+        border-style: solid;
+        border-width: 1px;
+        box-sizing: border-box;
+        font-size: 2.5vw;
+        text-align: center;
+    }
+
+    .itemShowCasePic {
+        width: 100%;
+        height: 80%;
+        background-color: lightgray;
+    }
+
+    div.tagBox {
+        width: 15vw;
+        height: 50vw;
     }
 }
