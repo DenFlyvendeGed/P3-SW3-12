@@ -31,7 +31,7 @@ namespace P3_Project.Models
 
         public string Type { get; set; }
 
-        public List<Picture>? Pictures { get; set; }
+        public List<Image>? Pictures { get; set; }
        
 
         static StorageDB db = new StorageDB();

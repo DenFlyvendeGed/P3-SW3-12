@@ -17,23 +17,20 @@
     @{
         foreach (ItemModel item in ViewBag.model)
         {
-
+            @*Create box for each item in stock*@
             <div class="stockBox  box containerBox">
                 <div class="item box stockPicBox">
-                
                     @{
                         Image img = item.GetFirstImg();
-                        if(img != null){
-                            
-                            <img src='@img.FilePath'/>
+                        if (img != null)
+                        {
+
+                            <img src='@img.FilePath' />
                         }
-                            
+
                     }
-                
                 </div>
-                <p class="item stockItemName">@(item.ModelName)</p>
-                <div class="item" id="@(item.Id)">
-                <div class="item box stockPicBox"></div>
+
                 <p class="item stockList" style="flex: 2;">@(item.ModelName)</p>
                 @{
                     int stockAmount = item.GetStockTotal();
@@ -46,13 +43,15 @@
                     <a href="..\api\admin\deleteModel?id=@(item.Id)"></a>
                 </div>
 
+
+
             </div>
 
         }
     }
-
-    <a href="\admin\AddItemModel" style="float:right"><input type="button" style="margin-top:10px; float:right" value="Tilføj ny vare" /></a>
 </div>
+<a href="\admin\AddItemModel" style="float:right"><input type="button" style="margin-top:10px; float:right" value="Tilføj ny vare" /></a>
+
 
 <script>
 

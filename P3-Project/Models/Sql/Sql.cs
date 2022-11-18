@@ -315,7 +315,7 @@ public class SqlDB : DataBase
 		cmd.CommandText = "SELECT * FROM " + tableName;
 		if(whereKey != null && whereValue != null)
 		{
-			cmd.CommandText += " " + whereKey + " = " + whereValue;
+			cmd.CommandText += " WHERE " + whereKey + " = '" + whereValue + "'";
 		}
 
 

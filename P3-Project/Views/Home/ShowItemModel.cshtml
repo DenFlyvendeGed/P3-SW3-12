@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Tøj";
+}
+
+
+<div class="displayItemBox">
+
+    @{
+        ItemModel item = ViewBag.item;
+
+            <div class="displayItem box">
+                Picture box
+            </div>
+
+
+            <div class="displayItem">
+                @*<------------------ModelName and price--------------------->*@
+                <div class="grid-containerTop">
+                    <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
+                    <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
+                </div>
+
+
+                @*<------------------Size--------------------->*@
+                <div class="box modelAttributes">
+                    <div>Størrelse:</div>
+                    <div class="grid-containerShowcase" id="sizeChoices">
+
+                        @{
+                        int sizeIndex = 1;
+                        foreach (string size in ViewBag.item.GetUniqueSize())
+                        {
+                                    <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
+                            sizeIndex += 1;
+                        }
+                        }
+                    </div>
+                </div>
+
+                @*<------------------Color--------------------->*@
+                <div class="box modelAttributes">
+                    <div>Farve:</div>
+                    <div class="grid-containerShowcase" id="colorChoices">
+                        @{
+                        int colorIndex = 1;
+                        foreach ((string, string) color in ViewBag.item.GetUniqueColor())
+                        {
+                                    <div class="grid-itemShowcase itemColor" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)"></div>
+                            colorIndex += 1;
+                        }
+                        }
+                    </div>
+                </div>
+
+                @*<------------------Description--------------------->*@
+                <div class="box modelAttributes">
+                    <div>Beskrivesle:</div>
+                    <div>@(item.Description)</div>
+                </div>
+
+
+                @*<------------------Cart--------------------->*@
+                <div class="box grid-containerShowcase modelAttributes">
+                    <input type="submit" value="Tilføj til kurv" id="addToCart">
+                </div>
+            </div>
+    }
+
+
+</div>
+
+<script>
+
+    let currentSizeToggle;
+    function toggleSize(e) {
+        if (e.target.id != "sizeChoices") {
+            let clicked = e.target;
+
+            if (currentSizeToggle == undefined) {
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = clicked.id
+            }
+            else if (currentSizeToggle != undefined && currentSizeToggle != clicked.id) {
+                let sizeToggled = document.getElementById(currentSizeToggle);
+                sizeToggled.classList.toggle("itemSizeToggle");
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = clicked.id;
+            }
+            else if (currentSizeToggle == clicked.id) {
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = undefined;
+            }
+
+        }
+    }
+
+    let currentColorToggle;
+    function toggleColor(e) {
+        if (e.target.id != "colorChoices") {
+            let clicked = e.target;
+
+            if (currentColorToggle == undefined) {
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = clicked.id
+            }
+            else if (currentColorToggle != undefined && currentColorToggle != clicked.id) {
+                let colorToggled = document.getElementById(currentColorToggle);
+                colorToggled.classList.toggle("itemColorToggle");
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = clicked.id;
+            }
+            else if (currentColorToggle == clicked.id) {
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = undefined;
+            }
+        }
+    }
+
+    function addToCart() {
+        if (currentColorToggle != undefined && currentSizeToggle != undefined) {
+            let chosenModel = document.getElementById("ModelName").attributes.value.nodeValue;
+            let chosenSize = document.getElementById(currentSizeToggle).attributes.value.nodeValue;
+            let chosenColorCode = document.getElementById(currentColorToggle).attributes.value.nodeValue;
+            let chosenColorName = document.getElementById(currentColorToggle).attributes.name.nodeValue;
+
+            let itemData = {
+                Id: chosenModel,
+                Size: chosenSize,
+                Color: chosenColorName,
+                ColoWheel: chosenColorCode,
+            }
+
+            console.log(itemData);
+        }
+        console.log("intet valgt");
+    }
+
+    document.getElementById("colorChoices").addEventListener("click", toggleColor);
+    document.getElementById("sizeChoices").addEventListener("click", toggleSize);
+    document.getElementById("addToCart").addEventListener("click", addToCart);
+
+</script>

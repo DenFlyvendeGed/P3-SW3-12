@@ -63,8 +63,14 @@ public class MySqlDB : DataBase {
 		conn.Close();
 		return list; 
 	}
-	public List<T> GetAllElements<T>(string tableName, T objectClass) where T: notnull{
+	public List<T>  GetAllElements<T>(string tableName, T objectClass, string? whereKey = null, string? whereValue = null) where T : notnull
+	{
+
 		cmd.CommandText = "SELECT * FROM " + tableName;
+		if(whereKey != null && whereValue != null)
+		{
+            cmd.CommandText += " WHERE " + whereKey + " = '" + whereValue + "'";
+        }
 
 		var properties = objectClass.GetType().GetProperties();
 		var fields = objectClass.GetType().GetFields();
