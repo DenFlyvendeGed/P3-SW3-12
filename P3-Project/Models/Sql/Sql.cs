@@ -283,11 +283,14 @@ public class SqlDB : DataBase
 		return objects;
 	}
 
-	public List<T>  GetAllElements<T>(string tableName, T objectClass) where T : notnull
+	public List<T>  GetAllElements<T>(string tableName, T objectClass, string? whereKey = null, string? whereValue = null) where T : notnull
 	{
 
 		cmd.CommandText = "SELECT * FROM " + tableName;
-
+		if(whereKey != null && whereValue != null)
+		{
+			cmd.CommandText += " " + whereKey + " = " + whereValue;
+		}
 
 
 		PropertyInfo[] Properties = objectClass.GetType().GetProperties();
