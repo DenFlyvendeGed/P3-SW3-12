@@ -150,6 +150,45 @@
 
         console.log(Container.children);
     }
+    function UpdateDB() {
+        let name = document.getElementById("LeftInput").value;
+        console.log(name);
+        let description = "";
+        let options = [];
+
+        const Choices = document.querySelectorAll(".flexBox-Packcreator");
+
+        for (i = 0; i < Choices.length; i++) {
+
+            options.push(FindOptions(Choices[i].id));
+            console.log(options);
+        }
+
+        let PayLoad = {
+            Name: name,
+            Description: description,
+            Options: options
+        };
+        let PackModel = JSON.stringify(PayLoad);
+
+        fetch("/api/admin/CreatePackModel", {
+            method: "POST",
+            body: PackModel
+        });
+
+    }
+
+    function FindOptions(id) {
+        let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv");
+        let nodeArray = Array.apply(null, NodeList);
+        let ValueArray = [];
+        nodeArray.forEach((e) => {
+            ValueArray.push(e.querySelector(".Dropdown-Option").value);
+
+        })
+        return (ValueArray);
+    }
+
 </script>
 
 @*
