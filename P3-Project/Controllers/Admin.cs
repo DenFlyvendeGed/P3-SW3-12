@@ -60,6 +60,7 @@ namespace P3_Project.Controllers
             if (!string.IsNullOrEmpty(id)) { 
                 ItemModel model = ItemModel.LoadModel(id);
                 model.LoadItems();
+                model.LoadImages();
 
                 ViewBag.model = model;
             }
@@ -108,38 +109,38 @@ namespace P3_Project.Controllers
             return View(psudoCodes);
         }
 
-        public ActionResult Webshop()
-        {
-            StorageDB db = new StorageDB();
+        //public ActionResult Webshop()
+        //{
+        //    StorageDB db = new StorageDB();
             
             
-            if(!db.DB.CheckTable("ItemModels"))
-                setup();
+        //    if(!db.DB.CheckTable("ItemModels"))
+        //        setup();
 
-            List<ItemModel> itemModels = db.DB.GetAllElements("ItemModels", new ItemModel());
+        //    List<ItemModel> itemModels = db.DB.GetAllElements("ItemModels", new ItemModel());
 
-            foreach (ItemModel itemModel in itemModels)
-            {
-                itemModel.items = db.DB.GetAllElements(itemModel.ItemTable, new Item());
+        //    foreach (ItemModel itemModel in itemModels)
+        //    {
+        //        itemModel.items = db.DB.GetAllElements(itemModel.ItemTable, new Item());
 
-            };
+        //    };
 
-            ViewBag.itemModels = itemModels;
-            return View();
-        }
+        //    ViewBag.itemModels = itemModels;
+        //    return View();
+        //}
 
         [HttpPut]
         async public void ItemModelTable(ItemModel test)
         {
-            string jsonData = string.Empty;
-            using (var reader = new StreamReader(Request.Body))
-            {
-                jsonData = await reader.ReadToEndAsync();
-            }
+            //string jsonData = string.Empty;
+            //using (var reader = new StreamReader(Request.Body))
+            //{
+            //    jsonData = await reader.ReadToEndAsync();
+            //}
 
-            Console.WriteLine(jsonData);
-
-            ItemModel itemModel = JsonSerializer.Deserialize<ItemModel>(jsonData);
+            //Console.WriteLine(jsonData);
+            //JsonSerializer.Deserialize<ItemModel>(jsonData);
+            ItemModel itemModel = test;
             if (itemModel.Id == 0)
             {
                 itemModel.Create();
@@ -151,18 +152,13 @@ namespace P3_Project.Controllers
 
         }
 
-        public ActionResult deleteModel(int Id)
-        {
-            ItemModel.Delete(Id);
-            return RedirectToAction(nameof(Stock));
-        }
+        //public ActionResult deleteModel(int Id)
+        //{
+        //    ItemModel.Delete(Id);
+        //    return RedirectToAction(nameof(Stock));
+        //}
 
-        private void setup()
-        {
-            StorageDB db = new StorageDB();
 
-            db.DB.CreateTable("ItemModels", new ItemModel());
-        }
 
         public ActionResult CreateItemModel()
         {
@@ -170,94 +166,25 @@ namespace P3_Project.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult CreateItemModel( string modelName, string description, ItemModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest("Not a valid model");
-            StorageDB db = new StorageDB();
-            
-            if(model.Id == 0)
-            {
-                model.Create();
-            }
-            else
-            {
-                model.Update();
-            }
+        //public ActionResult Delete(string id, Item item)
+        //{
+        //    StorageDB db = new StorageDB();
+        //    string subTable = db.DB.GetField("id", id, "ItemModels", "itemTable");
+        //    db.DB.RemoveRow("ItemModels", "Id", id);
+        //    db.DB.DeleteTable(subTable);
 
-            return Redirect("Webshop");
-        }
+        //    return RedirectToAction(nameof(Webshop));
+        //}
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult IncreaseStock(string modelId, string id, Item item)
-        {
+        //public ActionResult DeleteItem(string modelId, string id)
+        //{
+        //    StorageDB db = new StorageDB();
 
-            if (!ModelState.IsValid)
-                return BadRequest("Form has to be filled out");
-            StorageDB db = new StorageDB();
-            try
-            {
-                item.ChangeStock(1);    
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            
-            return Redirect("Webshop");
-        }
+        //    db.DB.RemoveRow("item" + modelId, "id", id);
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult DecreaseStock(string modelId, string id, Item item)
-        {
-
-            if (!ModelState.IsValid)
-                return BadRequest("Form has to be filled out");
-            StorageDB db = new StorageDB();
-            try
-            {
-                item.ChangeStock(-1);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-            return Redirect("Webshop");
-        }
-
-        [HttpPost]
-        public void CreateItem(Item item) 
-        {
-            if (!ModelState.IsValid )
-                BadRequest("Form has to be filled out");
-            item.Create();
-            Redirect("Webshop");
-        }
-
-        public ActionResult Delete(string id, Item item)
-        {
-            StorageDB db = new StorageDB();
-            string subTable = db.DB.GetField("id", id, "ItemModels", "itemTable");
-            db.DB.RemoveRow("ItemModels", "Id", id);
-            db.DB.DeleteTable(subTable);
-            
-            return RedirectToAction(nameof(Webshop));
-        }
-
-        public ActionResult DeleteItem(string modelId, string id)
-        {
-            StorageDB db = new StorageDB();
-           
-            db.DB.RemoveRow("item" + modelId, "id", id);
-
-            return RedirectToAction(nameof(Webshop));
-        }
-
+        //    return RedirectToAction(nameof(Webshop));
+        //}
+        #endregion
         public ActionResult ItemShowCase(string id)
         {
             StorageDB db = new StorageDB();

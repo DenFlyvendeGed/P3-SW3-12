@@ -2,6 +2,7 @@
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Lager oversigt";
+
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -18,7 +19,18 @@
         {
 
             <div class="stockBox  box containerBox">
-                <div class="item box stockPicBox"></div>
+                <div class="item box stockPicBox">
+                
+                    @{
+                        Image img = item.GetFirstImg();
+                        if(img != null){
+                            
+                            <img src='@img.FilePath'/>
+                        }
+                            
+                    }
+                
+                </div>
                 <p class="item stockItemName">@(item.ModelName)</p>
                 <div class="item" id="@(item.Id)">
                     <a href="\admin\AddItemModel?id=@(item.Id)"><input type="button" class="editStockBtn" value="Rediger lagerbeholdning" /> </a>

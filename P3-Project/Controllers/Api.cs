@@ -4,6 +4,9 @@ using System.Text.Json;
 using P3_Project.Models.DB;
 using P3_Project.Models;
 using System.Text.Json;
+using System.Xml.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Net;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -136,11 +139,38 @@ namespace P3_Project.Controllers
             return RedirectToAction("Stock","Admin");
         }
 
+        //api/Admin/DeleteImage? Id = 000 & Name = a1.PNG
+        [HttpDelete("DeleteImage")]
+        //[ValidateAntiForgeryToken]
+        public StatusCodeResult DeleteImage(string Id, string Name )
+        {
 
 
+            DirectoryInfo dir = Image.GetDir(int.Parse(Id));
+            string filepath = Path.Combine(dir.FullName, Name);
+            FileInfo file = new FileInfo(filepath);
+
+            if (file.Exists)
+            {
+                file.Delete();
+
+            }
+            else
+            {
+                
+                return new StatusCodeResult((int)HttpStatusCode.NotFound);
+            }
+            return new StatusCodeResult((int)HttpStatusCode.OK);
+        }
+        public HttpResponse DeleteImage()
+        {
+
+            Response.StatusCode = 200;
+            return Response;
+        }
         #endregion
-    
-    
-    
+
+
+
     }
 }

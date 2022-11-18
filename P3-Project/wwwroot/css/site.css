@@ -304,8 +304,15 @@ a.BoxLink:active {
     border: 1px solid #000000;
 }
 
-
-
+.delBut {
+    position: absolute;
+    justify-self: end;
+}
+img {
+    max-height: -webkit-fill-available;
+    vertical-align: middle;
+    max-width: -webkit-fill-available;
+}
 
 .flexbox-createPack {
     display: flex;

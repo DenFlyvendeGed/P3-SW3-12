@@ -9,6 +9,11 @@ using System.ComponentModel;
 using System.Drawing;
 
 using P3_Project.Models.DB;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
+using System.Net.NetworkInformation;
+using Image = System.Drawing.Image;
+using System.Text.RegularExpressions;
 
 namespace P3_Project.Models
 {
@@ -24,7 +29,7 @@ namespace P3_Project.Models
         public int StockAlarm { get; set; }
         public List<Item>? items { get; set; }
 
-        public List<Picture>? Pictures { get; set; }
+        public List<Image>? Pictures { get; set; }
        
 
         static StorageDB db = new StorageDB();
@@ -40,7 +45,7 @@ namespace P3_Project.Models
             Description = "";
             ItemTable = "";
 
-
+            Pictures = new();
             Description = "";
         }
 
@@ -63,6 +68,14 @@ namespace P3_Project.Models
                 {
                     item.ModelId = Id.ToString();
                     AddItem(item);
+                }
+            }
+            if (Pictures != null)
+            {
+                foreach (Image item in Pictures)
+                {
+                    if (item.Data != null)
+                        item.Save(Id);
                 }
             }
 
@@ -124,7 +137,38 @@ namespace P3_Project.Models
 
             items = db.DB.GetAllElements(ItemTable, new Item());
         }
+        public void LoadImages()
+        
+        {
+            DirectoryInfo dir = Image.GetDir(Id);
 
+            foreach(FileInfo file in dir.GetFiles())
+            {
+                Image img = new();
+                img.Name = file.Name;
+                img.Type = file.Extension;
+                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
+                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
+                img.FilePath = img.GetFilePath(Id);
+                Pictures.Add(img);
+            }
+        }
+        public Image GetFirstImg()
+        {
+            DirectoryInfo dir = Image.GetDir(Id);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                Image img = new();
+                img.Name = file.Name;
+                img.Type = file.Extension.Replace(".","");
+                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
+                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
+                img.FilePath = img.GetFilePath(Id);
+                return img;
+            }
+            return null;
+        }
         public void AddItem(Item item)
         {
 
@@ -141,6 +185,8 @@ namespace P3_Project.Models
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "StockAlarm", StockAlarm.ToString());
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "Description", Description);
 
+
+
             db.DB.DeleteTable(ItemTable);
             CreateItemTable();
             if (items != null)
@@ -149,6 +195,14 @@ namespace P3_Project.Models
                 {
                     item.ModelId = Id.ToString();
                     AddItem(item);
+                }
+            }
+            if(Pictures != null)
+            {
+                foreach (Image item in Pictures)
+                {
+                    if(item.Data != null)
+                        item.Save(Id);
                 }
             }
 
@@ -171,5 +225,53 @@ namespace P3_Project.Models
         }
     }
 
-    
+    public class Image
+    {
+        public string? Name { get; set; }
+        public int? Size { get; set; }
+        public string? Type { get; set; }
+        public string? Data { get; set; }
+        public string? FilePath { get; set; }
+
+        //Save Image under 'wwwroot/Pictures/{Id}/{Filename}'
+        public void Save(int id)
+        {
+            string projectPath = Directory.GetCurrentDirectory();
+            string folderName = Path.Combine(projectPath, "wwwroot" ,"Pictures\\" + id);
+            DirectoryInfo dir = Directory.CreateDirectory(folderName);
+            string fileName = Path.Combine(dir.FullName, Name);
+            
+            string base64Data = Regex.Replace(Data, "^data:image\\/(png|jpeg);base64,", "");
+            //Image img = LoadBase64(base64Data);
+            File.WriteAllBytes(fileName, Convert.FromBase64String(base64Data));
+        }
+
+        ///<summary>
+        /// Acces Directory of a ItemModel
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Directory of ItemModel picture folder</returns>
+        public static DirectoryInfo GetDir(int id)
+        {
+            string projectPath = Directory.GetCurrentDirectory();
+            string folderName = Path.Combine(projectPath, "wwwroot" , "Pictures\\" + id);
+            return Directory.CreateDirectory(folderName);
+        }
+
+        /// <summary>
+        /// Only works if 'Image.Name' has been set.
+        /// Get filepath for frontend reading. wwwroot is leftout given that it shouldnt be included in the frontend.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Filepath for browser accesing of Image</returns>
+        public string GetFilePath(int id)
+        {
+            string projectPath = Directory.GetCurrentDirectory();
+            string fileName = Path.Combine( "/Pictures", id.ToString() , Name);
+            fileName = Regex.Replace(fileName, "\\\\", "/");
+            //fileName = fileName.Replace(@"\\", "/");
+            this.FilePath = fileName;
+            return fileName;
+        }
+    }
 }
