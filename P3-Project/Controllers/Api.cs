@@ -59,6 +59,7 @@ namespace P3_Project.Controllers
     [ApiController]
     public class AdminApi : ControllerBase
     {
+		// PromoCode
         [HttpPost("CreatePromoCode")]
         public async void CreatePromoCode() {
 			string json;
@@ -84,6 +85,42 @@ namespace P3_Project.Controllers
 			code.Items = data.Items;
 
 			code.PushToDB(db);
+		}
+        
+		[HttpPost("CreatePackModel")]
+        public async void CreatePackModel() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var code = JsonSerializer.Deserialize<PackModel>(json);
+			if(code == null) return;
+			code.PushToDB(new StorageDB());
+		}
+
+		[HttpPut("EditPromoCode/{id}")]
+		public async void EditPackModel(int id) {
+			var db = new StorageDB();
+			var code = new PackModel(id, db); 
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var data = JsonSerializer.Deserialize<PackModel>(json);
+			if( data == null ) {Response.StatusCode = 418; return;}
+
+			code.Description = data.Description;
+			code.Name = data.Name;
+			code.Options = data.Options;
+
+			code.PushToDB(db);
+		}
+
+		[HttpDelete("DeletePromoCode")]
+		public async void DeletePromoCode() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+			if(dict == null) { Response.StatusCode = 418; return; }
+			var id = dict["Id"];
+			var db = new StorageDB();
+			new PromoCode(id, db).DeleteFromDB(db);	
 		}
 
 		[HttpDelete("DeletePromoCode")]

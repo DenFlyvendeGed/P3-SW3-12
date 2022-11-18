@@ -19,6 +19,7 @@ namespace P3_Project.Models
     {
         public int? PackID { get; private set; } = null;
         public string Name  { get; set; } = "";
+		public int    Price { get; set; } = 0;
         public string Description {get; set; } = "";
 		//                ID   ModelName
         public List<List<(int, string)>> Options { get; set; } = new();
@@ -50,6 +51,7 @@ namespace P3_Project.Models
 				db.DB.CreateTable(TABLE_NAME,(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {
 					("Id", SQLType.IntAutoIncrement),
 					("Name", SQLType.String64),
+					("Price", SQLType.Int),
 					("Description", SQLType.String512),
 					("NOptions", SQLType.Small)
 				});
