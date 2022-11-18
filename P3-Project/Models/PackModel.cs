@@ -43,6 +43,7 @@ namespace P3_Project.Models
 		}
 
 
+		// Push or Update /this/ in database
         const string TABLE_NAME = "PackModel"; // If changed, it should also be changed in PsudoPackModel
         public void PushToDB(StorageDB db){
 			if(!db.DB.CheckTable(TABLE_NAME)) 
@@ -68,13 +69,18 @@ namespace P3_Project.Models
 				}, $"Id = {PackID}");
 			}
 
-			foreach(var (i, option) in new Enumerate<List<List<(int, string)>>, List<(int, string)>>(Options)){
+			// Create the option tables
+			int i;
+			for(i = 0; i < Options.Count; i++){
 				db.DB.CreateTable($"{TABLE_NAME}_{PackID}_{i}",(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {("ItemModelId", SQLType.Int)});
 
-				foreach(var item in option) {
+				foreach(var item in Options[i]) {
 					db.DB.PushToTable($"{TABLE_NAME}_{PackID}_{i}", new object[] {item.Item1});
 				}
 			}
+			// Delete tables if options were deleted in edit
+			for(; db.DB.CheckTable($"{TABLE_NAME}_{this.PackID}_{i}"); i++) 
+				db.DB.DeleteTable($"{TABLE_NAME}_{this.PackID}_{i}");
         }
 
 
