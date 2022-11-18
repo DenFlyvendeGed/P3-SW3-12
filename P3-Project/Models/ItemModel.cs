@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace P3_Project.Models
 {
-
+    
     public class ItemModel
     {
         public int Id { get; set; }
@@ -29,13 +29,14 @@ namespace P3_Project.Models
         public int StockAlarm { get; set; }
         public List<Item>? items { get; set; }
 
-        public List<Image>? Pictures { get; set; }
+        public string Type { get; set; }
+
+        public List<Picture>? Pictures { get; set; }
        
 
         static StorageDB db = new StorageDB();
         
 
-        
         public ItemModel()
         {
             Id = 0;
@@ -103,7 +104,6 @@ namespace P3_Project.Models
 
             return uniqueSizes;
         }
-
         //Get all items of a given size on an item model
         public Dictionary<string, int> GetAllItemsOfSize(string size)
         {
@@ -131,7 +131,7 @@ namespace P3_Project.Models
         {
             return db.DB.GetRow("ItemModels", new ItemModel(), id);
         }
-
+        
         public void LoadItems()
         {
 
@@ -184,6 +184,7 @@ namespace P3_Project.Models
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ModelName", ModelName);
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "StockAlarm", StockAlarm.ToString());
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "Description", Description);
+            db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "Type", Type);
 
 
 
@@ -223,6 +224,17 @@ namespace P3_Project.Models
             db.DB.DeleteTable(ItemTable);
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
         }
+
+        //Get 
+        public int GetStockTotal()
+        {
+            int result = db.DB.GetStockAmount(ItemTable);
+
+
+            return result;
+        }
+        
+
     }
 
     public class Image

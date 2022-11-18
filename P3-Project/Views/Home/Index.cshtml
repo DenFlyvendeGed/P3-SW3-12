@@ -3,8 +3,26 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Alt tøj.</p>
 
-<script>
-    //document.querySelector('#IndexSite').style = ("color: rgb(59, 146, 178) !important");
-</script>
+<div class="grid-container">
+    @{
+        int index = 1;
+        foreach (ItemModel item in ViewBag.model)
+        {
+            <a style="color: black; text-decoration: none;" href="home\ShowItemModel?id=@(item.Id)">
+                <div class="item@(index) itemShowCase">
+                    <div class="itemShowCasePic">
+                    </div>
+                    <div class="box itemShowCaseName">
+                        <div>@(item.ModelName)</div>
+                        <div>Pris: @(item.ModelPrice) kr.-</div>
+                    </div>
+
+                </div>
+            </a>
+            index += 1;
+        }
+    }
+
+</div>
+

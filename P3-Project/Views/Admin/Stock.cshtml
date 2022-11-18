@@ -33,6 +33,14 @@
                 </div>
                 <p class="item stockItemName">@(item.ModelName)</p>
                 <div class="item" id="@(item.Id)">
+                <div class="item box stockPicBox"></div>
+                <p class="item stockList" style="flex: 2;">@(item.ModelName)</p>
+                @{
+                    int stockAmount = item.GetStockTotal();
+                }
+                <p class="item stockList" style="flex: 1;">Antal i alt: @(stockAmount)</p>
+                <p class="item stockList" style="flex: 1;">Pris: @(item.ModelPrice) kr.- </p>
+                <div class="item" id="@(item.Id)" style="flex:1.5;">
                     <a href="\admin\AddItemModel?id=@(item.Id)"><input type="button" class="editStockBtn" value="Rediger lagerbeholdning" /> </a>
                     <input type="button" class="deleteModelBTN" value="Slet model" name="@(item.ModelName)">
                     <a href="..\api\admin\deleteModel?id=@(item.Id)"></a>

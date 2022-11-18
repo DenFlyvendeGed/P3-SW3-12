@@ -5,6 +5,8 @@ using System.Data;
 
 using System.Collections.Generic;
 using System.Reflection;
+using static System.Formats.Asn1.AsnWriter;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 public class SqlDB : DataBase
 {
@@ -215,6 +217,30 @@ public class SqlDB : DataBase
 	//    return;
 
 	//}
+	
+	public int GetStockAmount(string tableName)
+	{
+		cmd.CommandText = "SELECT SUM(Stock) FROM " + tableName;
+
+        // open database connection.
+        conn.Open();
+
+        //Execute the query 
+        SqlDataReader sdr = cmd.ExecuteReader();
+
+		////Retrieve data from table and Display result
+		int sum = 0;
+		while (sdr.Read())
+        {
+			sum = (int)sdr[""];
+
+
+        }
+        //Close the connection
+        conn.Close();
+
+		return sum;
+    }
 
 	public List<string> GetAllElementsField(string tableName, string key)
 	{

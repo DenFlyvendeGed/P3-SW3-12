@@ -25,6 +25,10 @@ namespace P3_Project.Controllers
         // GET: Admin 
         public ActionResult Index()
         {
+
+
+
+
             return View("Stock");
         }
 
@@ -109,86 +113,9 @@ namespace P3_Project.Controllers
             return View(psudoCodes);
         }
 
-        //public ActionResult Webshop()
-        //{
-        //    StorageDB db = new StorageDB();
-            
-            
-        //    if(!db.DB.CheckTable("ItemModels"))
-        //        setup();
 
-        //    List<ItemModel> itemModels = db.DB.GetAllElements("ItemModels", new ItemModel());
-
-        //    foreach (ItemModel itemModel in itemModels)
-        //    {
-        //        itemModel.items = db.DB.GetAllElements(itemModel.ItemTable, new Item());
-
-        //    };
-
-        //    ViewBag.itemModels = itemModels;
-        //    return View();
-        //}
-
-        [HttpPut]
-        async public void ItemModelTable(ItemModel test)
-        {
-            //string jsonData = string.Empty;
-            //using (var reader = new StreamReader(Request.Body))
-            //{
-            //    jsonData = await reader.ReadToEndAsync();
-            //}
-
-            //Console.WriteLine(jsonData);
-            //JsonSerializer.Deserialize<ItemModel>(jsonData);
-            ItemModel itemModel = test;
-            if (itemModel.Id == 0)
-            {
-                itemModel.Create();
-            }
-            else
-            {
-                itemModel.Update();
-            }
-
-        }
-
-        //public ActionResult deleteModel(int Id)
-        //{
-        //    ItemModel.Delete(Id);
-        //    return RedirectToAction(nameof(Stock));
-        //}
-
-
-
-        public ActionResult CreateItemModel()
-        {
-            ItemModel model = new ItemModel();
-            return View(model);
-        }
-
-        //public ActionResult Delete(string id, Item item)
-        //{
-        //    StorageDB db = new StorageDB();
-        //    string subTable = db.DB.GetField("id", id, "ItemModels", "itemTable");
-        //    db.DB.RemoveRow("ItemModels", "Id", id);
-        //    db.DB.DeleteTable(subTable);
-
-        //    return RedirectToAction(nameof(Webshop));
-        //}
-
-        //public ActionResult DeleteItem(string modelId, string id)
-        //{
-        //    StorageDB db = new StorageDB();
-
-        //    db.DB.RemoveRow("item" + modelId, "id", id);
-
-        //    return RedirectToAction(nameof(Webshop));
-        //}
+        
         #endregion
-        public ActionResult ItemShowCase(string id)
-        {
-            StorageDB db = new StorageDB();
-            return View();
-        }
+
     }
 }
