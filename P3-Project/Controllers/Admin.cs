@@ -73,29 +73,23 @@ namespace P3_Project.Controllers
         public ActionResult PackViewModel()
         {
             var x = 5;
-            PackModel test = new PackModel();
-            test.Name = "Test";
-            List<PackModel> Packs = new List<PackModel>();
-            for (int i = 0; i<x; i++) {
-                Packs.Add(test);
-            }
-            return View(test);
+            //PackModel test = new PackModel();
+            //test.Name = "Test";
+            
+            return View(x);
         }
 
-        public ActionResult CreatePackModel()
-        {
-            return View();
-        }
 
-        public ActionResult PackViewModel()
-        {
-            var x = 5;
-            List<PackModel> Packs = new List<PackModel>();
-            for (int i = 0; i<x; i++) {
-                Packs.Add(new PackModel(i + 1, $"Name{i}"));
-            }
-            return View(Packs);
-        }
+        //public ActionResult PackViewModel()
+        //{
+        //    var x = 5;
+        //    List<PackModel> Packs = new List<PackModel>();
+        //    for (int i = 0; i < x; i++)
+        //    {
+        //        Packs.Add(new PackModel(i + 1));
+        //    }
+        //    return View(Packs);
+        //}
 
         public ActionResult CreatePackModel()
         {

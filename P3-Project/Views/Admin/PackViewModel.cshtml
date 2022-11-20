@@ -1,5 +1,4 @@
 ﻿@using P3_Project.Models
-@model List<PackModel>
 
 @{
     Layout = "AdminLayout";
@@ -15,17 +14,15 @@
 
 <div class="Flex-Container-PackBoxes">
 
-    @foreach(var Pack in Model){
-        @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Pack)
-    }
+    @*@foreach(var Pack in Model){*@
+        @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml")
+    @*}*@
     <a class="BoxLink" asp-area="" asp-controller="Admin" asp-action="CreatePackModel">
         <div class="packBox">
             <img class="packBox-plus" src="../Pics/plus-svgrepo-com.svg" />
         </div>
     </a>
-
-<div class="Flex-Container-PackBoxes">
-    @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Model)
 </div>
+
 
 
