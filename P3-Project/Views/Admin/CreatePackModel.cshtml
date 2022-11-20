@@ -47,7 +47,11 @@
 
 
 <script>
-    window.onload = AddChoice();
+    let Arraylist = [
+        ['Option0', 'Option3'],
+        ['Option2'],
+    ];
+    window.onload = LoadExistingPack(2, Arraylist);
 
     function AddOption(ChoiceNumber){
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
@@ -149,7 +153,6 @@
 
         Container.insertBefore(ChoiceDiv, document.querySelector(".buttonBox"));
 
-        console.log(Container.children);
     }
 
     function AddOptionFields(Array, DropDown) {
@@ -159,6 +162,26 @@
             let Text = document.createTextNode(`${Array[i]}`);
             Option.appendChild(Text);
             DropDown.appendChild(Option);
+        }
+    }
+
+    function FindOptions(id) {
+        let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv");
+        let nodeArray = Array.apply(null, NodeList);
+        let ValueArray = [];
+        nodeArray.forEach((e) => {
+            ValueArray.push(e.querySelector(".Dropdown-Option").value);
+
+        })
+        return (ValueArray);
+    }
+
+    function LoadExistingPack(Choices, Options){
+        for(j = 1; j<=Choices; j++){
+            AddChoice();
+            for(k=1; k<=Options[j-1].length; k++){
+                AddOption(j);
+            }
         }
     }
 
@@ -198,17 +221,6 @@
           1
         ]
         */
-    }
-
-    function FindOptions(id) {
-        let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv");
-        let nodeArray = Array.apply(null, NodeList);
-        let ValueArray = [];
-        nodeArray.forEach((e) => {
-            ValueArray.push(e.querySelector(".Dropdown-Option").value);
-
-        })
-        return (ValueArray);
     }
 
 </script>
