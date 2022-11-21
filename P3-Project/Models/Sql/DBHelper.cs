@@ -48,7 +48,7 @@ public class Helper {
 				string value = "";
 				switch(property.Name){
 					case "DateTime": value = ((DateTime)val).ToString("yyyy-MM-dd"); break;
-					default: value = val.ToString(); break;
+					default: value = val.ToString() ?? ""; break;
 				}
 				values += "'" + value.Replace("'", "''") + "', ";
 			}
