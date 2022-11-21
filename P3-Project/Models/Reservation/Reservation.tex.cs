@@ -1,6 +1,24 @@
 namespace P3_Project.Models.ReservationPdf;
+
+public interface LatexReservationItem {}
+public class LatexItemModel :LatexReservationItem {
+	public int Id {get; set;} = 0;
+	public string Name {get; set;} = "";
+	public int Amount {get; set;} = 0;
+	public int IndividualPrice {get; set;} = 0;
+	public int TotalPrice {get; set;} = 0;
+	
+	override public string ToString() => $"\\\\\\hline {Id} & {Name} & {Amount} & {IndividualPrice} & {TotalPrice}";
+}
+public class LatexPackModel : LatexReservationItem {
+	override public string ToString() => "";
+}
+
+
 static class LATEX_GLOBALS {
-	static string TEX_STRING(string header, string name, string date, string table, string id) => @"
+	static string TEX_STRING(string header, string name, string date, string id, string total, string salestax, IEnumerable<LatexReservationItem> items) {
+		var table = string.Join("\\\\", items);
+		return @"
 \documentclass[a4paper]{{article}}
 \usepackage[a4paper, margin=2cm]{{geometry}}
 \usepackage{{graphicx}}
@@ -70,14 +88,14 @@ static class LATEX_GLOBALS {
 		\leavevmode\color{{ASH-Yellow}}\textbf{Samlet pris(DKK)} \\
 	\hline
 	\hline
-		[data:table]
+		{table}
 	\end{{tabularx}}
 	\par\vspace{{8pt}}
 	\begin{{flushright}}
 	\noindent
 		\begin{{tabular}}{r r}
-			\textbf{{Total}}      & [data:total] \\
-			\textbf{{Heraf moms}} & [data:salestax] \\
+			\textbf{{Total}}      & {total} \\
+			\textbf{{Heraf moms}} & {salestax} \\
 		\end{{tabular}}
 	\end{{flushright}}
 	%% QR Code
@@ -93,11 +111,12 @@ static class LATEX_GLOBALS {
 		
 		\vspace{{60pt}}{
 		\textbf{{Order Id:}}\\
-		[data:id]}}
+		{id}}}
 	\end{{minipage}}
 	}}
 	
 \end{{document}}
 	";
+	}
 }
 
