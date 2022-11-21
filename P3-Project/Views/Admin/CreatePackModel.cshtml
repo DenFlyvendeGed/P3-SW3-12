@@ -77,7 +77,7 @@
         // creating and appending select
         const DropDown = document.createElement("select");
         DropDown.setAttribute("class", "Dropdown-Option");
-        //DropDown.setAttribute("id", `${ChoiceNumber}Dropdown-Option${number}`);
+        DropDown.setAttribute("id", `${ChoiceNumber}Dropdown-Option${number}`);
         DropDown.setAttribute("style", "left:40px;");
         LargeDiv.appendChild(DropDown);
 
@@ -180,12 +180,15 @@
         return (ValueArray);
     }
 
-    function ChangeOption(id, OptionValue) {
-        let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv");
-        let nodeArray = Array.apply(null, NodeList);
-        nodeArray.forEach((e) => {
-            e.querySelector(".Dropdown-Option").value = OptionValue;
-        })
+    function ChangeOption(id, OptionValue, value1, value2) {
+        document.getElementById(`${value1}Dropdown-Option${value2}`).value = OptionValue;
+        //let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv").reduce((p, c) => {p.add(c.querySelector())}, []);
+        //let nodeArray = Array.apply(null, NodeList);
+        //nodeArray.forEach((e) => {
+        //    //e.querySelector("#1Dropdown-Option1").value = OptionValue;
+        //    e.querySelector(`#${value1}Dropdown-Option${value2}`).value = OptionValue;
+        //    //e.querySelector(".Dropdown-Option").value = OptionValue;
+        //})
     }
 
     function LoadExistingPack(Choices, Options, Name, Price){
@@ -197,7 +200,7 @@
                 AddOption(j);
                 console.log(j);
                 console.log(k);
-                ChangeOption(`flexBox-Packcreator-${j}`, 'Option2');
+                ChangeOption(`flexBox-Packcreator-${j}`, Options[j-1][k-1] , j , k);
             }
         }
     }
