@@ -51,7 +51,8 @@
         ['Option0', 'Option3'],
         ['Option2'],
     ];
-    window.onload = LoadExistingPack(2, Arraylist, "Pack1", 120);
+    let Desc = "OHH YEAAHH(Moan)"
+    window.onload = LoadExistingPack(2, Arraylist, "Pack1", 120, Desc);
 
     function AddOption(ChoiceNumber){
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
@@ -191,9 +192,10 @@
         //})
     }
 
-    function LoadExistingPack(Choices, Options, Name, Price){
+    function LoadExistingPack(Choices, Options, Name, Price, Description){
         document.getElementById("LeftInput").value = Name;
         document.getElementById("RightInput").value = Price;
+        document.getElementById("DescriptionBox").value = Description;
         for(j = 1; j<=Choices; j++){
             AddChoice();
             for(k=1; k<=Options[j-1].length; k++){
