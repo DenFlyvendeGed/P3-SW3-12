@@ -22,7 +22,7 @@ namespace P3_Project.Models
 		public int    Price { get; set; } = 0;
         public string Description {get; set; } = "";
 		//                ID   ModelName
-        public List<List<(int, string)>> Options { get; set; } = new();
+        public List<List<int>> Options { get; set; } = new();
 
 		public PackModel() {
 			PackID = null;
@@ -30,14 +30,16 @@ namespace P3_Project.Models
 
 		public PackModel (int id, StorageDB db){
 			this.PackID = id;
-			var table_data = ((int, string, string, short))db.DB.ReadFromTable(TABLE_NAME, $"Id={this.PackID}", (l) => (l[0], l[1], l[2], l[3]))[0];
+			var table_data = ((int, string, int, string, short))db.DB.ReadFromTable(TABLE_NAME, $"Id={this.PackID}", 
+					(l) => (l[0], l[1], l[2], l[3], l[4]))[0];
 			this.Name = table_data.Item2;
-			this.Description = table_data.Item3;
+			this.Price = table_data.Item3;
+			this.Description = table_data.Item4;
 
-			foreach(var i in new Counter(table_data.Item4)){
-				var l = new List<(int, string)>();
+			foreach(var i in new Counter(table_data.Item5)){
+				var l = new List<int>();
 				var itemIds = db.DB.ReadFromTable($"{TABLE_NAME}_{this.PackID}_{i}", (e) => e[0].ToString() ?? "");
-				var data = db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => ((int)e[0], (string)e[1]));
+				var data = db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0]);
 				foreach(var d in data) l.Add(d);
 				this.Options.Add(l);
 			}
@@ -55,10 +57,10 @@ namespace P3_Project.Models
 					("Description", SQLType.String512),
 					("NOptions", SQLType.Small)
 				});
-
 			if(PackID == null) {
 				db.DB.PushToTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),
+					("Price", Price),
 					("Description", Description),
 					("NOptions", Options.Count)
 				});
@@ -66,6 +68,7 @@ namespace P3_Project.Models
 			} else {
 				db.DB.UpdateTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),
+					("Price", Price),
 					("Description", Description),
 					("NOptions", Options.Count)
 				}, $"Id = {PackID}");
@@ -77,7 +80,7 @@ namespace P3_Project.Models
 				db.DB.CreateTable($"{TABLE_NAME}_{PackID}_{i}",(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {("ItemModelId", SQLType.Int)});
 
 				foreach(var item in Options[i]) {
-					db.DB.PushToTable($"{TABLE_NAME}_{PackID}_{i}", new object[] {item.Item1});
+					db.DB.PushToTable($"{TABLE_NAME}_{PackID}_{i}", new object[] {item});
 				}
 			}
 			// Delete tables if options were deleted in edit

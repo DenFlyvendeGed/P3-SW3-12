@@ -47,7 +47,7 @@ namespace P3_Project.Controllers
                 setup();
             
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
-
+			Console.WriteLine(models);
             ViewBag.model = models;
             return View();
         }
@@ -80,21 +80,6 @@ namespace P3_Project.Controllers
                 Packs.Add(test);
             }
             return View(test);
-        }
-
-        public ActionResult CreatePackModel()
-        {
-            return View();
-        }
-
-        public ActionResult PackViewModel()
-        {
-            var x = 5;
-            List<PackModel> Packs = new List<PackModel>();
-            for (int i = 0; i<x; i++) {
-                Packs.Add(new PackModel(i + 1, $"Name{i}"));
-            }
-            return View(Packs);
         }
 
         public ActionResult CreatePackModel()

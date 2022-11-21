@@ -86,6 +86,18 @@ namespace P3_Project.Controllers
 
 			code.PushToDB(db);
 		}
+		
+		[HttpDelete("DeletePromoCode")]
+		public async void DeletePromoCode() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+			if(dict == null) { Response.StatusCode = 418; return; }
+			var id = dict["Id"];
+			var db = new StorageDB();
+			new PromoCode(id, db).DeleteFromDB(db);	
+		}
+
         
 		[HttpPost("CreatePackModel")]
         public async void CreatePackModel() {
@@ -96,7 +108,7 @@ namespace P3_Project.Controllers
 			code.PushToDB(new StorageDB());
 		}
 
-		[HttpPut("EditPromoCode/{id}")]
+		[HttpPut("EditPackModel/{id}")]
 		public async void EditPackModel(int id) {
 			var db = new StorageDB();
 			var code = new PackModel(id, db); 
@@ -107,31 +119,21 @@ namespace P3_Project.Controllers
 
 			code.Description = data.Description;
 			code.Name = data.Name;
+			code.Price = data.Price;
 			code.Options = data.Options;
 
 			code.PushToDB(db);
 		}
 
-		[HttpDelete("DeletePromoCode")]
-		public async void DeletePromoCode() {
+		[HttpDelete("DeletePackModel")]
+		public async void DeletePackModel() {
 			string json;
 			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
 			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
 			if(dict == null) { Response.StatusCode = 418; return; }
 			var id = dict["Id"];
 			var db = new StorageDB();
-			new PromoCode(id, db).DeleteFromDB(db);	
-		}
-
-		[HttpDelete("DeletePromoCode")]
-		public async void DeletePromoCode() {
-			string json;
-			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
-			if(dict == null) { Response.StatusCode = 418; return; }
-			var id = dict["Id"];
-			var db = new StorageDB();
-			new PromoCode(id, db).DeleteFromDB(db);	
+			new PackModel(id, db).DeleteFromDB(db);	
 		}
 
 
@@ -182,9 +184,6 @@ namespace P3_Project.Controllers
             ItemModel.Delete(Id);
             return RedirectToAction("Stock","Admin");
         }
-
-
-
         #endregion
     }
 }
