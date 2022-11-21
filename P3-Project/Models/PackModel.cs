@@ -9,12 +9,21 @@ namespace P3_Project.Models
 		public string Name {get; private set;} = "";
 
         const string TABLE_NAME = "PackModel"; // If changed, it should also be changed in PackModel
-		public static List<PsudoPackModel> GetAllFromDatabase(StorageDB db) =>
-			db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id", "Name"}, (r) => new PsudoPackModel(){
-				PackID = (int)r[0],
-				Name   = (string)r[1]
-			}); 
-	}
+		public static List<PsudoPackModel> GetAllFromDatabase(StorageDB db) {
+			try
+			{
+				return db.DB.ReadFromTable(TABLE_NAME, new string[] { "Id", "Name" }, (r) => new PsudoPackModel()
+				{
+					PackID = (int)r[0],
+					Name = (string)r[1]
+				});
+			}
+			catch
+			{
+				return new();
+			}
+        }
+    }
     public class PackModel
     {
         public int? PackID { get; private set; } = null;

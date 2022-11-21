@@ -1,5 +1,5 @@
 ﻿@using P3_Project.Models
-@model List<PackModel>
+@model PackModel
 @{
     Layout = "AdminLayout";
 
@@ -18,26 +18,6 @@
 </div>
 
 
-@*<div>
-<h3 style="margin-top: 25px"> Valgmulighed 1: </h3>
-
-    <div class="flexBox-Packcreator" id="flexBox-Packcreator-1" style="margin-bottom: 5px; padding: 4px;">
-
-        <div class="OptionBox" id="AddOption" onclick="AddOption(1)" style="left: 60px; height: 138px; width:180px; border: 4px solid #000000;">
-            <h2>
-                <strong style="position: absolute; display: block; margin: auto; left: 50px; top: 30px;">Tilføj Vare</strong>
-            </h2>
-        </div>
-    </div>
- 
-    <div id="Delete1" class="Box-Minus" style="position: relative; right: 5vw; top: -116px; width: 41px; height: 41px; cursor: pointer;">
-        <img class="Minus" src="../Pics/minus-svgrepo-com.svg" />
-    </div>
-
-</div>*@
-
-
-
 <p class="buttonBox" onclick="AddChoice()" style="top: 10px; left: 0vw; width: 110px; height: 56px; margin-top: initial; cursor: pointer;">Tilføj valgmulighed</p>
 
 <textarea id="DescriptionBox" style="position: static; width: 50vw; resize: none;" rows="5" placeholder="Beskrivelse"></textarea>
@@ -49,10 +29,10 @@
 <script>
     let Arraylist = [
         ['Option0', 'Option3'],
-        ['Option2'],
+        ['Option2', 'Option1'],
     ];
     let Desc = "OHH YEAAHH(Moan)"
-    window.onload = LoadExistingPack(2, Arraylist, "Pack1", 120, Desc);
+    window.onload = LoadExistingPack(2, Arraylist, "@Model.Name", "@Model.Price", "@Model.Description");
 
     function AddOption(ChoiceNumber){
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
@@ -209,7 +189,7 @@
 
     function UpdateDB() {
         let name = document.getElementById("LeftInput").value;
-        let price = document.getElementById("RightInput").value;
+        let price = parseInt(document.getElementById("RightInput").value);
         let description = document.getElementById("DescriptionBox").value;
         console.log(name, price, description);
         let options = [];
@@ -221,12 +201,13 @@
             options.push(FindOptions(Choices[i].id));
             console.log(options);
         }
-        /*
+        
+        
         let PayLoad = {
             Name: name,
             Price: price,
             Description: description,
-            Options: options
+            Options: []//options
         };
         let PackModel = JSON.stringify(PayLoad);
 
@@ -235,7 +216,7 @@
             body: PackModel
         });
 
-
+        /*
         [
           1, 2, 3, 4
         ],

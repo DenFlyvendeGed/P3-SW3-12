@@ -70,36 +70,28 @@ namespace P3_Project.Controllers
 
         #region PackModel
         //
-        public ActionResult PackViewModel()
-        {
-            var x = 5;
-            //PackModel test = new PackModel();
-            //test.Name = "Test";
-            
-            return View(x);
-        }
-
-
         //public ActionResult PackViewModel()
         //{
         //    var x = 5;
-        //    List<PackModel> Packs = new List<PackModel>();
-        //    for (int i = 0; i < x; i++)
-        //    {
-        //        Packs.Add(new PackModel(i + 1));
-        //    }
-        //    return View(Packs);
+        //    //PackModel test = new PackModel();
+        //    //test.Name = "Test";
+
+        //    return View(x);
         //}
 
-        public ActionResult CreatePackModel()
+
+        public ActionResult PackViewModel()
         {
-            return View();
+            
+            return View(PsudoPackModel.GetAllFromDatabase(new StorageDB()));
         }
 
-        public ActionResult EditPackModel()
+        public ActionResult CreatePackModel([FromQuery] int? PackID)
         {
-            return View();
+            var model = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
+            return View(model);
         }
+
         #endregion
 
         #region PromoCode
