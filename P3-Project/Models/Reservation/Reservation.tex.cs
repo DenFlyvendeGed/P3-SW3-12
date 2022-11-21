@@ -8,16 +8,23 @@ public class LatexItemModel :LatexReservationItem {
 	public int IndividualPrice {get; set;} = 0;
 	public int TotalPrice {get; set;} = 0;
 	
-	override public string ToString() => $"\\\\\\hline {Id} & {Name} & {Amount} & {IndividualPrice} & {TotalPrice}";
+	override public string ToString() => $"{Id} & {Name} & {Amount} & {IndividualPrice} & {TotalPrice}";
 }
-public class LatexPackModel : LatexReservationItem {
-	override public string ToString() => "";
+public class LatexPackModel : LatexItemModel {
+	public List<LatexPackModelItem> Items {get; set;} = new();
+	override public string ToString() => $"\\hline {Id} & {Name} & {Amount} & {IndividualPrice} & {TotalPrice} {string.Join("", Items)}";
 }
 
+public class LatexPackModelItem {
+	public int Id {get; set;} = 0;
+	public string Name {get; set;} = "";
+	public int Amount {get; set;} = 0;
+	override public string ToString() => "\\\\\\hline {Id} & {Name} & {Amount} &&";	
+}
 
 static class LATEX_GLOBALS {
 	static string TEX_STRING(string header, string name, string date, string id, string total, string salestax, IEnumerable<LatexReservationItem> items) {
-		var table = string.Join("\\\\", items);
+		var table = string.Join("\\\\\\hline", items);
 		return @"
 \documentclass[a4paper]{{article}}
 \usepackage[a4paper, margin=2cm]{{geometry}}
