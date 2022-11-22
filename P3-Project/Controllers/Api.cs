@@ -185,23 +185,6 @@ namespace P3_Project.Controllers
 			new PackModel(id, db).DeleteFromDB(db);	
 		}
 
-
-		[HttpGet("NotificationEmails")]
-		public ActionResult NotificationEmails() {
-			try {
-				return Ok(JsonSerializer.Serialize(new MailList(new StorageDB()).List));
-			} catch {
-				return Ok("[]");
-			}
-		}
-		[HttpPut("NotificationEmails")]
-		public async void PutNotificationEmails() {
-			string json;
-			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			var list = JsonSerializer.Deserialize<List<string>>(json);
-			if(list == null) return;
-			new MailList(){ List = list }.PushToDB(new StorageDB());
-		}
         [HttpGet]
         public IEnumerable<string> GetAdmin()
         {
