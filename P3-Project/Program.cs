@@ -1,5 +1,3 @@
-using P3_Project.Models.ReservationPdf;
-ReservationPdf.FromOrder();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
