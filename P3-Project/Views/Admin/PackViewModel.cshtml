@@ -3,25 +3,19 @@
 @{
     Layout = "AdminLayout";
 
-    ViewData["Title"] = "Rediger pakker";
+    ViewData["Title"] = "Pakke Oversigt";
 }
 
 <h1>@ViewData["Title"]</h1>
-
-<p>Rediger pakker.</p>
-
-<p id="demo"></p>
 
 <div class="Flex-Container-PackBoxes">
 
     @foreach(var Pack in Model){
         @await Html.PartialAsync("../Shared/PackPageAdmin.cshtml", Pack)
     }
-    <a class="BoxLink" asp-area="" asp-controller="Admin" asp-action="CreatePackModel">
-        <div class="packBox">
-            <img class="packBox-plus" src="../Pics/plus-svgrepo-com.svg" />
-        </div>
-    </a>
+    <div class="packBox" onclick="PackModelEdit(null)">
+        <img class="packBox-plus" src="../Pics/plus-svgrepo-com.svg" />
+    </div>
 </div>
 
 

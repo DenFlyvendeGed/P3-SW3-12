@@ -1,8 +1,8 @@
 ﻿@using P3_Project.Models
-@model PackModel
+@model (PackModel, List<(int, string)>)
 @{
     Layout = "AdminLayout";
-
+    var (Packs, Items) = Model;
     ViewData["Title"] = "Rediger Pakke";
 }
 
@@ -27,11 +27,12 @@
 
 
 <script>
+
+
     let Arraylist = [
         ['Option0', 'Option3'],
         ['Option2', 'Option1'],
     ];
-    let Desc = "OHH YEAAHH(Moan)"
     window.onload = LoadExistingPack(2, Arraylist, "@Model.Name", "@Model.Price", "@Model.Description");
 
     function AddOption(ChoiceNumber){
@@ -163,13 +164,6 @@
 
     function ChangeOption(id, OptionValue, value1, value2) {
         document.getElementById(`${value1}Dropdown-Option${value2}`).value = OptionValue;
-        //let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv").reduce((p, c) => {p.add(c.querySelector())}, []);
-        //let nodeArray = Array.apply(null, NodeList);
-        //nodeArray.forEach((e) => {
-        //    //e.querySelector("#1Dropdown-Option1").value = OptionValue;
-        //    e.querySelector(`#${value1}Dropdown-Option${value2}`).value = OptionValue;
-        //    //e.querySelector(".Dropdown-Option").value = OptionValue;
-        //})
     }
 
     function LoadExistingPack(Choices, Options, Name, Price, Description){
@@ -211,10 +205,19 @@
         };
         let PackModel = JSON.stringify(PayLoad);
 
-        fetch("/api/admin/CreatePackModel", {
-            method: "POST",
-            body: PackModel
-        });
+        if(@((Model.PackID != null).ToString().ToLower())){
+            fetch(`/api/admin/EditPackModel/@Model.PackID`, {
+                method: "PUT",
+                body: PackModel
+            });
+        }else{
+            fetch("/api/admin/CreatePackModel", {
+                method: "POST",
+                body: PackModel
+            });
+        }
+
+        
 
         /*
         [

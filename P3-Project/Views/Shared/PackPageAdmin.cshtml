@@ -6,6 +6,18 @@
 
 <script>
     function PackModelEdit(id) { window.location.href = "/admin/CreatePackModel?PackId=" + id; }
+
+    function DeletePackModel(ID){
+        let RequestBody = {
+            Id: ID
+        };
+        let Request = JSON.stringify(RequestBody);
+
+        fetch("/api/admin/DeletePackModel", {
+            method: "DELETE",
+            body: Request
+        });
+    }
 </script>
 
 
@@ -15,4 +27,5 @@
         @Model.Name
     </div>
 </div>
+<div class="Box-Minus" style="position: relative; top: 270px; right: 126px; width: 120px; height: 30px; text-align:center; padding: 4px 0;" onclick="DeletePackModel(@Model.PackID)">Slet PackModel</div>
 
