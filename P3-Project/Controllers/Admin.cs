@@ -93,11 +93,11 @@ namespace P3_Project.Controllers
 
             try
             {
-                Items = db.DB.ReadFromTable("ItemModels", new string[] { "Id", "Name" }, (r) => ((int)r[0], (string)r[1]));
+                Items = db.DB.ReadFromTable("ItemModels", new string[] { "Id", "ModelName" }, (r) => ((int)r[0], (string)r[1]));
             }
             catch
             {
-                new List<(int, string)> { };
+                Items = new List<(int, string)> { };
             }
             var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
             var model = (packmodel, Items);

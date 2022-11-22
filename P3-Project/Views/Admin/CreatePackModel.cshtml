@@ -1,8 +1,8 @@
 ﻿@using P3_Project.Models
 @model (PackModel, List<(int, string)>)
 @{
-    Layout = "AdminLayout";
     var (Packs, Items) = Model;
+    Layout = "AdminLayout";
     ViewData["Title"] = "Rediger Pakke";
 }
 
@@ -28,14 +28,26 @@
 
 <script>
 
+    
 
-    let Arraylist = [
-        ['Option0', 'Option3'],
-        ['Option2', 'Option1'],
+    let arraylist = [
+        @foreach(var i in Packs.Options){
+            <text>[</text>
+            @foreach(var j in i){
+                <text>@j,</text>
+            }
+            <text>],</text>
+        }
     ];
-    window.onload = LoadExistingPack(2, Arraylist, "@Model.Name", "@Model.Price", "@Model.Description");
+    console.log(arraylist);
+    window.onload = LoadExistingPack(arraylist.length, arraylist , "@Packs.Name", "@Packs.Price", "@Packs.Description");
 
     function AddOption(ChoiceNumber){
+    let ItemArray = [
+        @foreach(var (id, name) in Items){
+            <text>{Name:"@name",Id:"@id"},</text>
+        }
+    ]
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
 
 
@@ -63,7 +75,7 @@
         DropDown.setAttribute("style", "left:40px;");
         LargeDiv.appendChild(DropDown);
 
-        AddOptionFields(Array, DropDown); //<-- helper function to make the select options based on an array it gets passed
+        AddOptionFields(ItemArray, DropDown); //<-- helper function to make the select options based on an array it gets passed
 
         //creating and appending the minus box and minus
         const MinusBox = document.createElement("div");
@@ -144,8 +156,8 @@
     function AddOptionFields(Array, DropDown) {
         for (i = 0; i < Array.length; i++) {
             let Option = document.createElement("option");
-            Option.setAttribute("value", `Option${i}`);
-            let Text = document.createTextNode(`${Array[i]}`);
+            Option.setAttribute("value", `${Array[i].Id}`);
+            let Text = document.createTextNode(`${Array[i].Name}`);
             Option.appendChild(Text);
             DropDown.appendChild(Option);
         }
@@ -156,7 +168,7 @@
         let nodeArray = Array.apply(null, NodeList);
         let ValueArray = [];
         nodeArray.forEach((e) => {
-            ValueArray.push(e.querySelector(".Dropdown-Option").value);
+            ValueArray.push(parseInt((e.querySelector(".Dropdown-Option").value)));
 
         })
         return (ValueArray);
@@ -170,13 +182,15 @@
         document.getElementById("LeftInput").value = Name;
         document.getElementById("RightInput").value = Price;
         document.getElementById("DescriptionBox").value = Description;
-        for(j = 1; j<=Choices; j++){
-            AddChoice();
-            for(k=1; k<=Options[j-1].length; k++){
-                AddOption(j);
-                console.log(j);
-                console.log(k);
-                ChangeOption(`flexBox-Packcreator-${j}`, Options[j-1][k-1] , j , k);
+        if(Options != 0){
+            for(j = 1; j<=Choices; j++){
+                AddChoice();
+                for(k=1; k<=Options[j-1].length; k++){
+                    AddOption(j);
+                    console.log(j);
+                    console.log(k);
+                    ChangeOption(`flexBox-Packcreator-${j}`, Options[j-1][k-1] , j , k);
+                }
             }
         }
     }
@@ -201,12 +215,12 @@
             Name: name,
             Price: price,
             Description: description,
-            Options: []//options
+            Options: options
         };
         let PackModel = JSON.stringify(PayLoad);
 
-        if(@((Model.PackID != null).ToString().ToLower())){
-            fetch(`/api/admin/EditPackModel/@Model.PackID`, {
+        if(@((Packs.PackID != null).ToString().ToLower())){
+            fetch(`/api/admin/EditPackModel/@Packs.PackID`, {
                 method: "PUT",
                 body: PackModel
             });

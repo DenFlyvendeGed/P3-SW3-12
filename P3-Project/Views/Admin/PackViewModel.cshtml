@@ -7,7 +7,8 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-
+<script>    function PackModelEdit(id) { window.location.href = "/admin/CreatePackModel?PackId=" + id; }
+</script>
 <div class="Flex-Container-PackBoxes">
 
     @foreach(var Pack in Model){
