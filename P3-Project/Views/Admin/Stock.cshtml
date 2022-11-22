@@ -19,13 +19,13 @@
         {
             @*Create box for each item in stock*@
             <div class="stockBox  box containerBox">
-                <div class="item box stockPicBox">
+                <div class="item box stockPicBox wrap">
                     @{
                         Image img = item.GetFirstImg();
                         if (img != null)
                         {
 
-                            <img class="picSize" src='@img.FilePath' />
+                            <img class="picSize midImg" src='@img.FilePath' />
                         }
 
                     }

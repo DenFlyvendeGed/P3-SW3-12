@@ -8,13 +8,13 @@
     @{
         ItemModel item = ViewBag.item;
 
-        <div class="displayItem box">
+        <div class="displayItem box picScaling wrap">
             @{
                 Image img = item.GetFirstImg();
                 if (img != null)
                 {
 
-                    <img class="picSize" src='@img.FilePath' />
+                    <img class="midImg" style="padding:2%;" src='@img.FilePath' />
                 }
             }
         </div>
@@ -52,14 +52,15 @@
                         int colorIndex = 1;
                         foreach ((string, string) color in ViewBag.item.GetUniqueColor())
                         {
-                            <div class="grid-itemShowcase itemColor" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)"></div>
+                            <div class="grid-itemShowcase itemColor colorStyle" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
                             colorIndex += 1;
                         }
                     }
                 </div>
             </div>
 
-            @*<------------------Description--------------------->*@
+            @*<------------------Description--------------------->
+        *@
             <div class="box modelAttributes">
                 <div>Beskrivesle:</div>
                 <div>@(item.Description)</div>
@@ -67,7 +68,15 @@
 
 
             @*<------------------Cart--------------------->*@
-            <div class="box grid-containerShowcase modelAttributes">
+            <div class="box modelAttributes cartBtnLayout">
+                <div>Antal:</div>
+
+                <div class="counterGrid">
+                    <input class="counterItem" type="button" id="plus" value="+">
+                    <div class="counterItem" id="counter">1</div>
+                    <input class="counterItem" type="button" id="minus" value="-">
+                </div>
+
                 <input type="submit" value="Tilføj til kurv" id="addToCart">
             </div>
         </div>
@@ -78,6 +87,7 @@
 
 <script>
 
+    //Size toggle
     let currentSizeToggle;
     function toggleSize(e) {
         if (e.target.id != "sizeChoices") {
@@ -101,6 +111,7 @@
         }
     }
 
+    //Color toggle
     let currentColorToggle;
     function toggleColor(e) {
         if (e.target.id != "colorChoices") {
@@ -123,6 +134,26 @@
         }
     }
 
+    //Amount added to cart
+    let currentAmount = 1;
+    function changeCount(delta) {
+        return function () {
+            var counter = document.getElementById('counter').innerHTML;
+            var parsed = parseInt(counter);
+            if (delta == "plus") {
+                currentAmount += 1;
+                var result = parsed + 1;
+                document.getElementById('counter').innerHTML = result;
+            }
+            else if (delta == "minus" && parsed != 1) {
+                currentAmount -= 1;
+                var result = parsed - 1;
+                document.getElementById('counter').innerHTML = result;
+            }
+        }
+    }
+
+    //Create cart object
     function addToCart() {
         if (currentColorToggle != undefined && currentSizeToggle != undefined) {
             let chosenModel = document.getElementById("ModelName").attributes.value.nodeValue;
@@ -130,11 +161,13 @@
             let chosenColorCode = document.getElementById(currentColorToggle).attributes.value.nodeValue;
             let chosenColorName = document.getElementById(currentColorToggle).attributes.name.nodeValue;
 
+
             let itemData = {
                 Id: chosenModel,
                 Size: chosenSize,
                 Color: chosenColorName,
                 ColoWheel: chosenColorCode,
+                AmountToCart: currentAmount,
             }
 
             console.log(itemData);
@@ -144,6 +177,10 @@
         }
     }
 
+
+
+    document.getElementById('minus').onclick = changeCount("minus");
+    document.getElementById('plus').onclick = changeCount("plus");
     document.getElementById("colorChoices").addEventListener("click", toggleColor);
     document.getElementById("sizeChoices").addEventListener("click", toggleSize);
     document.getElementById("addToCart").addEventListener("click", addToCart);

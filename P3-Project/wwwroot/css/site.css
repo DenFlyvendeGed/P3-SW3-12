@@ -326,17 +326,12 @@ a.BoxLink:active {
 }
 
 img {
+    
     max-width: -webkit-fill-available;
     max-height: -webkit-fill-available;
 }
 
-/*.picSize {
-    max-width: 100%;
-    max-height: 200px;
-    box-sizing: border-box;
-    padding: 5px;
-    margin: auto;
-}*/
+
 
 .picSize {
     box-sizing: border-box;
@@ -372,6 +367,7 @@ img {
 .CreateItemModel {
     height: 450px;
     width: 50vw;
+    min-width: 50vw;
     max-width: 50vw;
     
 }
@@ -464,14 +460,14 @@ img {
 
 
 .slash {
-    margin-left: -20px;
     width: 50px;
     height: 1px;
-    transform: rotate(26deg);
+    transform: rotate(40deg);
     display: inline-block;
     background: #111;
-    vertical-align: 7px;
-    overflow:hidden;
+    overflow: hidden;
+    vertical-align: 1px;
+    margin-left: -20px;
 }
 
 .itemShowCase {
@@ -486,23 +482,21 @@ img {
 .itemShowCaseName {
     height: 20%;
     width: 100%;
-    border-style: solid;
-    border-width: 1px;
+    background-color: #D9D9D9;
     box-sizing: border-box;
     font-size: 1.3vw;
     text-align: center;
-
 }
 .itemShowCasePic {
     width: 100%;
     height: 80%;
-    background-color: lightgray;
+    background-color: #D9D9D9;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: 25vw 25vw 25vw;
-    margin-left:4%;
+    margin-left: 8%;
 }
 
 .item1 {
@@ -529,7 +523,7 @@ img {
 
 .descriptionArea {
     margin: 2px;
-    height: 99%;
+    height: 89.9%;
 }
 
 .grid-containerShowcase {
@@ -589,21 +583,17 @@ div.itemSizeToggle {
     margin: 1px;
     border-style: solid;
     border-width: 1px;
-    background-color: var(--ash-light-blue);
+    background-color: var(--ash-light-blue) ;
 }
 
 div.itemColor {
-    width:100%;
-    height:22px;
     margin:1px;
     border-style: solid;
     border-width: 1px;
 }
 
 div.itemColorToggle {
-    width: 100%;
-    height: 22px;
-    margin: 1px;
+    height:26px;
     border-style: solid;
     border-width: 3px;
 }
@@ -624,15 +614,82 @@ div.createTaxBox{
     width: 20vw;
 }
 
+.picScaling {
+    margin-top: 40px;
+    height: 80%;
+   
+}
+
+.colorStyle {
+    border-color: black;
+    color: white;
+    font-weight: bold;
+    /*text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/
+    -webkit-text-stroke-width: 0.7px;
+    -webkit-text-stroke-color: black;
+}
+
+
+.counterGrid{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    padding: 2px;
+    text-align: center;
+}
+
+.counterItem1{
+    background-color: white;
+    text-align: center;
+}
+
+
+.cartBtnLayout {
+    padding: 4px;
+    display:grid; 
+    grid-template-columns: 20% 20% 30%;
+    gap: 15%;
+}
+
+div.shopTagBox{
+    height:3vw;
+}
+
+
+
+.wrap {
+    position: relative;
+    
+}
+
+
+.midImg {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+} 
+
+
+/*Scalling for window < 480px*/
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+
+    .mainIndex {
+        overflow: auto;
+    }
+
     .grid-container {
         display: grid;
         grid-template-columns: 70vw;
+        gap: 1%;
+        margin-left:12%
     }
 
     .itemShowCase {
         width: 100%;
-        height: 100%;
+        height: 25vh;
         border-style: solid;
         border-width: 1px;
         margin-top: 4%;
@@ -642,21 +699,85 @@ div.createTaxBox{
     .itemShowCaseName {
         height: 20%;
         width: 100%;
-        border-style: solid;
-        border-width: 1px;
-        box-sizing: border-box;
-        font-size: 2.5vw;
+        
+        font-size: 90%;
         text-align: center;
     }
 
     .itemShowCasePic {
-        width: 100%;
+        width: 99.8%;
         height: 80%;
-        background-color: lightgray;
+        background-color: #D9D9D9;
+        ;
     }
 
-    div.tagBox {
-        width: 15vw;
-        height: 50vw;
+    .displayItemBox {
+        display: block;
+        width: 80vw;
+        margin-left: 8%;
     }
+
+    .cartBtnLayout {
+        padding: 4px;
+        display: grid;
+        grid-template-columns: 10% 20% 40%;
+        gap: 15%;
+    }
+
+    .grid-containerShowcase {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        padding: 4px;
+        text-align: center;
+    }
+
+    #leftFooterBox {
+        min-height: 20px;
+        float: left;
+        width: 50%;
+        margin-top:-6%;
+    }
+
+    #textLeft {
+        display: block;
+        font-size:9px;
+        font-weight: 400;
+        color: white;
+        line-height: 1em;
+        margin-right: 17px;
+        font-family: 'DINMittelschrift',sans-serif;
+    }
+
+    #textField {
+        padding-top: 15%;
+    }
+
+    .counterGrid {
+        display: grid;
+        grid-template-columns: 60% 40% 60%;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .picScaling {
+        height: 60vw;
+        margin-top: 5vw;
+    }
+   
+}
+
+/*Scalling for 1440px > window > 480px*/
+@media only screen and (min-device-width : 480px) and (max-device-width : 1250px) {
+
+    .picScaling {
+        height: 80%;
+        margin-top: 5vw;
+
+    }
+
+    .grid-container {
+        
+        margin-left: 12%
+    }
+    
 }

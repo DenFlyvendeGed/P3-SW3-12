@@ -92,18 +92,18 @@
                 Pris: <input type="number" id="ItemModelPrice" name="ItemModelPrice" placeholder="Pris" style="width:120px;" @(ViewBag.model?.ModelPrice != null ? "value = " + ViewBag.model.ModelPrice : "") required />
                 Type:
                 @{
-                                                                                                                                                <select name="itemModelType" id="itemModelType">
-                                                                                                                                                    @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
-                                                                                                                                                    @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj' >Tøj</option>") : Html.Raw("<option value='Tøj' >Tøj</option>"))
-                                                                                                                                                    @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' >Tilbehør</option>") : Html.Raw("<option value='Tilbehør' >Tilbehør</option>"))
+                                                                                                                                            <select name="itemModelType" id="itemModelType">
+                                                                                                                                                @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
+                                                                                                                                                @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj' >Tøj</option>") : Html.Raw("<option value='Tøj' >Tøj</option>"))
+                                                                                                                                                @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' >Tilbehør</option>") : Html.Raw("<option value='Tilbehør' >Tilbehør</option>"))
 
-                                                                                                                                                    @*<option value="Tilbehør">Tilbehør</option>
+                                                                                                                                                @*<option value="Tilbehør">Tilbehør</option>
                     *@
-                                                                                                                                                </select>
+                                                                                                                                            </select>
                 }
             </p>
 
-            
+
 
 
         </div>
@@ -132,10 +132,10 @@
                     <tr id="itemColor">
 
                         <th>
-                            <div>
-                                <sub style="margin-left:3px;">Størrelse:</sub>
+                            <div style="height: 33.67px; max-height: 33.67px; width: 134.17px; min-width: 134.17px; max-width: 134.17px;">
+                                <sub style="margin-left: 10px; bottom:-0.7em;">Størrelse:</sub>
                                 <span class="slash"></span>
-                                <sup style="margin-left: -10px;">Farve:</sup>
+                                <sup style="margin-left: 90px; top: -2.3em;">Farve:</sup>
                             </div>
                         </th>
 
@@ -145,11 +145,11 @@
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
 
-                                                                                                                                                        <td id="@createIdColor" class="colStyle">
-                                                                                                                                                            <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
-                                                                                                                                                            <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
-                                                                                                                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
-                                                                                                                                                        </td>
+                                                                                                                                                    <td id="@createIdColor" class="colStyle">
+                                                                                                                                                        <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
+                                                                                                                                                        <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+                                                                                                                                                        <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
+                                                                                                                                                    </td>
 
 
                         data.Add(new Dictionary<string,object>{
@@ -180,14 +180,14 @@
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
 
-                                                                                                                                                    <tr id="@createIdSize" class="headerStyle">
-                                                                                                                                                        <td>
-                                                                                                                                                            <input value="@size" id="@createIdSize" style="width: 100px;">
-                                                                                                                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
+                                                                                                                                                <tr id="@createIdSize" class="headerStyle">
+                                                                                                                                                    <td>
+                                                                                                                                                        <input value="@size" id="@createIdSize" style="width: 100px;">
+                                                                                                                                                        <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
 
-                                                                                                                                                        </td>
+                                                                                                                                                    </td>
 
-                                                                                                                                                        @{
+                                                                                                                                                    @{
                         //Create Items for given header
                         var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
                         int colX = 1;
@@ -195,11 +195,11 @@
                         List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
                         int colId = colX;
-                                                                                                                                                                                                                                                                                        <td id="@createIdSize,@colX" class="@colId">
+                                                                                                                                                                                                                                                                                <td id="@createIdSize,@colX" class="@colId">
 
-                                                                                                                                                                                                                                                                                            <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                                                                                                                                                                                                                                                                    <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
 
-                                                                                                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                                                                                                </td>
                         colX+=1;
 
                         //Item data object
@@ -219,10 +219,10 @@
                         {"dom",""}
                         });
 
-                                                                                                                                                        }
+                                                                                                                                                    }
 
 
-                                                                                                                                                    </tr>
+                                                                                                                                                </tr>
 
                     createIdSize+=1;
                     }
@@ -249,10 +249,14 @@
     </div>
 
     @*Description box*@
-    <div class="box" style="height:450px; margin-top:10px;">
-        <textarea class="descriptionArea" style="resize: none;" id="ItemModelDescription" name="ItemModelDescription"> @(ViewBag.model?.Description != null ? ViewBag.model.Description : "")</textarea>
-    </div>
-
+    @{
+    int maxLenght = 200;
+                                                                                                                                <div class="box" style="height:450px; margin-top:10px; margin-left:10px;">
+                                                                                                                                    <div style="text-align:center; width:100%;">Beskrivelse:</div>
+                                                                                                                                    <div id="charCounterBox" style="text-align:center; width:100%; font-size: 12px;"></div>
+                                                                                                                                    <textarea class="descriptionArea" maxlength="@(maxLenght) " style="resize: none;" id="ItemModelDescription" name="ItemModelDescription">@(ViewBag.model?.Description != null ? ViewBag.model.Description : "")</textarea>
+                                                                                                                                </div>
+    }
 
 
 </div>
@@ -267,7 +271,29 @@
 <script>
     const tagList = [];
 
+    //Text area counter
+    function TextAreaCounter() {
+        const textarea = document.querySelector("textarea");
 
+
+        const newTarget = document.getElementById('ItemModelDescription')
+        let currentLength = newTarget.defaultValue.length;
+        const maxLength = newTarget.getAttribute("maxlength");
+
+        document.getElementById('charCounterBox').innerHTML = "Tegn: " + currentLength + " af " + (maxLength);
+
+        textarea.addEventListener("input", event => {
+            const target = event.currentTarget;
+            const currentLength = target.value.length;
+
+
+            document.getElementById('charCounterBox').innerHTML = "Tegn: " + currentLength + " af " + (maxLength);
+            console.log(currentLength);
+        });
+    }
+    TextAreaCounter();
+
+    //Grid
     function Grid() {
         //Size = Row
         //Color = Col
@@ -371,7 +397,7 @@
                     id: this.colId,
                     color: "",
                     dom: newCol,
-                    colorWheel: "000000",
+                    colorWheel: "#000000",
 
                 }
             );
@@ -426,8 +452,8 @@
 
                     newElem.type = "number";
                     newElem.min = "0";
-                    newElem.placeholder = "Antal";
                     newElem.id = id;
+                    newElem.value = 0;
                     newCell.append(newElem);
 
                     //Create field in itemData object
@@ -460,8 +486,8 @@
 
                     newElem.type = "number";
                     newElem.min = "0";
-                    newElem.placeholder = "Antal";
                     newElem.id = id;
+                    newElem.value = 0;
                     newCell.append(newElem);
 
                     //Create field in itemData object
@@ -595,6 +621,33 @@
             Pictures: fileArray,
             Tags: formatedTagList,
         }
+
+        let stateColor = true;
+        let stateSize = true;
+        if(itemModel.items != null){
+            
+            for(let i = 0; i < itemModel.items.length; i++){
+                console.log(itemModel.items[i]);
+                if(itemModel.items[i].Color === ""){
+                    stateColor = false;
+                    break;
+                }
+                if(itemModel.items[i].Size === ""){
+                    stateSize = false;
+                    break;
+                }
+            }
+            
+        }
+        if(stateSize == false){
+            alert("En eller flere størrelser mangler.");
+            return;
+        }
+        if(stateColor == false){
+            alert("En eller flere farver mangler.");
+            return;
+        }
+        
         const data = JSON.stringify(itemModel);
         console.log(grid.itemData);
 
@@ -839,6 +892,7 @@
     if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {
         nextPic();
     }
+
     document.querySelector("#AddRow").addEventListener("click", grid.addRow);
     document.querySelector("#AddCol").addEventListener("click", grid.addCol);
     document.querySelector("#CreateItemModel").addEventListener("click", sendDataToDB);

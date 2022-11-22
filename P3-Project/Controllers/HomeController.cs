@@ -53,6 +53,15 @@ namespace P3_Project.Controllers
         }
         public ActionResult Accessoires()
         {
+            StorageDB db = new StorageDB();
+            if (!db.DB.CheckTable("ItemModels"))
+                setup();
+
+
+            List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel(), "Type", "Tilbehør");
+
+            ViewBag.model = models;
+
             return View();
         }
 
