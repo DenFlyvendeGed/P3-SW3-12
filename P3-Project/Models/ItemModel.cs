@@ -31,7 +31,7 @@ namespace P3_Project.Models
 
         public string Type { get; set; }
 
-        public List<Image>? Pictures { get; set; }
+        public List<ImageModel>? Pictures { get; set; }
 
         public List<Tag>? Tags { get; set; }
        
@@ -48,6 +48,7 @@ namespace P3_Project.Models
             Description = "";
             ItemTable = "";
 
+            Type = "";
             Pictures = new();
             Description = "";
         }
@@ -78,7 +79,7 @@ namespace P3_Project.Models
             }
             if (Pictures != null)
             {
-                foreach (Image item in Pictures)
+                foreach (ImageModel item in Pictures)
                 {
                     if (item.Data != null)
                         item.Save(Id);
@@ -160,31 +161,33 @@ namespace P3_Project.Models
         public void LoadImages()
         
         {
-            DirectoryInfo dir = Image.GetDir(Id);
+            DirectoryInfo dir = ImageModel.GetDir(Id);
 
             foreach(FileInfo file in dir.GetFiles())
             {
-                Image img = new();
+                ImageModel img = new();
                 img.Name = file.Name;
                 img.Type = file.Extension;
+                img.Id = Id;
                 //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
                 //img.Data = $"data:image/{img.Type};base64,{img.Data}";
-                img.FilePath = img.GetFilePath(Id);
+                img.FilePath = img.GetFilePath();
                 Pictures.Add(img);
             }
         }
-        public Image GetFirstImg()
+        public ImageModel GetFirstImg()
         {
-            DirectoryInfo dir = Image.GetDir(Id);
+            DirectoryInfo dir = ImageModel.GetDir(Id);
 
             foreach (FileInfo file in dir.GetFiles())
             {
-                Image img = new();
+                ImageModel img = new();
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".","");
+                img.Id = Id;
                 //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
                 //img.Data = $"data:image/{img.Type};base64,{img.Data}";
-                img.FilePath = img.GetFilePath(Id);
+                img.FilePath = img.GetFilePath();
                 return img;
             }
             return null;
@@ -220,7 +223,7 @@ namespace P3_Project.Models
             }
             if(Pictures != null)
             {
-                foreach (Image item in Pictures)
+                foreach (ImageModel item in Pictures)
                 {
                     if(item.Data != null)
                         item.Save(Id);
@@ -236,7 +239,7 @@ namespace P3_Project.Models
             db.DB.DeleteTable($"ItemModels_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
-            DirectoryInfo dir = Image.GetDir(Id);
+            DirectoryInfo dir = ImageModel.GetDir(Id);
             dir.Delete(true);
         }
 
@@ -247,7 +250,7 @@ namespace P3_Project.Models
             db.DB.DeleteTable($"ItemModels_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
-            DirectoryInfo dir = Image.GetDir(Id);
+            DirectoryInfo dir = ImageModel.GetDir(Id);
             dir.Delete(true);
         }
 
@@ -263,15 +266,25 @@ namespace P3_Project.Models
 
     }
 
-    public class Image
+    public class ImageModel
     {
         public string? Name { get; set; }
         public int? Size { get; set; }
         public string? Type { get; set; }
         public string? Data { get; set; }
         public string? FilePath { get; set; }
-
+        public int? Id { get; set; }
         //Save Image under 'wwwroot/Pictures/{Id}/{Filename}'
+        public ImageModel()
+        {
+            Name = null;
+            Size = null;
+            Type = null;
+            Data = null;
+            FilePath = "";
+            Id = null;
+
+        }
         public void Save(int id)
         {
             string projectPath = Directory.GetCurrentDirectory();
@@ -302,14 +315,34 @@ namespace P3_Project.Models
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Filepath for browser accesing of Image</returns>
-        public string GetFilePath(int id)
+        public string GetFilePath()
         {
+            if(Id == null)
+                return string.Empty;
             string projectPath = Directory.GetCurrentDirectory();
-            string fileName = Path.Combine( "/Pictures", id.ToString() , Name);
+            string fileName = Path.Combine("/Pictures", Id.ToString(), Name);
             fileName = Regex.Replace(fileName, "\\\\", "/");
             //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
             return fileName;
+        }
+
+        public static ImageModel GetFirstImg(int Id)
+        {
+            DirectoryInfo dir = ImageModel.GetDir(Id);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                ImageModel img = new();
+                img.Name = file.Name;
+                img.Type = file.Extension.Replace(".", "");
+                img.Id = Id;
+                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
+                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
+                img.FilePath = img.GetFilePath();
+                return img;
+            }
+            return new ImageModel();
         }
     }
 }
