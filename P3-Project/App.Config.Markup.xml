@@ -12,7 +12,7 @@
 		<add key="email-password" value="crxygpmhabehdvmz"/>
 	<!-- END OF EMAIL -->
 	<!-- LATEX FOLDER -->
-		<add key="latex-folder" value="/home/kamya/AAU/Projecter/P3/latex_compile/" />
+		<add key="latex-compile-folder" value="/home/kamya/AAU/Projecter/P3/latex_compile/" />
 
 	<!-- SQL Database -->
 		<!-- What database are you using (SQL OR MySQL)-->
