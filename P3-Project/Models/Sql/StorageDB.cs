@@ -48,6 +48,7 @@ namespace P3_Project.Models.DB
 		int GetStockAmount(string tableName);
 
 
+
     }
 
 	public class StorageDB {

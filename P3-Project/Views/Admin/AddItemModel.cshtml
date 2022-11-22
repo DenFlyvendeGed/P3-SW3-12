@@ -51,8 +51,32 @@
             <input class="uploadBut" type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
         </div>
 
-        <div class="box createTaxBox">
-            tag box her
+        <div class="box TagBox">
+            <div>
+                @{
+                    List<Tag>? modelTags = (ViewBag?.model != null ? Tag.GetAllTagsOfItemModel(ViewBag.model.Id.ToString()) : null);
+
+                foreach(Tag tag in Tag.GetAllTags())
+                {
+                    <div>
+                        <label>@tag.Name</label>
+                        <input type="checkbox" id="@tag.Id"  onclick="ToggleTag(this)" @(
+                            modelTags != null ?
+                                modelTags.Any(modeltag => modeltag.Name == tag.Name) ? Html.Raw("Checked") : ""
+                                : 
+                                ""
+                        
+                        )>
+                        <input type="button" value="-" id="@tag.Id" onclick="DeleteTag(this)">
+                    </div>
+                }
+
+                
+
+            }
+            </div>
+            <input type="button" value="+" onclick="CreateTagDom(this.previousElementSibling)">
+
         </div>
     </div>
 
@@ -68,14 +92,14 @@
                 Pris: <input type="number" id="ItemModelPrice" name="ItemModelPrice" placeholder="Pris" style="width:120px;" @(ViewBag.model?.ModelPrice != null ? "value = " + ViewBag.model.ModelPrice : "") required />
                 Type:
                 @{
-                    <select name="itemModelType" id="itemModelType">
-                        @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
-                        @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj' >Tøj</option>") : Html.Raw("<option value='Tøj' >Tøj</option>"))
-                        @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' >Tilbehør</option>") : Html.Raw("<option value='Tilbehør' >Tilbehør</option>"))
+                                                                                                                                                <select name="itemModelType" id="itemModelType">
+                                                                                                                                                    @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
+                                                                                                                                                    @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj' >Tøj</option>") : Html.Raw("<option value='Tøj' >Tøj</option>"))
+                                                                                                                                                    @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' >Tilbehør</option>") : Html.Raw("<option value='Tilbehør' >Tilbehør</option>"))
 
-                        @*<option value="Tilbehør">Tilbehør</option>
+                                                                                                                                                    @*<option value="Tilbehør">Tilbehør</option>
                     *@
-                    </select>
+                                                                                                                                                </select>
                 }
             </p>
 
@@ -121,11 +145,11 @@
                         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
 
-                            <td id="@createIdColor" class="colStyle">
-                                <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
-                                <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
-                                <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
-                            </td>
+                                                                                                                                                        <td id="@createIdColor" class="colStyle">
+                                                                                                                                                            <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
+                                                                                                                                                            <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+                                                                                                                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
+                                                                                                                                                        </td>
 
 
                         data.Add(new Dictionary<string,object>{
@@ -156,14 +180,14 @@
                     int createIdSize = 1;
                     foreach(string size in ViewBag.model.GetUniqueSize()){
 
-                        <tr id="@createIdSize" class="headerStyle">
-                            <td>
-                                <input value="@size" id="@createIdSize" style="width: 100px;">
-                                <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
+                                                                                                                                                    <tr id="@createIdSize" class="headerStyle">
+                                                                                                                                                        <td>
+                                                                                                                                                            <input value="@size" id="@createIdSize" style="width: 100px;">
+                                                                                                                                                            <input type="button" class="removeAttributeBTN" style="margin-left: -4.5px;" value="-">
 
-                            </td>
+                                                                                                                                                        </td>
 
-                            @{
+                                                                                                                                                        @{
                         //Create Items for given header
                         var sizeDict = ViewBag.model.GetAllItemsOfSize(size);
                         int colX = 1;
@@ -171,11 +195,11 @@
                         List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
                         foreach((string, string) color in ViewBag.model.GetUniqueColor()){
                         int colId = colX;
-                                <td id="@createIdSize,@colX" class="@colId">
+                                                                                                                                                                                                                                                                                        <td id="@createIdSize,@colX" class="@colId">
 
-                                    <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
+                                                                                                                                                                                                                                                                                            <input type="number" min="0" class="elemStyle" value="@sizeDict[color.Item1]" id="@createIdSize,@colX">
 
-                                </td>
+                                                                                                                                                                                                                                                                                        </td>
                         colX+=1;
 
                         //Item data object
@@ -195,10 +219,10 @@
                         {"dom",""}
                         });
 
-                            }
+                                                                                                                                                        }
 
 
-                        </tr>
+                                                                                                                                                    </tr>
 
                     createIdSize+=1;
                     }
@@ -241,6 +265,8 @@
 
 
 <script>
+    const tagList = [];
+
 
     function Grid() {
         //Size = Row
@@ -547,7 +573,16 @@
 
     //Send table to SQL database
     async function sendDataToDB() {
-
+        const formatedTagList = [];
+        tagList.forEach( tag => 
+        {
+            formatedTagList.push(
+                {
+                    Id: parseInt(tag.Id),
+                    Name: "",
+                }
+            )
+        })
 
         const itemModel = {
             Id: @(ViewBag?.model!= null ? ViewBag.model.Id : 0),
@@ -558,6 +593,7 @@
             Description: document.getElementById("ItemModelDescription").value,
             Type: document.getElementById("itemModelType").value,
             Pictures: fileArray,
+            Tags: formatedTagList,
         }
         const data = JSON.stringify(itemModel);
         console.log(grid.itemData);
@@ -693,9 +729,111 @@
                     }
                 });
         }
+    }
 
+    function ToggleTag(dom){
+        if(dom.checked)
+        {
+            AddTag(dom.id);
+        }
+        else
+        {
+            RemoveTag(dom.id);
+        }
+    }
 
+    function AddTag(Id)
+    {
+        const modelId = @(ViewBag?.model!= null ? ViewBag.model.Id : 0)
+        if(modelId != 0)
+        {
+            fetch("../api/Admin/AddTag?ItemModelId=" + modelId + "&TagId=" + Id,
+            {
+                method: "POST",
+            })
+        }
+        else{
+            tagList.push({Id})
+        }
+        //console.log(Id)
+    }
 
+    function RemoveTag(Id)
+    {
+        const modelId = @(ViewBag?.model!= null ? ViewBag.model.Id : 0)
+        if(modelId != 0)
+        {
+            fetch("../api/Admin/RemoveTag?ItemModelId=" + modelId + "&TagId=" + Id,
+            {
+                method: "POST",
+            })
+        }
+        else
+        {
+            tagList = taglist.splice(tagList.indexOf(Id),1);
+        }
+        //console.log(Id)
+    }
+
+    function DeleteTag(dom)
+    {
+        if (confirm("Er du sikker på at du vil slette " + dom.parentElement.children[0].innerText + " permanent?")) {
+            fetch("../api/Admin/DeleteTag?TagId=" + dom.id,
+                {
+                    method: "POST",
+                })
+
+            dom.parentElement.remove();
+        }
+    }
+
+    function CreateTag(e)
+    {
+        const tagName = e.target.previousElementSibling.value;
+        fetch("../api/Admin/CreateTag?TagName=" + tagName,
+            {
+                    method: "POST",
+            }
+        
+        )
+        .then(Response => {
+            if(Response.ok)
+            {
+                const container = e.target.parentElement;
+                const parent = container.parentElement;
+
+                const div = document.createElement("div");
+                div.innerHTML =
+                 `<div>
+                    <label>`+tagName+`</label>
+                    <input type="checkbox" id= ` + Response.headers.get('Id') + `  onclick="ToggleTag(this)">
+                    <input type="button" value="-" id="-1" onclick="DeleteTag(this)">
+                </div>`
+
+                parent.append(div);
+                container.remove();
+            }
+        })
+
+    }
+
+    function CreateTagDom(dom)
+    {
+
+        //console.log(dom)
+        
+        const input = document.createElement("input");
+
+        const div = document.createElement("div");
+
+        const button = document.createElement("button");
+
+        button.textContent = "Tilføj Tag";
+        button.addEventListener("click", CreateTag);
+        div.append(input);
+        div.append(button);
+
+        dom.append(div);
     }
 
     if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {

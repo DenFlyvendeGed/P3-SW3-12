@@ -39,6 +39,8 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
 
             db.DB.CreateTable("ItemModels", new ItemModel());
+            db.DB.CreateTable("Tags", new Tag());
+
         }
 
         #region ItemModel

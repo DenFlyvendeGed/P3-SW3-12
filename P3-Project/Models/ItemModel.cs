@@ -32,6 +32,8 @@ namespace P3_Project.Models
         public string Type { get; set; }
 
         public List<Image>? Pictures { get; set; }
+
+        public List<Tag>? Tags { get; set; }
        
 
         static StorageDB db = new StorageDB();
@@ -50,6 +52,8 @@ namespace P3_Project.Models
             Description = "";
         }
 
+        
+
         //Adds the ItemModel instance to the list of Itemmodel's int the SQL table
         public void Create()
         {
@@ -63,6 +67,7 @@ namespace P3_Project.Models
             ItemTable = "Item" + Id;
             db.DB.UpdateField("ItemModels", "Id", Id.ToString(), "ItemTable", ItemTable);
             CreateItemTable();
+            CreateTagTable();
             if (items != null)
             {
                 foreach (Item item in items)
@@ -77,6 +82,17 @@ namespace P3_Project.Models
                 {
                     if (item.Data != null)
                         item.Save(Id);
+                }
+            }
+            if (Tags != null)
+            {
+                foreach(Tag tag in Tags)
+                {
+                    if (db.DB.CheckRow("Tags", "Id", tag.Id.ToString()))
+                    {
+                        Tag dbTag = db.DB.GetRow("Tags", new Tag(), tag.Id.ToString());
+                        db.DB.AddRowToTable($"ItemModel_{Id}_Tags", dbTag);
+                    }
                 }
             }
 
@@ -104,6 +120,12 @@ namespace P3_Project.Models
 
             return uniqueSizes;
         }
+
+        private void CreateTagTable()
+        {
+
+            db.DB.CreateTable($"ItemModel_{Id}_Tags", new Tag());
+        }
         //Get all items of a given size on an item model
         public Dictionary<string, int> GetAllItemsOfSize(string size)
         {
@@ -122,8 +144,6 @@ namespace P3_Project.Models
         //Create SQL table corresponding to the items in the ItemModel that is being created
         public void CreateItemTable()
         {
-
-
             db.DB.CreateTable(ItemTable, new Item());
         }
 
@@ -213,16 +233,22 @@ namespace P3_Project.Models
         public void Delete()
         {
             db.DB.DeleteTable(ItemTable);
+            db.DB.DeleteTable($"ItemModels_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
-
+            DirectoryInfo dir = Image.GetDir(Id);
+            dir.Delete(true);
         }
 
         public static void Delete(int Id)
         {
             string ItemTable = db.DB.GetField("Id", Id.ToString(), "ItemModels", "ItemTable");
             db.DB.DeleteTable(ItemTable);
+            db.DB.DeleteTable($"ItemModels_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
+
+            DirectoryInfo dir = Image.GetDir(Id);
+            dir.Delete(true);
         }
 
         //Get 
