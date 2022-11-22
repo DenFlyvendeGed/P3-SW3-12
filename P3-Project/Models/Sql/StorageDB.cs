@@ -20,9 +20,10 @@ namespace P3_Project.Models.DB
 	    IList<T> GetItems<T>(Func<IList<object>, T> initializer, string table, string? where = null);
 		
 		List<string> GetAllElementsField(string tableName, string key);
-		List<T>      GetAllElements<T>(string tableName, T objectClass) where T: notnull;
-		
-		bool CheckRow(string table, string key, string value);
+		public List<T> GetAllElements<T>(string tableName, T objectClass, string? whereKey = null, string? whereValue = null) where T : notnull;
+
+
+        bool CheckRow(string table, string key, string value);
 		bool CheckTable(string table);
 
 		void UpdateField(string table, string selectorKey, string selectorValue, string field, string fieldValue);
@@ -46,7 +47,11 @@ namespace P3_Project.Models.DB
 		void RemoveRow(string table, string key, string value);
 		void DeleteTable(string Name);
 
-	}
+		int GetStockAmount(string tableName);
+
+
+
+    }
 
 	public class StorageDB {
 		public DataBase DB;

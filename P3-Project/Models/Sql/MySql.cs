@@ -2,6 +2,7 @@ namespace P3_Project.Models.DB;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Collections;
+using Microsoft.Data.SqlClient;
 
 public class MySqlDB : DataBase {
 	MySqlConnection conn = new();
@@ -62,8 +63,14 @@ public class MySqlDB : DataBase {
 		conn.Close();
 		return list; 
 	}
-	public List<T> GetAllElements<T>(string tableName, T objectClass) where T: notnull{
+	public List<T>  GetAllElements<T>(string tableName, T objectClass, string? whereKey = null, string? whereValue = null) where T : notnull
+	{
+
 		cmd.CommandText = "SELECT * FROM " + tableName;
+		if(whereKey != null && whereValue != null)
+		{
+            cmd.CommandText += " WHERE " + whereKey + " = '" + whereValue + "'";
+        }
 
 		var properties = objectClass.GetType().GetProperties();
 		var fields = objectClass.GetType().GetFields();
@@ -412,5 +419,33 @@ public class MySqlDB : DataBase {
 		conn.Close();
 		return rtn;
 	}
+
+    public int GetStockAmount(string tableName)
+    {
+        cmd.CommandText = "SELECT SUM(Stock) FROM " + tableName;
+
+        // open database connection.
+        conn.Open();
+
+        //Execute the query 
+        MySqlDataReader sdr = cmd.ExecuteReader();
+
+        ////Retrieve data from table and Display result
+        int sum = 0;
+        while (sdr.Read())
+        {
+            sum = (int)sdr[""];
+
+
+        }
+        //Close the connection
+        conn.Close();
+
+        return sum;
+    }
+
+
+
+
 }
 

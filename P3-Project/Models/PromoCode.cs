@@ -21,7 +21,9 @@ public class PromoCode
 	public PromoCodeDiscountType DiscountType{ get; set; }
 	public PromoCodeItemType     ItemType { get; set; }
 	public List<PromoCodeSomeItemType>  Items{get; set;} = new();
+
 	public DateTime ExpirationDate{get; set;} = DateTime.Now;
+
 
 	const string TABLE_NAME = "PromoCode";
 
