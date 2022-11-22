@@ -101,7 +101,6 @@ namespace P3_Project.Controllers
         {
             return View();
         }
-
         #endregion
 
         #region PromoCode
@@ -114,13 +113,21 @@ namespace P3_Project.Controllers
 
         public ActionResult PromoCode()
         {
-			var psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+
+			List<(int, string, DateTime)> psudoCodes;
+			try {
+				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+			} catch {
+				psudoCodes = new();
+			}
             return View(psudoCodes);
         }
-
-
         
-        #endregion
+		public ActionResult Settings()
+        {
+            return View();
+        }
 
+        #endregion
     }
 }

@@ -33,6 +33,8 @@ namespace P3_Project.Models.DB
 
 		void PushToTable(string name, IEnumerable<object> values);
 		void PushToTable(string name, IEnumerable<(string, object)> values);
+
+		void UpdateTable(string name, IEnumerable<(string, object)> values, string where);
 	
 		List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue);
 		T GetRow<T>(string tableName, T objectClass, string id);

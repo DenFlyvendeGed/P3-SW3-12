@@ -5,16 +5,23 @@
     ViewData["Title"] = "Rabat koder";
 }
 <h1>@ViewData["Title"]</h1>
+
 <script>
-	function callbackEdit(id){window.location.href = "/admin/EditPromoCode?Id";}
-	function callbackDelete(){} 
+	function promoCodeEdit(id){window.location.href = "/admin/EditPromoCode?Id=" + id;}
+	function promoCodeDelete(id){
+		fetch("/api/admin/DeletePromoCode", {
+			method : "DELETE",
+			body : JSON.stringify({Id : id})
+		}).then(() => {
+			let e = document.getElementById("psudo-promo-code-" + id);
+			e.parentElement.removeChild(e);
+		})
+	} 
 </script>
 <div>
-	<input type="button" value="Opret Rabatkode" />
+	<input type="button" value="Opret Rabatkode" onclick="promoCodeEdit(null)" />
 	@foreach((int, string, DateTime) code in Model){
 		@await Html.PartialAsync("./PromoCodeOverviewItem.cshtml", code)
 	}
 </div>
 
-<script>
-</script>

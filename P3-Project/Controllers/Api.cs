@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
+
+using P3_Project.Models.Mail;
+
 using P3_Project.Models.DB;
 using P3_Project.Models;
 using System.Text.Json;
@@ -62,6 +65,7 @@ namespace P3_Project.Controllers
         }
 
         [HttpGet("ValidatePromoCode/{code}")]
+
         [Produces("application/json")]
         public IActionResult ValidatePromoCode(string code)
         {
@@ -69,13 +73,70 @@ namespace P3_Project.Controllers
             var promoCodeJson = JsonSerializer.Serialize(promoCode);
             return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
         }
+
     }
 
     [Route("api/Admin")]
     [ApiController]
     public class AdminController :  ControllerBase
     {
+
         static StorageDB db = new StorageDB();
+
+
+      [HttpPost("CreatePromoCode")]
+      public async void CreatePromoCode() {
+        string json;
+        using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+        var code = JsonSerializer.Deserialize<PromoCode>(json);
+        if(code == null) return;
+        code.PushToDB(db);
+		  }
+
+		[HttpPut("EditPromoCode/{id}")]
+		public async void EditPromoCode(int id) {
+			var code = new PromoCode(id, db); 
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var data = JsonSerializer.Deserialize<PromoCode>(json);
+			if( data == null ) {Response.StatusCode = 418; return;}
+
+			code.Code = data.Code;
+			code.DiscountType = data.DiscountType;
+			code.ItemType = data.ItemType;
+			code.ExpirationDate = data.ExpirationDate;
+			code.Items = data.Items;
+
+			code.PushToDB(db);
+		}
+
+		[HttpDelete("DeletePromoCode")]
+		public async void DeletePromoCode() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+			if(dict == null) { Response.StatusCode = 418; return; }
+			var id = dict["Id"];
+			new PromoCode(id, db).DeleteFromDB(db);	
+		}
+
+
+		[HttpGet("NotificationEmails")]
+		public ActionResult NotificationEmails() {
+			try {
+				return Ok(JsonSerializer.Serialize(new MailList(db).List));
+			} catch {
+				return Ok("[]");
+			}
+		}
+		[HttpPut("NotificationEmails")]
+		public async void PutNotificationEmails() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var list = JsonSerializer.Deserialize<List<string>>(json);
+			if(list == null) return;
+			new MailList(){ List = list }.PushToDB(db);
+		}
 
         [HttpGet]
         public IEnumerable<string> Get()
@@ -92,12 +153,11 @@ namespace P3_Project.Controllers
 			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
 			if(code == null) return;
-			code.PushToDB(new StorageDB());
+			code.PushToDB(db);
 		}
 
 		[HttpPut("EditPromoCode/{id}")]
 		public async Task<StatusCodeResult> EditPromoCode(int id) {
-			var db = new StorageDB();
 			var code = new PromoCode(id, db); 
 			string json;
             using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
@@ -122,7 +182,6 @@ namespace P3_Project.Controllers
 			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
 			if(dict == null) {  return new StatusCodeResult(418); }
 			var id = dict["Id"];
-			var db = new StorageDB();
 			new PromoCode(id, db).DeleteFromDB(db);	
             
             return new StatusCodeResult((int)HttpStatusCode.OK);
@@ -271,6 +330,5 @@ namespace P3_Project.Controllers
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
         #endregion
-
     }
 }

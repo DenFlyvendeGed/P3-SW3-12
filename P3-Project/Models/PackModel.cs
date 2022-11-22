@@ -61,13 +61,11 @@ namespace P3_Project.Models
 				});
 				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0])[0];
 			} else {
-				this.DeleteFromDB(db);
-				db.DB.PushToTable(TABLE_NAME,  new (string, object)[] {
-					("Id", PackID),
+				db.DB.UpdateTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),
 					("Description", Description),
 					("NOptions", Options.Count)
-				});
+				}, $"Id = {PackID}");
 			}
 
 			foreach(var (i, option) in new Enumerate<List<List<(int, string)>>, List<(int, string)>>(Options)){

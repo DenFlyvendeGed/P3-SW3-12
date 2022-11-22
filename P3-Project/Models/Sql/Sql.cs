@@ -720,6 +720,18 @@ public class SqlDB : DataBase
 		conn.Close();
 
 	}
+	public void UpdateTable(string name, IEnumerable<(string, object)> values, string where){
+		var fields  = new List<string>();
+		foreach(var (f, v) in values){
+			fields.Add($"{f} = '{v.ToString()}'");
+		};
+
+		cmd.CommandText = $"UPDATE {name} SET {string.Join(',', fields)} WHERE {where}";
+
+		conn.Open();
+		cmd.ExecuteReader();
+		conn.Close();
+	}
 
 	void ReadToArrayFunc<T>(SqlDataReader sdr, List<T> rtn, Func<IList<object>, T>initializer) where T : notnull{
 		while(sdr.Read()){

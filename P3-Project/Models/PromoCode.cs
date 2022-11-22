@@ -21,7 +21,9 @@ public class PromoCode
 	public PromoCodeDiscountType DiscountType{ get; set; }
 	public PromoCodeItemType     ItemType { get; set; }
 	public List<PromoCodeSomeItemType>  Items{get; set;} = new();
-	public DateTime ExpirationDate{get; set;}
+
+	public DateTime ExpirationDate{get; set;} = DateTime.Now;
+
 
 	const string TABLE_NAME = "PromoCode";
 
@@ -65,15 +67,14 @@ public class PromoCode
 			});
 
 		if(Id != null){
-			DeleteFromDB(db);
-			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
+			db.DB.UpdateTable(TABLE_NAME, new (string, object)[] {
 				("Id", Id),
 				("Code", Code),
 				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
-			});
+			}, $"Id = {Id}");
 		} else {
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Code", Code),
