@@ -2,6 +2,7 @@ namespace P3_Project.Models.DB;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Collections;
+using Microsoft.Data.SqlClient;
 
 public class MySqlDB : DataBase {
 	MySqlConnection conn = new();
@@ -62,8 +63,14 @@ public class MySqlDB : DataBase {
 		conn.Close();
 		return list; 
 	}
-	public List<T> GetAllElements<T>(string tableName, T objectClass) where T: notnull{
+	public List<T>  GetAllElements<T>(string tableName, T objectClass, string? whereKey = null, string? whereValue = null) where T : notnull
+	{
+
 		cmd.CommandText = "SELECT * FROM " + tableName;
+		if(whereKey != null && whereValue != null)
+		{
+            cmd.CommandText += " WHERE " + whereKey + " = '" + whereValue + "'";
+        }
 
 		var properties = objectClass.GetType().GetProperties();
 		var fields = objectClass.GetType().GetFields();
@@ -161,6 +168,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = Helper.CreateTableCreationQuery(this, name, obj); 
 		cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id),");
 
+		Console.WriteLine(cmd.CommandText);
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -195,6 +203,93 @@ public class MySqlDB : DataBase {
 		conn.Close();
 
 		return rtn;
+	}
+	public T GetRow<T>(string tableName, T objectClass, string id)
+	{
+
+		cmd.CommandText = "SELECT * FROM " + tableName + " WHERE Id = " + id;
+
+
+
+		var Properties = objectClass.GetType().GetProperties();
+		// open database connection.
+		conn.Open();
+
+		var fields = objectClass.GetType().GetFields();
+
+
+
+		//Execute the query 
+		var sdr = cmd.ExecuteReader();
+
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+			T classInstance = (T)Activator.CreateInstance(typeof(T));
+
+			foreach (var property in Properties)
+			{
+				try
+				{
+					property.SetValue(classInstance, sdr[property.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(property.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			foreach (var field in fields)
+			{
+				try
+				{
+					field.SetValue(classInstance, sdr[field.Name]);
+				}
+				catch
+				{
+					Console.WriteLine(field.Name + " Cant be set");
+				}
+				//instance.Add(field.Name, sdr[field.Name].ToString());
+			}
+			objectClass = classInstance;
+		}
+		//Close the connection
+		conn.Close();
+
+		return objectClass;
+	}
+	public List<List<string>> GetSortedList(string tableName, List<string> columns, string sortkey, string sortValue)
+	{
+
+		cmd.CommandText = "SELECT ";
+		columns.ForEach(column => cmd.CommandText += column + ",");
+		cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.Length - 1);
+		cmd.CommandText += " FROM " + tableName + " WHERE " + sortkey + " = '" + sortValue +"'";
+
+
+		// open database connection.
+		conn.Open();
+
+		//Execute the query 
+		var sdr = cmd.ExecuteReader();
+
+		List<List<string>> Result = new List<List<string>>();
+		////Retrieve data from table and Display result
+		while (sdr.Read())
+		{
+
+			List<string> list = new List<string>();
+			foreach (string column in columns)
+			{
+
+				list.Add(sdr[column].ToString());
+			}
+			Result.Add(list);
+		}
+		//Close the connection
+		conn.Close();
+
+		return Result;
 	}
 
 	public void CreateTable(string name, IEnumerable<(string, SQLType)> columns){
@@ -254,6 +349,19 @@ public class MySqlDB : DataBase {
 		conn.Close();
 
 	}
+	public void UpdateTable(string name, IEnumerable<(string, object)> values, string where){
+		var fields  = new List<string>();
+		foreach(var (f, v) in values){
+			fields.Add($"{f} = '{v.ToString()}'");
+		};
+
+		cmd.CommandText = $"UPDATE {name} SET {string.Join(',', fields)} WHERE {where}";
+
+		conn.Open();
+		cmd.ExecuteReader();
+		conn.Close();
+	}
+
 
 	void ReadToArrayFunc<T>(MySqlDataReader sdr, List<T> rtn, Func<IList<object>, T>initializer) where T : notnull{
 		while(sdr.Read()){
@@ -311,5 +419,33 @@ public class MySqlDB : DataBase {
 		conn.Close();
 		return rtn;
 	}
+
+    public int GetStockAmount(string tableName)
+    {
+        cmd.CommandText = "SELECT SUM(Stock) FROM " + tableName;
+
+        // open database connection.
+        conn.Open();
+
+        //Execute the query 
+        MySqlDataReader sdr = cmd.ExecuteReader();
+
+        ////Retrieve data from table and Display result
+        int sum = 0;
+        while (sdr.Read())
+        {
+            sum = (int)sdr[""];
+
+
+        }
+        //Close the connection
+        conn.Close();
+
+        return sum;
+    }
+
+
+
+
 }
 

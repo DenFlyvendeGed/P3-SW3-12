@@ -13,13 +13,13 @@ public class MailClient {
 	MailMessage message = new();
 	List<AttachmentSpecification> attachments = new();
 	public MailClient(){
-		const string ERROR_CODE = "was not configured in App.Config";
+		const string ERROR_MESSAGE = "was not configured in App.Config";
 		var userName = ConfigurationManager.AppSettings["email-username"] ?? 
-			throw new Exception("\"email-username\" " + ERROR_CODE);
+			throw new Exception("\"email-username\" " + ERROR_MESSAGE);
 		var password = ConfigurationManager.AppSettings["email-password"] ?? 
-			throw new Exception("\"email-password\" " + ERROR_CODE);
+			throw new Exception("\"email-password\" " + ERROR_MESSAGE);
 		var server   = ConfigurationManager.AppSettings["email-server"  ] ?? 
-			throw new Exception("\"email-server\" "   + ERROR_CODE);
+			throw new Exception("\"email-server\" "   + ERROR_MESSAGE);
 
 		Console.WriteLine(server + " " + password + " " + client);
 
@@ -34,6 +34,11 @@ public class MailClient {
 
 	public MailClient To(string to){
 		this.message.To.Add(new MailAddress(to));
+		return this;
+	}
+
+	public MailClient ToList(MailList list) {
+		foreach(var address in list) this.To(address);	
 		return this;
 	}
 
@@ -68,7 +73,5 @@ public class MailClient {
 			attachment.ContentStream.Close();
 		}
 	}
-
-
 }
 

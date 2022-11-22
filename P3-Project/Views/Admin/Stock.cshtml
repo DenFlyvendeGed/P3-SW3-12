@@ -2,11 +2,71 @@
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Lager oversigt";
-}
-<h1>@ViewData["Title"]</h1>
 
-<p>Lager oversigt.</p>
+}
+
+<h4>@ViewData["Title"]</h4>
+
 
 <script>
     document.querySelector('#StockSite').style = ("color: rgb(59, 146, 178) !important");
 </script>
+
+<div style="width: 80vw;">
+
+    @{
+        foreach (ItemModel item in ViewBag.model)
+        {
+            @*Create box for each item in stock*@
+            <div class="stockBox  box containerBox">
+                <div class="item box stockPicBox wrap">
+                    @{
+                        Image img = item.GetFirstImg();
+                        if (img != null)
+                        {
+
+                            <img class="picSize midImg" src='@img.FilePath' />
+                        }
+
+                    }
+                </div>
+
+                <p class="item stockList" style="flex: 2;">@(item.ModelName)</p>
+                @{
+                    int stockAmount = item.GetStockTotal();
+                }
+                <p class="item stockList" style="flex: 1;">Antal i alt: @(stockAmount)</p>
+                <p class="item stockList" style="flex: 1;">Pris: @(item.ModelPrice) kr.- </p>
+                <div class="item" id="@(item.Id)" style="flex:1.5;">
+                    <a href="\admin\AddItemModel?id=@(item.Id)"><input type="button" class="editStockBtn" value="Rediger lagerbeholdning" /> </a>
+                    <input type="button" class="deleteModelBTN" value="Slet model" name="@(item.ModelName)">
+                    <a href="..\api\admin\deleteModel?id=@(item.Id)"></a>
+                </div>
+
+
+
+            </div>
+
+        }
+    }
+</div>
+<a href="\admin\AddItemModel" style="float:right"><input type="button" style="margin-top:10px; float:right" value="Tilføj ny vare" /></a>
+
+
+<script>
+
+    function confirmationPopUp(e) {
+        let model = e.target.name;
+        let content = confirm("Du er ved at slette: " + model + "\n Er du sikker?");
+        if (content == true) {
+            console.log(e);
+            e.target.nextElementSibling.click();
+        }
+    }
+
+    document.querySelectorAll(".item input[value='Slet model']").forEach(deletePopUp => {
+        deletePopUp.addEventListener("click", confirmationPopUp);
+    });
+
+</script>
+

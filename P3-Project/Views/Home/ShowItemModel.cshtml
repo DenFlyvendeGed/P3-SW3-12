@@ -1,0 +1,248 @@
+﻿@{
+    ViewData["Title"] = "Tøj";
+}
+
+
+<div class="displayItemBox">
+    
+    @{
+        ItemModel item = ViewBag.item;
+
+            <div class="displayItem box picScaling wrap">
+                @{
+                
+
+                ViewBag.pictures = "";
+                if (ViewBag.item != null)
+                {
+
+                    foreach (Image img in ViewBag?.item?.Pictures)
+                    {
+                        ViewBag.pictures += "'" + img.FilePath + "', ";
+                    }
+                }
+                        //<div id="img" class="picSize" style="display:block;">
+                            @*Billed placehodler*@
+                            <img  class="midImg" src="" />
+
+                        //</div>
+
+                        @*Buttons*@
+                        <div class="imageButtons center">
+                            @*billed vælger*@
+                            <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+                            <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+                        </div>
+                //Image img = item.GetFirstImg();
+                //if (img != null)
+                //{
+
+                //    <img class="midImg" style="padding:2%;" src='@img.FilePath' />
+                //}
+                
+                }
+                <script>
+                    let currentPic = 0;
+                    let pictures = @(ViewBag.pictures != "" ? Html.Raw("[" + "" + ViewBag.pictures + "" + "]") : Html.Raw("[]"));
+                    //Scroll last picture
+                    function lastPic() {
+                        if (currentPic == 0) {
+                            currentPic = pictures.length - 1;
+                        } else {
+                            currentPic--;
+                        }
+                        showImg(currentPic);
+                    }
+
+                    //Scroll next picture
+                    function nextPic() {
+                        if (currentPic == pictures.length - 1) {
+                            currentPic = 0;
+                        } else {
+                            currentPic++;
+                        }
+                        showImg(currentPic);
+                    }
+
+                    //Display picture in box
+                    function showImg(pic) {
+                        //console.log(currentPic);
+                        if (pictures[pic] != undefined){
+                            const imgDom = document.querySelector('.displayItem img');
+                            imgDom.setAttribute('src', pictures[pic]);
+                        }
+                    }
+                    
+                    if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {
+                        nextPic();
+                    }
+                </script>
+            </div>
+
+
+            <div class="displayItem">
+                @*<------------------ModelName and price--------------------->*@
+                <div class="grid-containerTop">
+                    <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
+                    <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
+                </div>
+
+
+                @*<------------------Size--------------------->*@
+                <div class="box modelAttributes">
+                    <div>Størrelse:</div>
+                    <div class="grid-containerShowcase" id="sizeChoices">
+
+                        @{
+                        int sizeIndex = 1;
+                        foreach (string size in ViewBag.item.GetUniqueSize())
+                        {
+                                    <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
+                            sizeIndex += 1;
+                        }
+                        }
+                    </div>
+                </div>
+
+                @*<------------------Color--------------------->*@
+                <div class="box modelAttributes">
+                    <div>Farve:</div>
+                    <div class="grid-containerShowcase" id="colorChoices">
+                        @{
+                        int colorIndex = 1;
+                        foreach ((string, string) color in ViewBag.item.GetUniqueColor())
+                        {
+                                    <div class="grid-itemShowcase itemColor colorStyle" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
+                            colorIndex += 1;
+                        }
+                        }
+                    </div>
+                </div>
+
+                @*<------------------Description--------------------->
+        *@
+                <div class="box modelAttributes">
+                    <div>Beskrivesle:</div>
+                    <div>@(item.Description)</div>
+                </div>
+
+
+                @*<------------------Cart--------------------->*@
+                <div class="box modelAttributes cartBtnLayout">
+                    <div>Antal:</div>
+
+                    <div class="counterGrid">
+                        <input class="counterItem" type="button" id="plus" value="+">
+                        <div class="counterItem" id="counter">1</div>
+                        <input class="counterItem" type="button" id="minus" value="-">
+                    </div>
+
+                    <input type="submit" value="Tilføj til kurv" id="addToCart">
+                </div>
+            </div>
+    }
+
+
+</div>
+
+<script>
+
+    //Size toggle
+    let currentSizeToggle;
+    function toggleSize(e) {
+        if (e.target.id != "sizeChoices") {
+            let clicked = e.target;
+
+            if (currentSizeToggle == undefined) {
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = clicked.id
+            }
+            else if (currentSizeToggle != undefined && currentSizeToggle != clicked.id) {
+                let sizeToggled = document.getElementById(currentSizeToggle);
+                sizeToggled.classList.toggle("itemSizeToggle");
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = clicked.id;
+            }
+            else if (currentSizeToggle == clicked.id) {
+                clicked.classList.toggle("itemSizeToggle");
+                currentSizeToggle = undefined;
+            }
+
+        }
+    }
+
+    //Color toggle
+    let currentColorToggle;
+    function toggleColor(e) {
+        if (e.target.id != "colorChoices") {
+            let clicked = e.target;
+
+            if (currentColorToggle == undefined) {
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = clicked.id
+            }
+            else if (currentColorToggle != undefined && currentColorToggle != clicked.id) {
+                let colorToggled = document.getElementById(currentColorToggle);
+                colorToggled.classList.toggle("itemColorToggle");
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = clicked.id;
+            }
+            else if (currentColorToggle == clicked.id) {
+                clicked.classList.toggle("itemColorToggle");
+                currentColorToggle = undefined;
+            }
+        }
+    }
+
+    //Amount added to cart
+    let currentAmount = 1;
+    function changeCount(delta) {
+        return function () {
+            var counter = document.getElementById('counter').innerHTML;
+            var parsed = parseInt(counter);
+            if (delta == "plus") {
+                currentAmount += 1;
+                var result = parsed + 1;
+                document.getElementById('counter').innerHTML = result;
+            }
+            else if (delta == "minus" && parsed != 1) {
+                currentAmount -= 1;
+                var result = parsed - 1;
+                document.getElementById('counter').innerHTML = result;
+            }
+        }
+    }
+
+    //Create cart object
+    function addToCart() {
+        if (currentColorToggle != undefined && currentSizeToggle != undefined) {
+            let chosenModel = document.getElementById("ModelName").attributes.value.nodeValue;
+            let chosenSize = document.getElementById(currentSizeToggle).attributes.value.nodeValue;
+            let chosenColorCode = document.getElementById(currentColorToggle).attributes.value.nodeValue;
+            let chosenColorName = document.getElementById(currentColorToggle).attributes.name.nodeValue;
+
+
+            let itemData = {
+                Id: chosenModel,
+                Size: chosenSize,
+                Color: chosenColorName,
+                ColoWheel: chosenColorCode,
+                AmountToCart: currentAmount,
+            }
+
+            console.log(itemData);
+        }
+        else {
+            console.log("intet valgt");
+        }
+    }
+
+
+
+    document.getElementById('minus').onclick = changeCount("minus");
+    document.getElementById('plus').onclick = changeCount("plus");
+    document.getElementById("colorChoices").addEventListener("click", toggleColor);
+    document.getElementById("sizeChoices").addEventListener("click", toggleSize);
+    document.getElementById("addToCart").addEventListener("click", addToCart);
+
+</script>
