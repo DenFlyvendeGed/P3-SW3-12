@@ -94,6 +94,7 @@ namespace P3_Project.Controllers
 
         public ActionResult CreatePackModel()
         {
+
             return View();
         }
 

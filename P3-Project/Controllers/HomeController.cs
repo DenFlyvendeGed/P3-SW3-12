@@ -12,6 +12,7 @@ namespace P3_Project.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+			
         }
 
         private void setup()
