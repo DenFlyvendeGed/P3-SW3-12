@@ -84,9 +84,7 @@ namespace P3_Project.Controllers
 
         public ActionResult CreatePackModel()
         {
-			new PackModel(){
-				Name = "CAKE"
-			};
+
             return View();
         }
 
