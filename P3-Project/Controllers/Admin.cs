@@ -54,7 +54,10 @@ namespace P3_Project.Controllers
             
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
 
+
             ViewBag.model = models;
+
+
             return View();
         }
 

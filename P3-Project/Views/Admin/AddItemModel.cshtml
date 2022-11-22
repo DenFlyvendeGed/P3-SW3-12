@@ -20,8 +20,6 @@
             ViewBag.pictures += "'" + img.FilePath + "', ";
         }
     }
-
-
 }
 
 <script>
@@ -712,7 +710,7 @@
 
     //Display picture in box
     function showImg(pic) {
-        console.log(currentPic);
+        //console.log(currentPic);
         if (pictures[pic] != undefined)
             imgTag.setAttribute('src', pictures[pic]);
     }

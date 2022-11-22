@@ -341,7 +341,7 @@ img {
 
 .imageButtons {
     margin:auto;
-    width: 165px;
+    width: 100%; /*165px;*/
     height: 50px;
     text-align: center;
     font-size: 15px;
@@ -664,7 +664,7 @@ div.shopTagBox{
 
 .midImg {
     margin: auto;
-    position: absolute;
+    position: relative;/*absolute; */
     left: 0;
     right: 0;
     top: 0;

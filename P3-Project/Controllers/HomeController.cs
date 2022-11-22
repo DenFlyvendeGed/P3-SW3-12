@@ -41,6 +41,7 @@ namespace P3_Project.Controllers
         {
             ItemModel models = ItemModel.LoadModel(id);
             models.LoadItems();
+            models.LoadImages();
             ViewBag.item = models;
             return View();
         }
