@@ -83,12 +83,14 @@ namespace P3_Project.Models
 				}, $"Id = {PackID}");
 			}
 
+
 			// Create the option tables
 			int i;
 			for(i = 0; i < Options.Count; i++){
 				if(db.DB.CheckTable($"{TABLE_NAME}_{PackID}_{i}"))
 					db.DB.DeleteTable($"{TABLE_NAME}_{PackID}_{i}");
                 db.DB.CreateTable($"{TABLE_NAME}_{PackID}_{i}",(IEnumerable<(string, SQLType)>) new (string, SQLType)[] {("ItemModelId", SQLType.Int)});
+
 
 				foreach(var item in Options[i]) {
 					db.DB.PushToTable($"{TABLE_NAME}_{PackID}_{i}", new object[] {item});
