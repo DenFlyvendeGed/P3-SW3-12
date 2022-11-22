@@ -80,7 +80,6 @@ namespace P3_Project.Controllers
     [ApiController]
     public class AdminController :  ControllerBase
     {
-
         static StorageDB db = new StorageDB();
 
 
@@ -105,7 +104,6 @@ namespace P3_Project.Controllers
         #endregion
 
         #region PromoCode
-
         [HttpPost("CreatePromoCode")]
         public async void CreatePromoCode() {
 			string json;
@@ -135,7 +133,7 @@ namespace P3_Project.Controllers
 			code.PushToDB(db);
             return new StatusCodeResult((int)HttpStatusCode.OK); ;
 		}
-
+		
 		[HttpDelete("DeletePromoCode")]
 		public async Task<StatusCodeResult> DeletePromoCode() {
 			string json;
@@ -145,8 +143,52 @@ namespace P3_Project.Controllers
 			if(dict == null) {  return new StatusCodeResult(418); }
 			var id = dict["Id"];
 			new PromoCode(id, db).DeleteFromDB(db);	
-            
-            return new StatusCodeResult((int)HttpStatusCode.OK);
+          
+      return new StatusCodeResult((int)HttpStatusCode.OK);
+		}
+
+        
+		[HttpPost("CreatePackModel")]
+        public async void CreatePackModel() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var code = JsonSerializer.Deserialize<PackModel>(json);
+			if(code == null) return;
+			code.PushToDB(new StorageDB());
+		}
+
+		[HttpPut("EditPackModel/{id}")]
+		public async void EditPackModel(int id) {
+			var db = new StorageDB();
+			var code = new PackModel(id, db); 
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var data = JsonSerializer.Deserialize<PackModel>(json);
+			if( data == null ) {Response.StatusCode = 418; return;}
+
+			code.Description = data.Description;
+			code.Name = data.Name;
+			code.Price = data.Price;
+			code.Options = data.Options;
+
+			code.PushToDB(db);
+		}
+
+		[HttpDelete("DeletePackModel")]
+		public async void DeletePackModel() {
+			string json;
+			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+			if(dict == null) { Response.StatusCode = 418; return; }
+			var id = dict["Id"];
+			var db = new StorageDB();
+			new PackModel(id, db).DeleteFromDB(db);	
+		}
+
+        [HttpGet]
+        public IEnumerable<string> GetAdmin()
+        {
+            return new string[] { "test" };
         }
         #endregion
 
@@ -185,6 +227,7 @@ namespace P3_Project.Controllers
            
             return RedirectToAction("Stock","Admin");
         }
+
 
         //api/Admin/DeleteImage? Id = 000 & Name = a1.PNG
         [HttpDelete("DeleteImage")]
