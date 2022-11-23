@@ -25,6 +25,10 @@ namespace P3_Project.Controllers
         // GET: Admin 
         public ActionResult Index()
         {
+
+
+
+
             return View("Stock");
         }
 
@@ -35,6 +39,8 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
 
             db.DB.CreateTable("ItemModels", new ItemModel());
+            db.DB.CreateTable("Tags", new Tag());
+
         }
 
         #region ItemModel
@@ -48,7 +54,10 @@ namespace P3_Project.Controllers
             
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
 
+
             ViewBag.model = models;
+
+
             return View();
         }
 
@@ -60,6 +69,7 @@ namespace P3_Project.Controllers
             if (!string.IsNullOrEmpty(id)) { 
                 ItemModel model = ItemModel.LoadModel(id);
                 model.LoadItems();
+                model.LoadImages();
 
                 ViewBag.model = model;
             }
@@ -104,6 +114,7 @@ namespace P3_Project.Controllers
 
         public ActionResult PromoCode()
         {
+
 			List<(int, string, DateTime)> psudoCodes;
 			try {
 				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));

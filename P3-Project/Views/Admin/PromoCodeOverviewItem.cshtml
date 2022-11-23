@@ -17,6 +17,7 @@
 		display : inline;
 	}
 </style>
+
 <div id="psudo-promo-code-@Model.Item1" class="box promo-code-psudo">
 	<div class="promo-code-item">
 		<p>@Model.Item2</p>
@@ -25,7 +26,9 @@
 		<p><b>Expiration Date:</b> @Model.Item3.ToString("dd/MM/yyyy")</p>
 	</div>
 	<div class="promo-code-item promo-code-overview-button-container">
+
 		<input type="button" value="Redigér Rabatkode" onclick="promoCodeEdit(@(Model.Item1))" />
 		<input type="button" value="Slet Rabatkode" onclick="promoCodeDelete(@(Model.Item1))" />
+
 	</div>
 </div>
