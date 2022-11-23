@@ -180,29 +180,6 @@ body {
     font-family: 'DINMittelschrift',sans-serif;
 }
 
-a.BoxLink:link {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:visited {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:hover {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:active {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 .Flex-Container-PackBoxes {
     display: flex;
     flex-direction: row;
@@ -287,11 +264,6 @@ a.BoxLink:active {
     top: 1%;
 }
 
-a.BoxLink:link {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 .packBox-plus {
     position: absolute;
     max-width: inherit;
@@ -304,37 +276,13 @@ a.BoxLink:link {
     top: 30%;
 }
 
-a.BoxLink:visited {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:hover {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:active {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 .Flex-Container-PackBoxes {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px;
 }
-.box {
-    box-sizing: content-box;
-    display: block;
-    position: relative;
-  
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
+
 .topBar-Input {
     display: inline-block;
     -ms-transform: translateY(-80%);
@@ -351,24 +299,6 @@ a.BoxLink:active {
 }
 .buttonBox:hover {
     box-shadow: 2px 2px 5px black;
-}
-
-.valgmulighedPakke {
-    position: absolute;
-    
-    
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    width: 98%;
-    height: auto;
-    right: 1%;
-    top: 1%;
-
-
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
 }
 
 #LeftInput {
