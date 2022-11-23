@@ -233,7 +233,7 @@ namespace P3_Project.Models
         public void Delete()
         {
             db.DB.DeleteTable(ItemTable);
-            db.DB.DeleteTable($"ItemModels_{Id}_Tags");
+            db.DB.DeleteTable($"ItemModel_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
             DirectoryInfo dir = Image.GetDir(Id);
@@ -244,7 +244,7 @@ namespace P3_Project.Models
         {
             string ItemTable = db.DB.GetField("Id", Id.ToString(), "ItemModels", "ItemTable");
             db.DB.DeleteTable(ItemTable);
-            db.DB.DeleteTable($"ItemModels_{Id}_Tags");
+            db.DB.DeleteTable($"ItemModel_{Id}_Tags");
             db.DB.RemoveRow("ItemModels", "Id", Id.ToString());
 
             DirectoryInfo dir = Image.GetDir(Id);
