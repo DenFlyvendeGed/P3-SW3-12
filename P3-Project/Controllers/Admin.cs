@@ -54,7 +54,6 @@ namespace P3_Project.Controllers
             
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
 
-
             ViewBag.model = models;
 
 
@@ -80,28 +79,45 @@ namespace P3_Project.Controllers
 
         #region PackModel
         //
+        //public ActionResult PackViewModel()
+        //{
+        //    var x = 5;
+        //    //PackModel test = new PackModel();
+        //    //test.Name = "Test";
+
+        //    return View(x);
+        //}
+
+
         public ActionResult PackViewModel()
         {
-            var x = 5;
-            PackModel test = new PackModel();
-            test.Name = "Test";
-            List<PackModel> Packs = new List<PackModel>();
-            for (int i = 0; i<x; i++) {
-                Packs.Add(test);
+            
+            return View(PsudoPackModel.GetAllFromDatabase(new StorageDB()));
+        }
+
+        public ActionResult CreatePackModel([FromQuery] int? PackID)
+        {
+            var db = new StorageDB();
+            List<(int, string)> Items;
+            try
+            {
+                Items = db.DB.ReadFromTable("ItemModels", new string[] { "Id", "ModelName" }, (r) => ((int)r[0], (string)r[1]));
             }
-            return View(test);
+            catch
+            {
+                Items = new List<(int, string)> { };
+            }
+            var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
+            List<(int, string, string)> Items2 = new();
+            Items.ForEach(item =>
+            {
+                Items2.Add((item.Item1, item.Item2, ImageModel.GetFirstImg(item.Item1).FilePath));
+            });
+
+            var model = (packmodel, Items2);
+            return View(model);
         }
 
-        public ActionResult CreatePackModel()
-        {
-
-            return View();
-        }
-
-        public ActionResult EditPackModel()
-        {
-            return View();
-        }
         #endregion
 
         #region PromoCode

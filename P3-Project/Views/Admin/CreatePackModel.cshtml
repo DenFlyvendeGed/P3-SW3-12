@@ -1,44 +1,256 @@
-﻿
+﻿@using P3_Project.Models
+@model (PackModel, List<(int, string, string)>)
 @{
+    var (Packs, Items) = Model;
     Layout = "AdminLayout";
-
     ViewData["Title"] = "Rediger Pakke";
 }
 
 <h1>Rediger Pakke</h1>
 
 <div class="flexbox-createPack">
-    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%);
-    transform: translateY(30%);">
-        Angiv navn: <input type="text" class="topBar-Input">
+    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
+        Angiv navn: <input type="text" class="topBar-Input" id="LeftInput">
     </h5>
-    <h5 style="margin-left:1%; display:inline; font-weight: bolder; -ms-transform: translateY(25%);
-    transform: translateY(30%);">
-        Angiv pris: <input type="text" class="topBar-Input">
+    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
+        Angiv pris: <input type="text" class="topBar-Input" id="RightInput">
     </h5>
 </div>
 
-<h3 style="margin-top: 25px"> Valgmulighed 1: </h3>
-<div class="box" style="margin-bottom: 5px">
 
- 
-    <div class="valgmulighedPakke"> 
-        <h7> Tilføj pakke</h7>
-    </div>
+<p class="buttonBox" onclick="AddChoice()" style="top: 10px; left: 0vw; width: 110px; height: 56px; margin-top: initial; cursor: pointer;">Tilføj valgmulighed</p>
 
-</div>
+<textarea id="DescriptionBox" style="position: static; width: 50vw; resize: none;" rows="5" placeholder="Beskrivelse"></textarea>
+
+<p class="buttonBox" onclick="UpdateDB()" style="top: 20px; left: 73vw; width: 100px; height: 36px; margin-top: 26px; cursor: pointer;">Opret pakke</p>
 
 
-<h3 style="margin-top: 25px"> Valgmulighed 2:</h3>
-<div class="box" style="margin-bottom: 5px">
 
-    <h2>Paris</h2>
-    <p>Paris is the capital of France.</p>
-    <script>  </script>
-
-</div>
-
-
-<p class="buttonBox">Opret pakke</p>
+<script>
 
     
+
+    let arraylist = [
+        @foreach(var i in Packs.Options){
+            <text>[</text>
+            @foreach(var j in i){
+                <text>@j,</text>
+            }
+            <text>],</text>
+        }
+    ];
+    console.log(arraylist);
+    window.onload = LoadExistingPack(arraylist.length, arraylist , "@Packs.Name", "@Packs.Price", "@Packs.Description");
+
+    function AddOption(ChoiceNumber){
+    let ItemArray = [
+        @foreach(var (id, name, imgPath) in Items){
+            <text>{Name:"@name",Id:"@id", ImgPath:"@imgPath"},</text>
+        }
+    ]
+        const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
+
+
+        //adding the main box to the flexbox
+        const LargeDiv = document.createElement("div");
+        LargeDiv.className = "LargeDiv";
+        const FlexBox = document.querySelector(`#flexBox-Packcreator-${ChoiceNumber}`); // selecting the pack choice flexbox
+        FlexBox.insertBefore(LargeDiv, FlexBox.children[(FlexBox.children.length)-1]); // inserting into found flexbox and inserting it before all already existing optionfields(The LargeDiv class)
+        let number = FlexBox.children.length - 1;
+
+        //creating and appending the option box to the main box 
+        const Options = document.createElement("div");
+        Options.setAttribute("class", "OptionBox");
+        Options.setAttribute("style", "left: 65px; height: 158px; width:120px;");
+        const ModelImage = document.createElement("img");
+        ModelImage.setAttribute("src", "../favicon.ico");
+        ModelImage.setAttribute("style", "display: block; max-width: 100%; max-height: 100%; margin-left: auto; margin-right: auto; padding: 20px 0px; ")
+        Options.appendChild(ModelImage);
+        LargeDiv.appendChild(Options);
+
+        // creating and appending select
+        const DropDown = document.createElement("select");
+        DropDown.setAttribute("class", "Dropdown-Option");
+        DropDown.setAttribute("id", `${ChoiceNumber}Dropdown-Option${number}`);
+        DropDown.setAttribute("style", "left:40px;");
+        LargeDiv.appendChild(DropDown);
+        DropDown.addEventListener("change", loadImg)
+        AddOptionFields(ItemArray, DropDown); //<-- helper function to make the select options based on an array it gets passed
+
+        //sæt billedet af første option som Select indeholder
+        ModelImage.src = DropDown.selectedOptions[0].imgPath;
+        function loadImg(e)
+        {
+            //console.log(e.target.selectedOptions[0].imgPath)
+            ModelImage.src = e.target.selectedOptions[0].imgPath;
+        }
+
+        //creating and appending the minus box and minus
+        const MinusBox = document.createElement("div");
+        MinusBox.setAttribute("class", "Box-Minus");
+        MinusBox.setAttribute("id", `${ChoiceNumber}DeleteOption${number}`);
+        MinusBox.setAttribute("onclick", "DeleteOption(this.id)");
+        MinusBox.setAttribute("style", "position: relative; left: 200px; bottom: 80px; width: 31px; height: 31px;");
+        LargeDiv.appendChild(MinusBox);
+
+        const Minus = document.createElement("img");
+        Minus.setAttribute("class", "Minus");
+        Minus.setAttribute("src", "../Pics/minus-svgrepo-com.svg");
+        MinusBox.appendChild(Minus);
+    }
+
+
+    function DeleteOption(ID){
+        
+        let OptionElement = document.getElementById(ID);
+        let ParentElement = OptionElement.parentElement;
+        ParentElement.remove();
+    }
+
+
+    function DeleteChoice(ID){
+        let Element = document.getElementById(ID);
+        let ParentElement = Element.parentElement;
+        ParentElement.remove();
+    }
+    function AddChoice(){
+
+        const ChoiceDiv = document.createElement("div");
+        const Title = document.createElement("h3");
+
+        const Container = document.querySelector(".pb-3");
+        const ChoiceNumber = Container.children.length - 5;
+        ChoiceDiv.setAttribute("id",`Choice${ChoiceNumber}`);
+        Title.appendChild(document.createTextNode(`Valgmulighed ${ChoiceNumber}:`));
+
+        const MinusBox = document.createElement("div");
+        MinusBox.setAttribute("class", "Box-Minus");
+        MinusBox.setAttribute("id", `Delete${ChoiceNumber}`)
+        MinusBox.setAttribute("onclick", "DeleteChoice(this.id)")
+        MinusBox.setAttribute("style", `position: relative; right: 5vw; top: -116px; width: 41px; height: 41px; cursor: pointer;`);
+        const Minus = document.createElement("img");
+        Minus.setAttribute("class", "Minus");
+        Minus.setAttribute("src", "../Pics/minus-svgrepo-com.svg");
+        MinusBox.appendChild(Minus);
+
+        const FlexBox = document.createElement("div");
+        FlexBox.setAttribute("class", "flexBox-Packcreator");
+        FlexBox.setAttribute("id", `flexBox-Packcreator-${ChoiceNumber}`);
+        FlexBox.setAttribute("style", "margin-bottom: 5px; padding: 4px;");
+        ChoiceDiv.appendChild(Title);
+        ChoiceDiv.appendChild(FlexBox);
+        ChoiceDiv.appendChild(MinusBox);
+        
+
+        const AddButton = document.createElement("div");
+        AddButton.setAttribute("class", "OptionBox");
+        AddButton.setAttribute("id", "AddOption");
+        AddButton.setAttribute("onclick", `AddOption(${ChoiceNumber})`);
+        AddButton.setAttribute("style", "left: 60px; height: 138px; width:180px; border: 4px solid #000000;");
+        FlexBox.appendChild(AddButton);
+
+        const h2 = document.createElement("h2");
+        AddButton.appendChild(h2);
+
+        const strong = document.createElement("strong");
+        strong.setAttribute("style", "position: absolute; display: block; margin: auto; left: 50px; top: 30px;");
+        h2.appendChild(strong);
+        strong.appendChild(document.createTextNode("Tilføj Vare"));
+
+        Container.insertBefore(ChoiceDiv, document.querySelector(".buttonBox"));
+
+    }
+
+    function AddOptionFields(Array, DropDown) {
+        for (i = 0; i < Array.length; i++) {
+            let Option = document.createElement("option");
+            Option.setAttribute("value", `${Array[i].Id}`);
+            Option.imgPath = Array[i].ImgPath;
+            let Text = document.createTextNode(`${Array[i].Name}`);
+            Option.appendChild(Text);
+            DropDown.appendChild(Option);
+        }
+    }
+
+    function FindOptions(id) {
+        let NodeList = document.querySelector(`#${id}`).querySelectorAll(".LargeDiv");
+        let nodeArray = Array.apply(null, NodeList);
+        let ValueArray = [];
+        nodeArray.forEach((e) => {
+            ValueArray.push(parseInt((e.querySelector(".Dropdown-Option").value)));
+
+        })
+        return (ValueArray);
+    }
+
+    function ChangeOption(id, OptionValue, value1, value2) {
+        document.getElementById(`${value1}Dropdown-Option${value2}`).value = OptionValue;
+    }
+
+    function LoadExistingPack(Choices, Options, Name, Price, Description){
+        document.getElementById("LeftInput").value = Name;
+        document.getElementById("RightInput").value = Price;
+        document.getElementById("DescriptionBox").value = Description;
+        if(Options != 0){
+            for(j = 1; j<=Choices; j++){
+                AddChoice();
+                for(k=1; k<=Options[j-1].length; k++){
+                    AddOption(j);
+                    console.log(j);
+                    console.log(k);
+                    ChangeOption(`flexBox-Packcreator-${j}`, Options[j-1][k-1] , j , k);
+                }
+            }
+        }
+    }
+
+    function UpdateDB() {
+        let name = document.getElementById("LeftInput").value;
+        let price = parseInt(document.getElementById("RightInput").value);
+        let description = document.getElementById("DescriptionBox").value;
+        console.log(name, price, description);
+        let options = [];
+
+        const Choices = document.querySelectorAll(".flexBox-Packcreator");
+
+        for (i = 0; i < Choices.length; i++) {
+
+            options.push(FindOptions(Choices[i].id));
+            console.log(options);
+        }
+        
+        
+        let PayLoad = {
+            Name: name,
+            Price: price,
+            Description: description,
+            Options: options
+        };
+        let PackModel = JSON.stringify(PayLoad);
+
+        if(@((Packs.PackID != null).ToString().ToLower())){
+            fetch(`/api/admin/EditPackModel/@Packs.PackID`, {
+                method: "PUT",
+                body: PackModel
+            });
+        }else{
+            fetch("/api/admin/CreatePackModel", {
+                method: "POST",
+                body: PackModel
+            });
+        }
+
+        
+
+        /*
+        [
+          1, 2, 3, 4
+        ],
+        [
+          1
+        ]
+        */
+    }
+
+</script>
+

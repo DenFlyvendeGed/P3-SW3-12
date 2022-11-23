@@ -86,8 +86,8 @@ public class SqlDB : DataBase
 		}
 		catch(SqlException ex)
 		{
-			
-			throw new Exception(ex.Message);
+            conn.Close();
+            throw new Exception(ex.Message);
 		}
 
 		//Close the connection
@@ -170,7 +170,8 @@ public class SqlDB : DataBase
 		}
 		else
 		{
-			throw new Exception("Row with given field dosent exist");
+            conn.Close();
+            throw new Exception("Row with given field dosent exist");
 		}
 	}
 

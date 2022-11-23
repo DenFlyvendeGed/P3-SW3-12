@@ -1,16 +1,30 @@
 ﻿@using P3_Project.Models
-@model PackModel
-
+@model PsudoPackModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<a class="BoxLink" asp-area="" asp-controller="Admin" asp-action="CreatePackModel">
-    <div class="packBox">
-        <img class="packBox-img" src="../favicon.ico" alt="HTML5 Icon">
-        <div class="packBox-bar">
-            @Model.Name
-        </div>
+<script>
+
+    function DeletePackModel(ID){
+        let RequestBody = {
+            Id: ID
+        };
+        let Request = JSON.stringify(RequestBody);
+
+        fetch("/api/admin/DeletePackModel", {
+            method: "DELETE",
+            body: Request
+        });
+    }
+</script>
+
+
+<div class="packBox" onclick="PackModelEdit(@Model.PackID)">
+    <img class="packBox-img" src="../favicon.ico" alt="HTML5 Icon">
+    <div class="packBox-bar">
+        @Model.Name
     </div>
-</a>
+</div>
+<div class="Box-Minus" style="position: relative; top: 270px; right: 126px; width: 120px; height: 30px; text-align:center; padding: 4px 0;" onclick="DeletePackModel(@Model.PackID)">Slet PackModel</div>
 
