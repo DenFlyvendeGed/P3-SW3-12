@@ -1,5 +1,5 @@
 ﻿@using P3_Project.Models
-@model (PackModel, List<(int, string)>)
+@model (PackModel, List<(int, string, string)>)
 @{
     var (Packs, Items) = Model;
     Layout = "AdminLayout";
@@ -44,8 +44,8 @@
 
     function AddOption(ChoiceNumber){
     let ItemArray = [
-        @foreach(var (id, name) in Items){
-            <text>{Name:"@name",Id:"@id"},</text>
+        @foreach(var (id, name, imgPath) in Items){
+            <text>{Name:"@name",Id:"@id", ImgPath:"@imgPath"},</text>
         }
     ]
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
@@ -74,8 +74,16 @@
         DropDown.setAttribute("id", `${ChoiceNumber}Dropdown-Option${number}`);
         DropDown.setAttribute("style", "left:40px;");
         LargeDiv.appendChild(DropDown);
-
+        DropDown.addEventListener("change", loadImg)
         AddOptionFields(ItemArray, DropDown); //<-- helper function to make the select options based on an array it gets passed
+
+        //sæt billedet af første option som Select indeholder
+        ModelImage.src = DropDown.selectedOptions[0].imgPath;
+        function loadImg(e)
+        {
+            //console.log(e.target.selectedOptions[0].imgPath)
+            ModelImage.src = e.target.selectedOptions[0].imgPath;
+        }
 
         //creating and appending the minus box and minus
         const MinusBox = document.createElement("div");
@@ -157,6 +165,7 @@
         for (i = 0; i < Array.length; i++) {
             let Option = document.createElement("option");
             Option.setAttribute("value", `${Array[i].Id}`);
+            Option.imgPath = Array[i].ImgPath;
             let Text = document.createTextNode(`${Array[i].Name}`);
             Option.appendChild(Text);
             DropDown.appendChild(Option);

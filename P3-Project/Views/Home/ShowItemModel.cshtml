@@ -16,7 +16,7 @@
                 if (ViewBag.item != null)
                 {
 
-                    foreach (Image img in ViewBag?.item?.Pictures)
+                    foreach (ImageModel img in ViewBag?.item?.Pictures)
                     {
                         ViewBag.pictures += "'" + img.FilePath + "', ";
                     }
