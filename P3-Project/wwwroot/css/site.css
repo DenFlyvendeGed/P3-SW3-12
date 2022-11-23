@@ -75,24 +75,6 @@ body {
     font-size: 90%;
 }
 
-.navBarText {
-    padding-top: 5px;
-    padding-left: 20px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    
-}
-
-.navBarText:hover {
-    padding-top: 5px;
-    padding-left: 20px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(59, 146, 178);
-}
-
 /*centers some elements*/
 .center { 
     display: flex;
@@ -180,20 +162,14 @@ body {
     font-family: 'DINMittelschrift',sans-serif;
 }
 
+
 .Flex-Container-PackBoxes {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px;
 }
-.box {
-    box-sizing: content-box;
-    display: block;
-    position: relative;
-  
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
+
 .topBar-Input {
     display: inline-block;
     margin-left: 32%;
@@ -263,6 +239,7 @@ body {
     right: 1%;
     top: 1%;
 }
+
 
 .packBox-plus {
     position: absolute;
@@ -709,8 +686,8 @@ div.modelAttributes {
 }
 
 div.tagBox{
-    width: 15vw;
-    height:25vw;
+    width: 20vw;
+    height:10vw;
 }
 
 div.createTaxBox{
@@ -756,16 +733,13 @@ div.createTaxBox{
 }
 
 div.shopTagBox{
-    height:3vw;
+    width: 12vw;
+    height:50vh;
 }
-
-
 
 .wrap {
     position: relative;
-    
 }
-
 
 .midImg {
     margin: auto;
