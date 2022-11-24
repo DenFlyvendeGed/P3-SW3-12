@@ -767,12 +767,15 @@ div.shopTagBox{
     top: 0;
     bottom: 0;
     width: 100%;
-} 
+}
 
+.mainIndexScale {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+}
 
 /*Scalling for window < 480px*/
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-
     .mainIndex {
         overflow: auto;
     }
@@ -860,7 +863,18 @@ div.shopTagBox{
         height: 60vw;
         margin-top: 5vw;
     }
-   
+
+    .mainIndexScale {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+    }
+
+    div.shopTagBox {
+        margin-left: 11vw;
+        width: 70vw;
+        height: 5vh;
+    }
+
 }
 
 /*Scalling for 1440px > window > 480px*/
@@ -874,7 +888,7 @@ div.shopTagBox{
 
     .grid-container {
         
-        margin-left: 12%
+        margin-left: 5%
     }
     
 }
