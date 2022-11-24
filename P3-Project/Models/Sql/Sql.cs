@@ -86,8 +86,8 @@ public class SqlDB : DataBase
 		}
 		catch(SqlException ex)
 		{
-			
-			throw new Exception(ex.Message);
+            conn.Close();
+            throw new Exception(ex.Message);
 		}
 
 		//Close the connection
@@ -170,7 +170,8 @@ public class SqlDB : DataBase
 		}
 		else
 		{
-			throw new Exception("Row with given field dosent exist");
+            conn.Close();
+            throw new Exception("Row with given field dosent exist");
 		}
 	}
 
@@ -675,7 +676,7 @@ public class SqlDB : DataBase
 				case SQLType.Int              : cmd.CommandText += "INT"; break;
 				case SQLType.Large            : cmd.CommandText += "BIGINT"; break;
 				case SQLType.IntAutoIncrement : cmd.CommandText += "INT IDENTITY(1,1) PRIMARY KEY"; break;
-				case SQLType.Bool             : cmd.CommandText += "BIT"; break;
+				case SQLType.Bool             : cmd.CommandText += "char(1)"; break;
 				
 				case SQLType.Char             : cmd.CommandText += "char(1)"; break;
 				case SQLType.String8          : cmd.CommandText += "varchar(8)"; break;

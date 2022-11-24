@@ -1,10 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Tøj";
+﻿@model string
+
+@{
+    if (Model == "Tøj")
+    {
+        ViewData["Title"] = "Tøj";
+    }
+    else if (Model == "Tilbehør")
+    {
+        ViewData["Title"] = "Tilbehør";
+    }
+
 }
 <h1>@ViewData["Title"]</h1>
 
-<div style="display:grid; grid-template-columns: repeat(2, auto)">
-    <div class="box tagBox">
+<div class="mainIndexScale">
+    <div class="box shopTagBox">
         Tags:
         <div>
             @{
@@ -30,7 +40,7 @@
                     <div class="item@(index) itemShowCase">
                         <div class="itemShowCasePic wrap">
                             @{
-                                Image img = item.GetFirstImg();
+                                ImageModel img = item.GetFirstImg();
                                 if (img != null)
                                 {
 

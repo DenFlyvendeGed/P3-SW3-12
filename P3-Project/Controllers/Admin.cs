@@ -26,9 +26,6 @@ namespace P3_Project.Controllers
         public ActionResult Index()
         {
 
-
-
-
             return View("Stock");
         }
 
@@ -108,7 +105,13 @@ namespace P3_Project.Controllers
                 Items = new List<(int, string)> { };
             }
             var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
-            var model = (packmodel, Items);
+            List<(int, string, string)> Items2 = new();
+            Items.ForEach(item =>
+            {
+                Items2.Add((item.Item1, item.Item2, ImageModel.GetFirstImg(item.Item1).FilePath));
+            });
+
+            var model = (packmodel, Items2);
             return View(model);
         }
 
@@ -119,7 +122,18 @@ namespace P3_Project.Controllers
         public ActionResult EditPromoCode([FromQuery] int? Id)
         {
             var model = Id != null ? new PromoCode((int)Id, new StorageDB()) : new PromoCode();
-            return View(model);
+
+            StorageDB db = new StorageDB();
+            if (!db.DB.CheckTable("ItemModels"))
+                setup();
+
+            List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel());
+            List<(int, string)> packs = db.DB.ReadFromTable("PackModel",new string[] {"Id","Name"}, r => ((int)r[0],(string)r[1]));
+
+            ViewBag.model = models;
+
+
+            return View((model, models, packs));
         }
 
         public ActionResult PromoCode()

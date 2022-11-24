@@ -236,7 +236,7 @@ namespace P3_Project.Controllers
         {
 
 
-            DirectoryInfo dir = Image.GetDir(int.Parse(Id));
+            DirectoryInfo dir = ImageModel.GetDir(int.Parse(Id));
             string filepath = Path.Combine(dir.FullName, Name);
             FileInfo file = new FileInfo(filepath);
 
