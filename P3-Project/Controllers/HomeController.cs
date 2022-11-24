@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Utilities;
 using P3_Project.Models;
 using P3_Project.Models.DB;
 using System.Diagnostics;
@@ -51,8 +53,23 @@ namespace P3_Project.Controllers
 
         public IActionResult PackModels()
         {
+            var db = new StorageDB();
+            List<(int, string, int)> Packs;
+            try
+            {
+                Packs = db.DB.ReadFromTable("PackModel", new string[] { "Id", "Name", "Price" }, (r) => ((int)r[0], (string)r[1], (int)r[2]));
+            }
+            catch {
+                Packs = new List<(int, string, int)> { };
+            }
+
+            return View(Packs);
+        }
+        public IActionResult PackPicker()
+        {
             return View();
         }
+
         public ActionResult Accessoires()
         {
             StorageDB db = new StorageDB();
