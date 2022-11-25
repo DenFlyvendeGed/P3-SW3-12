@@ -75,15 +75,6 @@ namespace P3_Project.Controllers
         #endregion
 
         #region PackModel
-        //
-        //public ActionResult PackViewModel()
-        //{
-        //    var x = 5;
-        //    //PackModel test = new PackModel();
-        //    //test.Name = "Test";
-
-        //    return View(x);
-        //}
 
 
         public ActionResult PackViewModel()
@@ -110,7 +101,10 @@ namespace P3_Project.Controllers
             {
                 Items2.Add((item.Item1, item.Item2, ImageModel.GetFirstImg(item.Item1).FilePath));
             });
-
+            if(packmodel.PackID != null) { 
+                packmodel.LoadTags();
+                packmodel.LoadImages();
+            }
             var model = (packmodel, Items2);
             return View(model);
         }

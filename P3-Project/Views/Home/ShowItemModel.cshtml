@@ -8,9 +8,11 @@
     @{
         ItemModel item = ViewBag.item;
 
+
         <div class="displayItem">
             <div class="box picScaling wrap">
                 @{
+
 
 
                     ViewBag.pictures = "";
@@ -22,6 +24,7 @@
                             ViewBag.pictures += "'" + img.FilePath + "', ";
                         }
                     }
+
                     @*Billed placehodler*@
                     <img class="midImg" src="" />
 
@@ -35,6 +38,7 @@
                 <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
             </div>
         </div>
+
 
         <div class="displayItem">
             @*<------------------ModelName and price--------------------->*@
