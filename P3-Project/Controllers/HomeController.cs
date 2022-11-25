@@ -84,11 +84,13 @@ namespace P3_Project.Controllers
             });
             return View(Packs2);
         }
+
         public IActionResult PackPicker([FromQuery] int? PackID)
         {
             var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
             return View(packmodel);
         }
+
         
         //Webshop page - Accessoires
         public ActionResult Accessoires()

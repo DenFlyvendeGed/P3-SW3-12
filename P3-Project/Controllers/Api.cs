@@ -125,6 +125,7 @@ namespace P3_Project.Controllers
 			if( data == null ) { return new StatusCodeResult(418); }
             
 			code.Code = data.Code;
+            code.Value = data.Value;
 			code.DiscountType = data.DiscountType;
 			code.ItemType = data.ItemType;
 			code.ExpirationDate = data.ExpirationDate;
