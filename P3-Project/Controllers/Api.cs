@@ -135,7 +135,7 @@ namespace P3_Project.Controllers
 		}
 		
 		[HttpDelete("DeletePromoCode")]
-		public async Task<StatusCodeResult> DeletePromoCode() {
+		public async Task<IActionResult> DeletePromoCode() {
 			string json;
 
             using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
@@ -144,46 +144,57 @@ namespace P3_Project.Controllers
 			var id = dict["Id"];
 			new PromoCode(id, db).DeleteFromDB(db);	
           
-      return new StatusCodeResult((int)HttpStatusCode.OK);
+            return new StatusCodeResult((int)HttpStatusCode.OK);
 		}
 
         
 		[HttpPost("CreatePackModel")]
-        public async void CreatePackModel() {
-			string json;
-			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			var code = JsonSerializer.Deserialize<PackModel>(json);
-			if(code == null) return;
-			code.PushToDB(new StorageDB());
-		}
+        public async Task<IActionResult> CreatePackModel(PackModel data) {
+            //string json;
+
+            //using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+            //var code = JsonSerializer.Deserialize<PackModel>(json);
+            //if(code == null) return BadRequest();
+
+
+
+            //code.PushToDB(db);
+            data.PushToDB(db);
+            return RedirectToActionPermanent("PackViewModel", "Admin");
+        }
 
 		[HttpPut("EditPackModel/{id}")]
-		public async void EditPackModel(int id) {
+		public async Task<IActionResult> EditPackModel(int id, PackModel data) {
 			var db = new StorageDB();
 			var code = new PackModel(id, db); 
-			string json;
-			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			var data = JsonSerializer.Deserialize<PackModel>(json);
-			if( data == null ) {Response.StatusCode = 418; return;}
+			//string json;
+			//using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
+			//var data = JsonSerializer.Deserialize<PackModel>(json);
+			//if( data == null ) {Response.StatusCode = 418; return BadRequest();}
 
-			code.Description = data.Description;
-			code.Name = data.Name;
-			code.Price = data.Price;
-			code.Options = data.Options;
+            code.Description = data.Description;
+            code.Name = data.Name;
+            code.Price = data.Price;
+            code.Options = data.Options;
+            code.Tags = data.Tags;
+            code.Pictures = data.Pictures;
 
-			code.PushToDB(db);
-		}
+            code.PushToDB(db);
+            return RedirectToActionPermanent("PackViewModel", "Admin");
+        }
 
 		[HttpDelete("DeletePackModel")]
-		public async void DeletePackModel() {
+		public async Task<IActionResult> DeletePackModel() {
 			string json;
 			using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
 			var dict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
-			if(dict == null) { Response.StatusCode = 418; return; }
+			if(dict == null) { Response.StatusCode = 418; return BadRequest(); }
 			var id = dict["Id"];
 			var db = new StorageDB();
-			new PackModel(id, db).DeleteFromDB(db);	
-		}
+			new PackModel(id, db).DeleteFromDB(db);
+
+            return RedirectToActionPermanent("PackViewModel", "Admin");
+        }
 
         [HttpGet]
         public IEnumerable<string> GetAdmin()
@@ -208,11 +219,7 @@ namespace P3_Project.Controllers
             {
                 itemModel.Update();
             }
-            var newUrl = this.Url.Link("Default", new
-            {
-                Controller = "Admin",
-                Action = "Stock"
-            });
+           
             //return Redirect(new Uri(newUrl.ToString(), UriKind.RelativeOrAbsolute));
             //RedirectToAction("Index", "Clients");
             return RedirectToActionPermanent("Stock", "Admin");
@@ -232,12 +239,46 @@ namespace P3_Project.Controllers
         //api/Admin/DeleteImage? Id = 000 & Name = a1.PNG
         [HttpDelete("DeleteImage")]
         //[ValidateAntiForgeryToken]
-        public StatusCodeResult DeleteImage(string Id, string Name )
+        public StatusCodeResult DeleteImage(string Id, string Name)
         {
+            string filepath = "";
+            DirectoryInfo dir = new("path");
 
 
-            DirectoryInfo dir = ImageModel.GetDir(int.Parse(Id));
-            string filepath = Path.Combine(dir.FullName, Name);
+            dir = ImageModel.GetDir(int.Parse(Id));
+            filepath = Path.Combine(dir.FullName, Name);
+
+
+            FileInfo file = new FileInfo(filepath);
+
+            if (file.Exists)
+            {
+                file.Delete();
+
+            }
+            else
+            {
+
+                return new StatusCodeResult((int)HttpStatusCode.NotFound);
+            }
+            return new StatusCodeResult((int)HttpStatusCode.OK);
+        }
+        [HttpDelete("DeleteImagePack")]
+        public StatusCodeResult DeleteImage2(string Id, string Name , string FilePath = "")
+        {
+            string filepath = "";
+            DirectoryInfo dir = new("path");
+            if (FilePath == "") {
+                dir = ImageModel.GetDir(int.Parse(Id));
+                filepath = Path.Combine(dir.FullName, Name);
+            }
+            else
+            {
+                string projectPath = Directory.GetCurrentDirectory();
+                filepath = Path.Combine(projectPath, "wwwroot" + FilePath);
+                
+            }
+
             FileInfo file = new FileInfo(filepath);
 
             if (file.Exists)
@@ -252,6 +293,28 @@ namespace P3_Project.Controllers
             }
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
+
+        
+        //public StatusCodeResult DeleteImage(string Id, string Name, string FilePath)
+        //{
+
+
+        //    DirectoryInfo dir = ImageModel.GetDir(int.Parse(Id));
+        //    string filepath = Path.Combine(dir.FullName, Name);
+        //    FileInfo file = new FileInfo(filepath);
+
+        //    if (file.Exists)
+        //    {
+        //        file.Delete();
+
+        //    }
+        //    else
+        //    {
+
+        //        return new StatusCodeResult((int)HttpStatusCode.NotFound);
+        //    }
+        //    return new StatusCodeResult((int)HttpStatusCode.OK);
+        //}
         //public HttpResponseMessage DeleteImage()
         //{
         //    var response = Request.CreateResponse(HttpStatusCode.OK);

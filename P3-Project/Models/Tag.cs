@@ -19,6 +19,15 @@ namespace P3_Project.Models
             return list;
         }
 
+        public static List<Tag> GetAllTagsOfPackModel(string packModelId)
+        {
+            var list = new List<Tag>();
+            list = db.DB.GetAllElements($"PackModel_{packModelId}_Tags", new Tag());
+
+
+            return list;
+        }
+
         public static List<Tag> GetAllTags()
         {
             var list = new List<Tag>();

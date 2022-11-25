@@ -278,24 +278,6 @@ body {
     box-shadow: 2px 2px 5px black;
 }
 
-.valgmulighedPakke {
-    position: absolute;
-    
-    
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    width: 98%;
-    height: auto;
-    right: 1%;
-    top: 1%;
-
-
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
-
 #LeftInput {
     margin-left: 50%;
 }
@@ -767,12 +749,15 @@ div.shopTagBox{
     top: 0;
     bottom: 0;
     width: 100%;
-} 
+}
 
+.mainIndexScale {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+}
 
 /*Scalling for window < 480px*/
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-
     .mainIndex {
         overflow: auto;
     }
@@ -860,7 +845,18 @@ div.shopTagBox{
         height: 60vw;
         margin-top: 5vw;
     }
-   
+
+    .mainIndexScale {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+    }
+
+    div.shopTagBox {
+        margin-left: 11vw;
+        width: 70vw;
+        height: 5vh;
+    }
+
 }
 
 /*Scalling for 1440px > window > 480px*/
@@ -874,7 +870,60 @@ div.shopTagBox{
 
     .grid-container {
         
-        margin-left: 12%
+        margin-left: 5%
     }
     
+}
+
+.grid-container-PackPicker {
+    display: grid;
+    width: 100%;
+    row-gap: vh;
+    column-gap: 6vw;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.PackPickerHeader {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-area: 1 / 1 / span 1 / span 2;
+    background-color: #D9D9D9;
+    text-align: center;
+    height: 63px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.PackChoices {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: start;
+    height: 63px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.PackPickerItems {
+    background-color: #D9D9D9;
+    text-align: center;
+    height: 236px;
+}
+.PackPickerImg {
+    position: relative;
+    right: 184px;
+    top: 40px;
+}
+.PackPickerFlexBox{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    bottom: 65%;
+    left: 22vw;
+    width: 10vw;
+
+}
+
+
+.Clickable:hover{
+    cursor:pointer;
 }
