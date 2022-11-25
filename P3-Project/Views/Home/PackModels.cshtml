@@ -23,7 +23,7 @@
 
     <div class="grid-container">
         @foreach(var part in Model){
-            <a style="color: black; text-decoration: none;" asp-area="" asp-controller="Home" asp-action="PackPicker">
+            <a style="color: black; text-decoration: none;" onclick="PackModelEdit(@part.Item1)">
                     <div class="itemShowCase">
                         <div class="itemShowCasePic wrap">
 
@@ -48,5 +48,5 @@
 </div>
 
 <script>
-    //document.querySelector('#PackModelSite').style = ("color: rgb(59, 146, 178) !important");
+    function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
 </script>

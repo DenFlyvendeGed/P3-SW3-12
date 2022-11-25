@@ -899,3 +899,12 @@ div.shopTagBox{
     right: 184px;
     top: 40px;
 }
+.PackPickerFlexBox{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    bottom: 65%;
+    left: 22vw;
+    width: 10vw;
+
+}

@@ -65,9 +65,10 @@ namespace P3_Project.Controllers
 
             return View(Packs);
         }
-        public IActionResult PackPicker()
+        public IActionResult PackPicker([FromQuery] int? PackID)
         {
-            return View();
+            var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
+            return View(packmodel);
         }
 
         public ActionResult Accessoires()
