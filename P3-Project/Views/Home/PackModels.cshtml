@@ -1,5 +1,5 @@
 ﻿@using P3_Project.Models
-@model List<(int, string, int)>
+@model List<(int, string, int, string, string)>
 
 @{
     ViewData["Title"] = "Pakker";
@@ -11,24 +11,30 @@
 <div style="display:grid; grid-template-columns: repeat(2, auto)">
     <div class="box shopTagBox">
         Tags:
-        <div>
-            
-            <div>
-                <label>lol</label>
-                <input type="checkbox" id="">
-            </div>
+        
+
+        @{
+
+            foreach (Tag tag in Tag.GetAllTags())
+            {
+                <div>
+                    <label>@tag.Name</label>
+                    <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)">
+                </div>
+            }
+        }
                 
-        </div>
+        
     </div>
 
     <div class="grid-container">
         @foreach(var part in Model){
-            <a style="color: black; text-decoration: none;" onclick="PackModelEdit(@part.Item1)">
+            <a style="color: black; text-decoration: none;" href="/Home/PackPicker?PackId=@part.Item1"  onclick="PackModelEdit(@part.Item1)" class="Clickable @part.Item5 ">
                     <div class="itemShowCase">
                         <div class="itemShowCasePic wrap">
 
 
-                    <img class="picSize midImg" src="../favicon.ico" style="background-color: black;" />
+                    <img class="picSize midImg" src="@(part.Item4 != "" ? Html.Raw(part.Item4) : Html.Raw("../favicon.ico"))" style="background-color: black;" />
 
                             
                         </div>
@@ -49,4 +55,56 @@
 
 <script>
     function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
+
+    const tagList = [];
+    const itemContainer = document.querySelector(".grid-container");
+    const items = itemContainer.children;
+    function ToggleTag(dom) {
+        const text = dom.previousElementSibling.innerText;
+        if (dom.checked) {
+            tagList.push(text);
+        }
+        else {
+            tagList.splice(tagList.indexOf(text), 1);
+        }
+        //console.log(tagList)
+
+
+
+        if (tagList.length > 0) {
+            let searchString = "\\s?(";
+            tagList.forEach(name => {
+                searchString += name + "\\s|";
+            })
+            searchString = searchString.slice(0, -1);
+            searchString += ")"//{" + tagList.length + "}";
+
+
+            const regex = new RegExp(searchString, "gm");
+
+            console.log(searchString);
+            //console.log(items)
+            for (item of items) {
+                //console.log(item)
+                //console.log(item.classList.value)
+                //console.log(item.classList.value.match(regex))
+
+                if (item.classList.value.match(regex)?.length != tagList.length) {
+                    item.style.display = "none";
+                }
+                else {
+                    item.style.display = "";
+                }
+            }
+        }
+        else {
+            for (item of items) {
+                item.style.display = "";
+            }
+        }
+
+
+        //\s((test\s+|test1\s+|test2\s+)){3}
+
+    }
 </script>

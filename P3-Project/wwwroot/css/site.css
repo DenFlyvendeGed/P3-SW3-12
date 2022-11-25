@@ -922,3 +922,8 @@ div.shopTagBox{
     width: 10vw;
 
 }
+
+
+.Clickable:hover{
+    cursor:pointer;
+}

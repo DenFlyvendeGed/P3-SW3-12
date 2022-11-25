@@ -57,8 +57,8 @@
                     {
                             <div>
                                 <label>@tag.Name</label>
-                                <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)" 
-                                @(
+                            <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)"
+                               @(
                            modelTags != null ?
                            modelTags.Any(modeltag => modeltag.Name == tag.Name) ? Html.Raw("Checked") : ""
                            :
@@ -291,7 +291,7 @@
 
 <textarea id="DescriptionBox" style="position: static; width: 50vw; resize: none;" rows="5" placeholder="Beskrivelse"></textarea>
 
-<p class="buttonBox" onclick="UpdateDB()" style="top: 20px; left: 73vw; width: 100px; height: 36px; margin-top: 26px; cursor: pointer;">Opret pakke</p>
+<p class="buttonBox" onclick="UpdateDB()" style="top: 20px; left: 73vw; width: 100px; height: 36px; margin-top: 26px; cursor: pointer;">@(Packs.PackID != null ? Html.Raw("Opdater"):Html.Raw("Opret pakke"))</p>
 
 
 

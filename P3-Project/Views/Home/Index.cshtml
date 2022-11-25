@@ -23,7 +23,7 @@
                 {
                     <div>
                         <label>@tag.Name</label>
-                        <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)">
+                        <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)">
                     </div>
                 }
             }
@@ -37,7 +37,7 @@
             foreach (ItemModel item in ViewBag.model)
             {
                 item.LoadTags();
-                                                        <a style="color: black; text-decoration: none;" class=" @Html.Raw(item.GetTagString()) " href="home\ShowItemModel?id=@(item.Id)">
+                                                        <a style="color: black; text-decoration: none;" class="Clickable @Html.Raw(item.GetTagString()) " href="../Home/ShowItemModel?id=@(item.Id)">
                                                                                                                                 <div class="item@(index) itemShowCase">
                                                                                                                                     <div class="itemShowCasePic wrap">
                                                                                                                                         @{

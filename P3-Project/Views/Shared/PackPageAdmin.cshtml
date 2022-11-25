@@ -25,11 +25,11 @@
 </script>
 
 
-<div class="packBox" onclick="PackModelEdit(@Model.PackID)">
+<div class="packBox class='Clickable'" onclick="PackModelEdit(@Model.PackID)">
     <img class="packBox-img" src="@(ImageModel.GetFirstImg(Model.PackID, "PackModel")?.FilePath != "" ? Html.Raw(ImageModel.GetFirstImg(Model.PackID, "PackModel").FilePath) : Html.Raw("../favicon.ico"))" alt="HTML5 Icon">
     <div class="packBox-bar">
         @Model.Name
     </div>
 </div>
-<div class="Box-Minus" style="position: relative; top: 270px; right: 126px; width: 120px; height: 30px; text-align:center; padding: 4px 0;" onclick="DeletePackModel(@Model.PackID)">Slet PackModel</div>
+<div class="Box-Minus Clickable" style="position: relative; top: 270px; right: 126px; width: 120px; height: 30px; text-align:center; padding: 4px 0;" onclick="DeletePackModel(@Model.PackID)">Slet PackModel</div>
 

@@ -65,8 +65,24 @@ namespace P3_Project.Controllers
             catch {
                 Packs = new List<(int, string, int)> { };
             }
-
-            return View(Packs);
+            List<(int, string, int, string, string)> Packs2 = new();
+            Packs.ForEach(item =>
+            {
+                List<Tag> tags = Tag.GetAllTagsOfPackModel(item.Item1.ToString());
+                string nameString = "";
+                tags.ForEach(tag =>
+                {
+                    nameString += $" {tag.Name}";
+                });
+                Packs2.Add(
+                    (item.Item1,
+                    item.Item2,
+                    item.Item3,
+                    ImageModel.GetFirstImg(item.Item1, "PackModel").FilePath,
+                    nameString
+                    ));
+            });
+            return View(Packs2);
         }
         public IActionResult PackPicker([FromQuery] int? PackID)
         {
