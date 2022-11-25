@@ -1,4 +1,4 @@
-﻿@model List<(int, string, DateTime)>
+﻿@model List<(int, string, DateTime, int, PromoCodeDiscountType, PromoCodeItemType)>
 @{
     Layout = "AdminLayout";
 
@@ -20,7 +20,7 @@
 </script>
 <div>
 	<input type="button" value="Opret Rabatkode" onclick="promoCodeEdit(null)" />
-	@foreach((int, string, DateTime) code in Model){
+	@foreach(var code in Model){
 		@await Html.PartialAsync("./PromoCodeOverviewItem.cshtml", code)
 	}
 </div>

@@ -139,9 +139,9 @@ namespace P3_Project.Controllers
         public ActionResult PromoCode()
         {
 
-			List<(int, string, DateTime)> psudoCodes;
+			List<(int, string, DateTime, int, PromoCodeDiscountType, PromoCodeItemType)> psudoCodes;
 			try {
-				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate", "Value", "DiscountType", "ItemType" }, (r) => ((int)r[0], (string)r[1], (DateTime)r[2], (int)r[3], (PromoCodeDiscountType)(short)r[4], (PromoCodeItemType)(short)r[5]));
 			} catch {
 				psudoCodes = new();
 			}
