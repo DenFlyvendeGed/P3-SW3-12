@@ -1,19 +1,247 @@
 @using P3_Project.Models
-@model PromoCode
+@model (PromoCode, List<ItemModel>, List<(int, string)>)
+
 @{
-    Layout = "AdminLayout";
-    ViewData["Title"] = "Rediger Rabat Kode";
+	Layout = "AdminLayout";
+	ViewData["Title"] = "Rediger Rabat Kode";
 
 	string before = "PriceBefore";
 	string after = "PriceAfter";
 
+	var (promoCode, itemList, packList) = Model;
+
+
 	string isModel() {
-		if(Model.Id == null)
+		if(promoCode.Id == null)
 			return "Opret Rabatkode";
-		return "Redigér Rabatkode (" + Model.Id + ": " + Model.Code + ")";
+		return "Redigér Rabatkode (" + promoCode.Id + ": " + promoCode.Code + ")";
 	}
 }
 
+
+
+<h1>@isModel()</h1>
+
+
+<div id="editPromoCodeContent">
+	<div class="edit-field box">
+
+		<div class="edit">
+			<p><b>Navn/Kode:</b> <input id="promo-code-code" value="@promoCode.Code"/></p>
+		</div>
+
+		<div class="edit">
+			<p><b>Slutdato:</b> <input id="promo-code-date" type="date" value="@promoCode.ExpirationDate.ToString("yyyy-MM-dd")"/></p>
+		</div>
+
+	</div>
+
+	<div class="edit-field box" style="justify-content:center">
+		<div class="edit">
+
+			<p><b>Rabat: </b> <input id="promo-code-value" value="@promoCode.Value" style="text-align:right"/>
+				<select id="promo-code-discount-type">
+					@{
+						async Task AddOption(PromoCodeDiscountType type, string message) {
+							if(promoCode.DiscountType == type){
+																																																																																																											<option value="@((int)type)" selected> @message </option> 
+							} else {
+																																																																																																											<option value="@((int)type)"> @message </option> 
+							}
+						}
+						AddOption(PromoCodeDiscountType.Percentage, "Procent (%)");
+						AddOption(PromoCodeDiscountType.Fixed     , "Fastsat (kr.)");
+					}
+				</select>
+			</p>
+		</div>
+	</div>
+
+	<div class="edit-field box grid-indhold">
+		<div class="grid-indhold1">Indhold</div>
+
+		<div class="grid-indhold1">
+			
+			<select name="type" id="selectType" onchange="chosenType(this)">
+				<option value="" selected hidden>Vælg indholds type</option>
+				<option value="" id="0">Alt</option>
+				<option value="" id="1">Alle pakker</option>
+				<option value="" id="2">Alle genstande</option>
+				<option value="" id="3">Vælg selv</option>
+			</select>
+			@{
+				string toolTip = "Alt: alle vare, både pakker og tøj, Alle pakker: rabat på alle pakker, Alle genstande: rabat på alt tøj og tilbehør, Vælg selv: rabat på valgte vare.";
+			}
+			<span class="hovertext" data-hover="@(toolTip)">?</span>
+		</div>
+
+		<div class="toggled grid-indhold1" id="choseItems">
+			<select name="selectItem" id="selectItem" onchange="addItem(this)">
+			
+				<option value=”” selected hidden>Tilføj vare</option>
+					@{
+					foreach (ItemModel item in ViewBag.model){
+																																																											<option value="@("Vare: "+item.ModelName)" id="@(item.Id)">Vare: @(item.ModelName)</option>
+					}
+
+					foreach (var pack in packList){
+																																																											<option value="@("Pakke: "+pack.Item2)" id="@(pack.Item1)">Pakke: @(pack.Item2)</option>
+					}
+
+
+					}
+            </select>
+		</div>
+	</div>
+
+
+	<div class=" toggled edit-field box addedOptions-Grid" style="height: 12vh; overflow:auto;" id="addedItems">
+	</div>
+
+
+	<input type="button" onclick="UpdateDB()" value = "@(promoCode.Id == null ? "Opret" : "Opdater")"/>
+</div>
+
+<script type="text/javascript">
+
+	let items = [];
+	let type = 0;
+
+	function getData() {
+
+		let rtn = {
+			Code : document.getElementById("promo-code-code").value,
+			ExpirationDate : document.getElementById("promo-code-date").value,
+			DiscountType : parseInt(document.getElementById("promo-code-discount-type").value),
+			Value : parseInt(document.getElementById("promo-code-value").value),
+			ItemType : type,
+			Items : items,
+		}
+		console.log(rtn);
+		return rtn;
+	}
+
+	function addItem(e){
+		let target = e.value;
+		let id = e.selectedOptions[0].id;
+
+		//Create btn
+		let newOption = document.createElement("div");
+		newOption.classList = "box";
+		newOption.classList = "addedOptions-Item";
+		newOption.id = id;
+		newOption.innerHTML = target;
+
+		let newBtn = document.createElement("input");
+		newBtn.type = "button";
+		newBtn.value = "-";
+		newBtn.classList = "delBtn";
+		newBtn.addEventListener("click",removeItem);
+		newOption.appendChild(newBtn);
+
+		document.getElementById("addedItems").appendChild(newOption);
+
+		//Add item to list
+		let isPack = false;
+		if(target.includes("Pakke")){
+			isPack = true;
+		}
+
+		let promoData = {
+			Id: parseInt(id),
+			IsPack: isPack,
+		}
+
+		items.push(promoData);
+
+		console.log(items);
+	}
+
+	function removeItem(e){
+		//Remove div
+		let Id = e.target.closest("div").id;
+		e.target.parentElement.remove();
+
+		//Remove from items list
+		for(let i = 0; i < items.length; i++){
+			if(items[i].Id == Id){
+				console.log(items[i]);
+			}
+		}
+
+	}
+
+	function chosenType(e){
+		let typeChosen = e.selectedOptions[0].id;
+
+		let choseItemsDom = document.getElementById("choseItems");
+		let addedItemsDom = document.getElementById("addedItems");
+
+		//All
+		if(typeChosen == 0){
+			type = typeChosen
+			
+			if(!choseItemsDom.classList.contains("toggled")){
+				choseItemsDom.classList.toggle("toggled");
+				addedItemsDom.classList.toggle("toggled");
+			}
+
+		}
+		//All packs
+		else if(typeChosen == 1){
+			type = typeChosen
+
+			if(!choseItemsDom.classList.contains("toggled")){
+				choseItemsDom.classList.toggle("toggled");
+				addedItemsDom.classList.toggle("toggled");
+			}
+		}
+		//All items
+		else if(typeChosen == 2){
+			type = typeChosen
+
+			if(!choseItemsDom.classList.contains("toggled")){
+				choseItemsDom.classList.toggle("toggled");
+				addedItemsDom.classList.toggle("toggled");
+			}
+		}
+		//Some
+		else if(typeChosen == 3){
+			type = typeChosen;
+			choseItemsDom.classList.remove("toggled");
+			addedItemsDom.classList.remove("toggled");
+		}
+		
+		console.log(type);
+	}
+
+
+
+	@if(@promoCode.Id == null){	
+		<text>function UpdateDB() { 
+			fetch("/api/admin/createPromoCode", {
+				method : 'POST',
+				body : JSON.stringify(getData()) 
+			}).then(() => {
+				window.location.href = "/admin/promocode";
+			})
+		}</text>
+	} else {
+		<text>function UpdateDB() { 
+			fetch("/api/admin/editPromoCode/@promoCode.Id", {
+				method : 'PUT',
+				body : JSON.stringify(getData()) 
+			}).then(() => {
+				window.location.href = "/admin/promocode";
+			})
+		}</text>
+	}
+
+	
+
+
+
+</script>
 
 <style>
 	#editPromoCodeContent {
@@ -44,83 +272,76 @@
 	.edit > p {
 		margin: 0px;
 	}
+
+	.addedOptions-Grid{
+		display: grid;
+		grid-template-columns: repeat(4, 24%);
+		padding:4px;
+		gap: 10px;
+		text-align:center;
+	}
+
+	.addedOptions-Item{
+		background-color: white;
+		text-align: center;
+		border-style: solid;
+		border-width: 1px;
+		height:5vh;
+		min-height: 5vh;
+
+	}
+
+	.delBtn{
+		height: 20px;
+		text-align: center;
+		vertical-align: text-bottom;
+		margin-left: 15%;
+	}
+
+	.toggled{
+		display: none;
+	}
+
+	.hovertext {
+		position: relative;
+		border-bottom: 1px dotted black;
+	}
+
+	.hovertext:before {
+		content: attr(data-hover);
+		visibility: hidden;
+		width: 20vw;
+		min-width: 50px;
+		opacity: 0;
+		background-color: black;
+		color: #fff;
+		text-align: center;
+		border-radius: 5px;
+		padding: 5px 5px;
+		transition: opacity 1s ease-in-out;
+
+		position: absolute;
+		z-index: 1;
+		left: 0;
+		top: 110%;
+	}
+
+	.hovertext:hover:before {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.grid-indhold {
+		display: grid;
+		grid-template-columns: repeat(3, 25vw);
+		padding:4px;
+		text-align:center;
+	}
+
+	.grid-indhold1 {
+		text-align: center;
+	}
+
+
 </style>
-
-
-<h1>@isModel()</h1>
-<script type="text/javascript">
-	function getData() {
-		let rtn = {
-			Code : document.getElementById("promo-code-code").value,
-			ExpirationDate : document.getElementById("promo-code-date").value,
-			DiscountType : parseInt(document.getElementById("promo-code-discount-type").value),
-			Value : parseInt(document.getElementById("promo-code-value").value),
-			ItemType : 2,
-			Items : []
-		}
-		console.log(rtn);
-		return rtn;
-	}
-	@if(@Model.Id == null){	
-		<text>function UpdateDB() { 
-			fetch("/api/admin/createPromoCode", {
-				method : 'POST',
-				body : JSON.stringify(getData()) 
-			}).then(() => {
-				window.location.href = "/admin/promocode";
-			})
-		}</text>
-	} else {
-		<text>function UpdateDB() { 
-			fetch("/api/admin/editPromoCode/@Model.Id", {
-				method : 'PUT',
-				body : JSON.stringify(getData()) 
-			}).then(() => {
-				window.location.href = "/admin/promocode";
-			})
-		}</text>
-	}
-</script>
-
-
-
-<div id="editPromoCodeContent">
-	<div class="edit-field box">
-		<div class="edit">
-			<p><b>Navn/Kode:</b> <input id="promo-code-code" value="@Model.Code"/></p>
-		</div>
-		<div class="edit">
-			<p><b>Slutdato:</b> <input id="promo-code-date" type="date" value="@Model.ExpirationDate.ToString("yyyy-MM-dd")"/></p>
-		</div>
-	</div>
-	<div class="edit-field box" style="justify-content:center">
-		<div class="edit">
-
-			<p><b>Rabat: </b> <input id="promo-code-value" value="@Model.Value" style="text-align:right"/>
-				<select id="promo-code-discount-type">
-					@{
-						async Task AddOption(PromoCodeDiscountType type, string message) {
-							if(Model.DiscountType == type){
-								<option value="@((int)type)" selected> @message </option> 
-							} else {
-								<option value="@((int)type)"> @message </option> 
-							}
-						}
-						AddOption(PromoCodeDiscountType.Percentage, "Procent (%)");
-						AddOption(PromoCodeDiscountType.Fixed     , "Fastsat (kr.)");
-					}
-				</select>
-			</p>
-		</div>
-	</div>
-	<div class="edit-field box">
-		<p><b>Indhold</b></p>
-	</div>
-	<input type="button" onclick="UpdateDB()" value = "@(Model.Id == null ? "Opret" : "Opdater")"/>
-</div>
-
-<script>
-</script>
-
-
 

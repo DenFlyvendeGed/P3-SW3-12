@@ -686,7 +686,7 @@ public class SqlDB : DataBase
 				case SQLType.Int              : cmd.CommandText += "INT"; break;
 				case SQLType.Large            : cmd.CommandText += "BIGINT"; break;
 				case SQLType.IntAutoIncrement : cmd.CommandText += "INT IDENTITY(1,1) PRIMARY KEY"; break;
-				case SQLType.Bool             : cmd.CommandText += "BIT"; break;
+				case SQLType.Bool             : cmd.CommandText += "char(1)"; break;
 				
 				case SQLType.Char             : cmd.CommandText += "char(1)"; break;
 				case SQLType.String8          : cmd.CommandText += "varchar(8)"; break;

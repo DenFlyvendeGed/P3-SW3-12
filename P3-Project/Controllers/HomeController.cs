@@ -23,8 +23,11 @@ namespace P3_Project.Controllers
             db.DB.CreateTable("Tags", new Tag());
         }
 
+        //Main webshop page - Clothes
         public IActionResult Index()
         {
+
+            string type = "Tøj";
 
             StorageDB db = new StorageDB();
             if (!db.DB.CheckTable("ItemModels"))
@@ -35,7 +38,7 @@ namespace P3_Project.Controllers
             
             ViewBag.model = models;
 
-            return View();
+            return View("Index",type);
         }
 
         public IActionResult ShowItemModel(string id)
@@ -53,8 +56,12 @@ namespace P3_Project.Controllers
         {
             return View();
         }
+        
+        //Webshop page - Accessoires
         public ActionResult Accessoires()
         {
+            string type = "Tilbehør";
+
             StorageDB db = new StorageDB();
             if (!db.DB.CheckTable("ItemModels"))
                 setup();
@@ -64,7 +71,8 @@ namespace P3_Project.Controllers
 
             ViewBag.model = models;
 
-            return View();
+            
+            return View("Index", type);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
