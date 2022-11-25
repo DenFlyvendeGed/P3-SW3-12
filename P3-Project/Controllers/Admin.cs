@@ -75,15 +75,6 @@ namespace P3_Project.Controllers
         #endregion
 
         #region PackModel
-        //
-        //public ActionResult PackViewModel()
-        //{
-        //    var x = 5;
-        //    //PackModel test = new PackModel();
-        //    //test.Name = "Test";
-
-        //    return View(x);
-        //}
 
 
         public ActionResult PackViewModel()

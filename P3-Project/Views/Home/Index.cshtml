@@ -21,10 +21,10 @@
 
                 foreach (Tag tag in Tag.GetAllTags())
                 {
-                                                                                                                                <div>
-                                                                                                                                    <label>@tag.Name</label>
-                                                                                                                                    <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)">
-                                                                                                                                </div>
+                    <div>
+                        <label>@tag.Name</label>
+                        <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)">
+                    </div>
                 }
             }
         </div>
