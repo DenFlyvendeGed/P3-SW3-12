@@ -239,7 +239,7 @@
         <div style="margin-left: 30px; margin-top: 10px;">
             <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" />
             <input type="submit" id="AddCol" class="button" value="Tilføj farve" />
-            <p>Notifikation ved lager beholdning: <input type="number" id="StockNotification" name="StockNotification" value="0" @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "") required /></p>
+            <p>Notifikation ved lager beholdning: <input type="number" id="StockNotification" name="StockNotification"  @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "value='0'") required /></p>
 
         </div>
 
@@ -647,7 +647,7 @@
         const data = JSON.stringify(itemModel);
         console.log(grid.itemData);
 
-        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0) {
+        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm))) {
             alert("Pris eller notifikation ved lager skal være tal");
         }
         else if (itemModel.ModelName == "") {
