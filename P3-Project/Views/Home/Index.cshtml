@@ -11,10 +11,10 @@
 
                 foreach (Tag tag in Tag.GetAllTags())
                 {
-                    <div>
-                        <label>@tag.Name</label>
-                        <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)">
-                    </div>
+                                                                                                                                <div>
+                                                                                                                                    <label>@tag.Name</label>
+                                                                                                                                    <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)">
+                                                                                                                                </div>
                 }
             }
         </div>
@@ -26,29 +26,87 @@
             int index = 1;
             foreach (ItemModel item in ViewBag.model)
             {
-                <a style="color: black; text-decoration: none;" href="home\ShowItemModel?id=@(item.Id)">
-                    <div class="item@(index) itemShowCase">
-                        <div class="itemShowCasePic wrap">
-                            @{
+                item.LoadTags();
+                                                        <a style="color: black; text-decoration: none;" class=" @Html.Raw(item.GetTagString()) " href="home\ShowItemModel?id=@(item.Id)">
+                                                                                                                                <div class="item@(index) itemShowCase">
+                                                                                                                                    <div class="itemShowCasePic wrap">
+                                                                                                                                        @{
                                 ImageModel img = item.GetFirstImg();
                                 if (img != null)
                                 {
 
-                                    <img class="picSize midImg" src='@img.FilePath' />
+                                                                                                                                                                                                                                                            <img class="picSize midImg" src='@img.FilePath' />
                                 }
 
-                            }
-                        </div>
-                        <div class="itemShowCaseName">
-                            <div>@(item.ModelName)</div>
-                            <div>Pris: @(item.ModelPrice) kr.-</div>
-                        </div>
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                    <div class="itemShowCaseName "  )>
+                                                                                                                                        <div>@(item.ModelName)</div>
+                                                                                                                                        <div>Pris: @(item.ModelPrice) kr.-</div>
+                                                                                                                                    </div>
 
-                    </div>
-                </a>
+                                                                                                                                </div>
+                                                                                                                            </a>
                 index += 1;
             }
         }
 
     </div>
 </div>
+<script>
+    const tagList = [];
+    const itemContainer = document.querySelector(".grid-container");
+    const items = itemContainer.children;
+    function ToggleTag(dom)
+    {
+        const text = dom.previousElementSibling.innerText;
+        if(dom.checked)
+        {
+            tagList.push(text);
+        }
+        else{
+            tagList.splice(tagList.indexOf(text), 1);
+        }
+        //console.log(tagList)
+
+       
+
+        if(tagList.length > 0){
+            let searchString = "\\s?(";
+            tagList.forEach(name => {
+                searchString += name + "\\s|";
+            })
+            searchString = searchString.slice(0, -1);
+            searchString += ")"//{" + tagList.length + "}";
+
+
+            const regex = new RegExp(searchString,"gm");
+
+            console.log(searchString);
+            //console.log(items)
+            for (item of items) {
+                //console.log(item)
+                //console.log(item.classList.value)
+                //console.log(item.classList.value.match(regex))
+
+                if (item.classList.value.match(regex)?.length != tagList.length){
+                    item.style.display = "none";
+                }
+                else{
+                    item.style.display = "";
+                }
+            }
+        }
+        else{
+            for (item of items) {
+                item.style.display = "";
+            }
+        }
+
+        
+        //\s((test\s+|test1\s+|test2\s+)){3}
+
+    }
+
+
+</script>

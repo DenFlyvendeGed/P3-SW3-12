@@ -15,13 +15,18 @@
         fetch("/api/admin/DeletePackModel", {
             method: "DELETE",
             body: Request
-        });
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
     }
 </script>
 
 
 <div class="packBox" onclick="PackModelEdit(@Model.PackID)">
-    <img class="packBox-img" src="../favicon.ico" alt="HTML5 Icon">
+    <img class="packBox-img" src="@(ImageModel.GetFirstImg(Model.PackID, "PackModel")?.FilePath != "" ? Html.Raw(ImageModel.GetFirstImg(Model.PackID, "PackModel").FilePath) : Html.Raw("../favicon.ico"))" alt="HTML5 Icon">
     <div class="packBox-bar">
         @Model.Name
     </div>

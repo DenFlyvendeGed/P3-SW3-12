@@ -8,6 +8,18 @@
 
 <h1>Rediger Pakke</h1>
 
+@{
+
+    ViewBag.pictures = "";
+    if (Model.Item1?.Pictures != null)
+    {
+
+        foreach (ImageModel img in Model.Item1.Pictures)
+        {
+            ViewBag.pictures += "'" + img.FilePath + "', ";
+            }
+    }
+}
 <div class="flexbox-createPack">
     <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
         Angiv navn: <input type="text" class="topBar-Input" id="LeftInput">
@@ -15,8 +27,265 @@
     <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
         Angiv pris: <input type="text" class="topBar-Input" id="RightInput">
     </h5>
+
+
+
+    <div id="imgBox" class="item">
+        <div id="img" class="picSize" style="display:block;">
+            <input type="button" class="delBut" value="X" />
+            @*Billed placehodler*@
+            <img id="prodImg" class="picSize" src="" />
+
+        </div>
+
+        @*Buttons*@
+        <div class="imageButtons center">
+            @*billed vælger*@
+            <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+            <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+            @*Upload knap*@
+            <button class="ASHButton" onclick="document.getElementById('imgUp').click();" style="margin-top:1px;">Upload Billed</button>
+            <input class="uploadBut" type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+        </div>
+
+        <div class="box TagBox">
+            <div>
+                @{
+                    List<Tag>? modelTags = (Model.Item1 != null ? Model.Item1.Tags : null);
+
+                    foreach (Tag tag in Tag.GetAllTags())
+                    {
+                            <div>
+                                <label>@tag.Name</label>
+                                <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)" 
+                                @(
+                           modelTags != null ?
+                           modelTags.Any(modeltag => modeltag.Name == tag.Name) ? Html.Raw("Checked") : ""
+                           :
+                           ""
+                                   )
+                                   >
+                                <input type="button" value="-" id="@tag.Id" onclick="DeleteTag(this)">
+                            </div>
+                    }
+
+                }
+            </div>
+            <input type="button" value="+" onclick="CreateTagDom(this.previousElementSibling)">
+
+        </div>
+    </div>
 </div>
 
+<script>
+    const tagList = [];
+    //Initiate picture
+    let pictures = @(ViewBag?.Pictures != null ? Html.Raw("[" + "" + ViewBag.pictures + "" + "]") : Html.Raw("[]"));
+
+    let toBeLoaded = [];
+    let currentPic = 0;
+    let fileArray = @(Model.Item1?.Pictures != null ? Html.Raw("JSON.parse('" + @Html.Raw(Json.Serialize(Model.Item1.Pictures)) + "')") : Html.Raw("[]"));
+    const input = document.querySelector('input.uploadBut');
+    const log = document.getElementById('imgUp');
+    const imgTag = document.querySelector('#img img');
+
+    //Scroll last picture
+    function lastPic() {
+        if (currentPic == 0) {
+            currentPic = pictures.length - 1;
+        } else {
+            currentPic--;
+        }
+        showImg(currentPic);
+    }
+
+    //Scroll next picture
+    function nextPic() {
+        if (currentPic == pictures.length - 1) {
+            currentPic = 0;
+        } else {
+            currentPic++;
+        }
+        showImg(currentPic);
+    }
+
+    //Display picture in box
+    function showImg(pic) {
+        //console.log(currentPic);
+        if (pictures[pic] != undefined)
+            imgTag.setAttribute('src', pictures[pic]);
+        else
+            imgTag.src = "";
+    }
+
+    //Save picture in list
+    async function saveImg(e) {
+
+        const reader = new FileReader();
+
+        reader.onload = async function (e) {
+
+            imgTag.setAttribute('src', e.target.result);
+            pictures.push(e.target.result);
+            currentPic = pictures.length - 1;
+            console.log(currentPic);
+
+            fileArray.push(
+                {
+                    Name: reader.file.name,
+                    Size: reader.file.size,
+                    Type: reader.file.type,
+                    Data: reader.result,
+
+                }
+            );
+            if (toBeLoaded.length != 0) {
+                const file = toBeLoaded.pop();
+                reader.file = file;
+                reader.readAsDataURL(file);
+            }
+        }
+
+        for (file of input.files) {
+            toBeLoaded.push(file);
+
+
+        }
+
+        if (toBeLoaded.length != 0) {
+            const file = toBeLoaded.pop();
+            reader.file = file;
+            reader.readAsDataURL(file);
+        }
+
+    }
+
+    function delImage(e) {
+        const img = fileArray[currentPic];
+        if (img.Data != null) {
+            pictures.splice(currentPic, 1);
+            fileArray.splice(currentPic, 1);
+            lastPic();
+        }
+        else {
+            fetch("../api/Admin/DeleteImagePack?Id=" + @Model.Item1?.PackID + "&Name=" + img.name + "&FilePath=" + encodeURIComponent(img.filePath),
+                {
+                    method: "DELETE",
+                })
+                .then(Response => {
+                    if (Response.ok) {
+                        pictures.splice(currentPic, 1);
+                        fileArray.splice(currentPic, 1);
+                        lastPic();
+                    }
+                    else {
+                        alert("Error when deleting image");
+                    }
+                });
+        }
+    }
+
+    function ToggleTag(dom) {
+        if (dom.checked) {
+            AddTag(dom.id);
+        }
+        else {
+            RemoveTag(dom.id);
+        }
+    }
+
+    function AddTag(Id) {
+        const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
+            if (modelId != 0) {
+            fetch("../api/Admin/AddTag?ItemModelId=" + modelId + "&TagId=" + Id,
+                {
+                    method: "POST",
+                })
+        }
+        else {
+            tagList.push({ Id })
+        }
+        //console.log(Id)
+    }
+
+    function RemoveTag(Id) {
+        const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
+            if (modelId != 0) {
+            fetch("../api/Admin/RemoveTag?ItemModelId=" + modelId + "&TagId=" + Id,
+                {
+                    method: "POST",
+                })
+        }
+        else {
+            tagList = taglist.splice(tagList.indexOf(Id), 1);
+        }
+        //console.log(Id)
+    }
+
+    function DeleteTag(dom) {
+        if (confirm("Er du sikker på at du vil slette " + dom.parentElement.children[0].innerText + " permanent?")) {
+            fetch("../api/Admin/DeleteTag?TagId=" + dom.id,
+                {
+                    method: "POST",
+                })
+
+            dom.parentElement.remove();
+        }
+    }
+
+    function CreateTag(e) {
+        const tagName = e.target.previousElementSibling.value;
+        fetch("../api/Admin/CreateTag?TagName=" + tagName,
+            {
+                method: "POST",
+            }
+
+        )
+            .then(Response => {
+                if (Response.ok) {
+                    const container = e.target.parentElement;
+                    const parent = container.parentElement;
+
+                    const div = document.createElement("div");
+                    div.innerHTML =
+                        `<div>
+                        <label>`+ tagName + `</label>
+                        <input type="checkbox" id= ` + Response.headers.get('Id') + `  onclick="ToggleTag(this)">
+                        <input type="button" value="-" id="-1" onclick="DeleteTag(this)">
+                    </div>`
+
+                    parent.append(div);
+                    container.remove();
+                }
+            })
+
+    }
+
+    function CreateTagDom(dom) {
+
+        //console.log(dom)
+
+        const input = document.createElement("input");
+
+        const div = document.createElement("div");
+
+        const button = document.createElement("button");
+
+        button.textContent = "Tilføj Tag";
+        button.addEventListener("click", CreateTag);
+        div.append(input);
+        div.append(button);
+
+        dom.append(div);
+    }
+
+    if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {
+        nextPic();
+    }
+
+    input.addEventListener('input', saveImg);
+    document.querySelector(".delBut").addEventListener("click", delImage);
+</script>
 
 <p class="buttonBox" onclick="AddChoice()" style="top: 10px; left: 0vw; width: 110px; height: 56px; margin-top: initial; cursor: pointer;">Tilføj valgmulighed</p>
 
@@ -45,7 +314,7 @@
     function AddOption(ChoiceNumber){
     let ItemArray = [
         @foreach(var (id, name, imgPath) in Items){
-            <text>{Name:"@name",Id:"@id", ImgPath:"@imgPath"},</text>
+            <text>{Name:"@name",Id:"@id", ImgPath:"@Html.Raw(imgPath)"},</text>
         }
     ]
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
@@ -119,7 +388,7 @@
         const Title = document.createElement("h3");
 
         const Container = document.querySelector(".pb-3");
-        const ChoiceNumber = Container.children.length - 5;
+        const ChoiceNumber = Container.children.length - 6;
         ChoiceDiv.setAttribute("id",`Choice${ChoiceNumber}`);
         Title.appendChild(document.createTextNode(`Valgmulighed ${ChoiceNumber}:`));
 
@@ -218,26 +487,55 @@
             options.push(FindOptions(Choices[i].id));
             console.log(options);
         }
+
+        const formatedTagList = [];
+        tagList.forEach(tag => {
+            formatedTagList.push(
+                {
+                    Id: parseInt(tag.Id),
+                    Name: "",
+                }
+            )
+        })
         
         
         let PayLoad = {
             Name: name,
             Price: price,
             Description: description,
-            Options: options
+            Options: options,
+            Pictures: fileArray,
+            Tags: formatedTagList,
         };
         let PackModel = JSON.stringify(PayLoad);
+        //console.log(PackModel)
 
         if(@((Packs.PackID != null).ToString().ToLower())){
             fetch(`/api/admin/EditPackModel/@Packs.PackID`, {
                 method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: PackModel
-            });
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
         }else{
             fetch("/api/admin/CreatePackModel", {
                 method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: PackModel
-            });
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
         }
 
         
