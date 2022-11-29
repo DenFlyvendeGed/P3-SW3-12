@@ -148,5 +148,14 @@ namespace P3_Project.Controllers
         }
 
         #endregion
+
+        #region ConfirmSale
+
+        public ActionResult ConfirmSale()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }
