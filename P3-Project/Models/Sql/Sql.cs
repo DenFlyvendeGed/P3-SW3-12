@@ -332,6 +332,8 @@ public class SqlDB : DataBase
 		SqlDataReader sdr = cmd.ExecuteReader();
 
 		////Retrieve data from table and Display result
+		///
+		try { 
 		while (sdr.Read())
 		{
 			T classInstance = (T)Activator.CreateInstance(typeof(T));
@@ -362,9 +364,17 @@ public class SqlDB : DataBase
 			}
 			list.Add(classInstance);
 		}
-		//Close the connection
-		conn.Close();
-
+        }
+		catch
+		{
+			throw new Exception("Error in reading table");
+		}
+		finally
+		{
+            //Close the connection
+            conn.Close();
+        }
+        
 		return list;
 	}
 	public void AddRowToTable(string table, List<(string, string)> keyValueSet)
@@ -676,7 +686,7 @@ public class SqlDB : DataBase
 				case SQLType.Int              : cmd.CommandText += "INT"; break;
 				case SQLType.Large            : cmd.CommandText += "BIGINT"; break;
 				case SQLType.IntAutoIncrement : cmd.CommandText += "INT IDENTITY(1,1) PRIMARY KEY"; break;
-				case SQLType.Bool             : cmd.CommandText += "BIT"; break;
+				case SQLType.Bool             : cmd.CommandText += "char(1)"; break;
 				
 				case SQLType.Char             : cmd.CommandText += "char(1)"; break;
 				case SQLType.String8          : cmd.CommandText += "varchar(8)"; break;

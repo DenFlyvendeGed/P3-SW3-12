@@ -4,142 +4,102 @@
 
 
 <div class="displayItemBox">
-    
+
     @{
         ItemModel item = ViewBag.item;
 
-            <div class="displayItem box picScaling wrap">
+
+        <div class="displayItem">
+            <div class="box picScaling wrap">
                 @{
-                
 
-                ViewBag.pictures = "";
-                if (ViewBag.item != null)
-                {
 
-                    foreach (ImageModel img in ViewBag?.item?.Pictures)
+
+                    ViewBag.pictures = "";
+                    if (ViewBag.item != null)
                     {
-                        ViewBag.pictures += "'" + img.FilePath + "', ";
+
+                        foreach (ImageModel img in ViewBag?.item?.Pictures)
+                        {
+                            ViewBag.pictures += "'" + img.FilePath + "', ";
+                        }
                     }
+
+                    @*Billed placehodler*@
+                    <img class="midImg" src="" />
+
                 }
-                        //<div id="img" class="picSize" style="display:block;">
-                            @*Billed placehodler*@
-                            <img  class="midImg" src="" />
 
-                        //</div>
+            </div>
+            @*Buttons*@
+            <div class="imageButtons" style="margin-top: 5%;">
+                @*billed vælger*@
+                <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+                <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+            </div>
+        </div>
 
-                        @*Buttons*@
-                        <div class="imageButtons center">
-                            @*billed vælger*@
-                            <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
-                            <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
-                        </div>
-                //Image img = item.GetFirstImg();
-                //if (img != null)
-                //{
 
-                //    <img class="midImg" style="padding:2%;" src='@img.FilePath' />
-                //}
-                
-                }
-                <script>
-                    let currentPic = 0;
-                    let pictures = @(ViewBag.pictures != "" ? Html.Raw("[" + "" + ViewBag.pictures + "" + "]") : Html.Raw("[]"));
-                    //Scroll last picture
-                    function lastPic() {
-                        if (currentPic == 0) {
-                            currentPic = pictures.length - 1;
-                        } else {
-                            currentPic--;
-                        }
-                        showImg(currentPic);
-                    }
-
-                    //Scroll next picture
-                    function nextPic() {
-                        if (currentPic == pictures.length - 1) {
-                            currentPic = 0;
-                        } else {
-                            currentPic++;
-                        }
-                        showImg(currentPic);
-                    }
-
-                    //Display picture in box
-                    function showImg(pic) {
-                        //console.log(currentPic);
-                        if (pictures[pic] != undefined){
-                            const imgDom = document.querySelector('.displayItem img');
-                            imgDom.setAttribute('src', pictures[pic]);
-                        }
-                    }
-                    
-                    if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {
-                        nextPic();
-                    }
-                </script>
+        <div class="displayItem">
+            @*<------------------ModelName and price--------------------->*@
+            <div class="grid-containerTop">
+                <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
+                <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
             </div>
 
 
-            <div class="displayItem">
-                @*<------------------ModelName and price--------------------->*@
-                <div class="grid-containerTop">
-                    <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
-                    <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
-                </div>
+            @*<------------------Size--------------------->*@
+            <div class="box modelAttributes">
+                <div>Størrelse:</div>
+                <div class="grid-containerShowcase" id="sizeChoices">
 
-
-                @*<------------------Size--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Størrelse:</div>
-                    <div class="grid-containerShowcase" id="sizeChoices">
-
-                        @{
+                    @{
                         int sizeIndex = 1;
                         foreach (string size in ViewBag.item.GetUniqueSize())
                         {
-                                    <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
+                            <div class="grid-itemShowcase itemSize Clickable" value="@(size)" id="size@(sizeIndex)">@size</div>
                             sizeIndex += 1;
                         }
-                        }
-                    </div>
+                    }
                 </div>
+            </div>
 
-                @*<------------------Color--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Farve:</div>
-                    <div class="grid-containerShowcase" id="colorChoices">
-                        @{
+            @*<------------------Color--------------------->*@
+            <div class="box modelAttributes">
+                <div>Farve:</div>
+                <div class="grid-containerShowcase" id="colorChoices">
+                    @{
                         int colorIndex = 1;
                         foreach ((string, string) color in ViewBag.item.GetUniqueColor())
                         {
-                                    <div class="grid-itemShowcase itemColor colorStyle" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
+                            <div class="grid-itemShowcase itemColor colorStyle Clickable" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
                             colorIndex += 1;
                         }
-                        }
-                    </div>
-                </div>
-
-                @*<------------------Description--------------------->
-        *@
-                <div class="box modelAttributes">
-                    <div>Beskrivesle:</div>
-                    <div>@(item.Description)</div>
-                </div>
-
-
-                @*<------------------Cart--------------------->*@
-                <div class="box modelAttributes cartBtnLayout">
-                    <div>Antal:</div>
-
-                    <div class="counterGrid">
-                        <input class="counterItem" type="button" id="plus" value="+">
-                        <div class="counterItem" id="counter">1</div>
-                        <input class="counterItem" type="button" id="minus" value="-">
-                    </div>
-
-                    <input type="submit" value="Tilføj til kurv" id="addToCart">
+                    }
                 </div>
             </div>
+
+            @*<------------------Description--------------------->
+        *@
+            <div class="box modelAttributes">
+                <div>Beskrivesle:</div>
+                <div>@(item.Description)</div>
+            </div>
+
+
+            @*<------------------Cart--------------------->*@
+            <div class="box modelAttributes cartBtnLayout">
+                <div>Antal:</div>
+
+                <div class="counterGrid">
+                    <input class="counterItem" type="button" id="plus" value="+">
+                    <div class="counterItem" id="counter">1</div>
+                    <input class="counterItem" type="button" id="minus" value="-">
+                </div>
+
+                <input type="submit" value="Tilføj til kurv" id="addToCart">
+            </div>
+        </div>
     }
 
 
@@ -245,4 +205,42 @@
     document.getElementById("sizeChoices").addEventListener("click", toggleSize);
     document.getElementById("addToCart").addEventListener("click", addToCart);
 
+</script>
+
+
+<script>
+    let currentPic = 0;
+    let pictures = @(ViewBag.pictures != "" ? Html.Raw("[" + "" + ViewBag.pictures + "" + "]") : Html.Raw("[]"));
+    //Scroll last picture
+    function lastPic() {
+        if (currentPic == 0) {
+            currentPic = pictures.length - 1;
+        } else {
+            currentPic--;
+        }
+        showImg(currentPic);
+    }
+
+    //Scroll next picture
+    function nextPic() {
+        if (currentPic == pictures.length - 1) {
+            currentPic = 0;
+        } else {
+            currentPic++;
+        }
+        showImg(currentPic);
+    }
+
+    //Display picture in box
+    function showImg(pic) {
+        //console.log(currentPic);
+        if (pictures[pic] != undefined) {
+            const imgDom = document.querySelector('.displayItem img');
+            imgDom.setAttribute('src', pictures[pic]);
+        }
+    }
+
+    if (@(ViewBag.pictures != "" ? Html.Raw("true") : Html.Raw("false"))) {
+        nextPic();
+    }
 </script>

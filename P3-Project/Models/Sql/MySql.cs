@@ -121,7 +121,8 @@ public class MySqlDB : DataBase {
 		}
 		catch(MySqlException ex)
 		{
-			throw new Exception(ex.Message);
+            conn.Close();
+            throw new Exception(ex.Message);
 		}
 
 		//Close the connection
