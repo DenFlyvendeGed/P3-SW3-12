@@ -29,20 +29,31 @@
 </style>
 
 
-
-
-
 <h1>Indkøbskurv</h1>
 
 
 <div class="box">
+
     <h2>Produkter:</h2>
+   
+    <button type="button" id="itemInsert">Itemdata</button>
+    
+    <fieldset>
+        <legend> Valgte Varer: </legend>
+        
+        <div class="itemOutput"> 
+            
+
+        </div>
+    
+    
+    </fieldset>
+
+
 
 
 
 </div>
-
-
 
 
 
@@ -54,9 +65,87 @@
     <button class="button">Reservér</button>
 
     <div class="PromoCode">
-        <label for="PromoKodeInput">Promokode:</label>
-        <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
+        <label for="PromoKodeInput">Promokode:
+        </label>
+        <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022" >
     </div>
     
+     <div class="total">Total:</div>
+
+     
+
+
+
+
 
 </div> 
+
+
+
+
+  <script>
+
+      /*
+      item
+      Promocode
+      Cookies.
+      Packs.
+      */
+
+     //modelPrice prisen på items.
+
+    itemInsert.onclick = function(){
+        var d="";
+        var json = JSON.parse(d);
+        
+        JSON.parse(localStorage.getItem('itemsSavedForCart'));
+        
+    }   
+        
+   
+
+    
+    const inputkey = document.getElementById("itemsSavedForCart: Id");
+
+
+
+
+   
+
+      /*  
+        
+     //Promocode input.
+    const selectObject = document.querySelector('#PromoKodeInput');
+
+    selectElement.addEventListener('change', sfbwgrb => 
+    {
+        fetch("api/ValidatePromoCode/{code}")
+        const result = document.querySelector('.result');
+        result.textContent = `Promokode aktiveret.`;
+    });
+
+      */
+
+
+    //ValidatePromoCode/{code}
+
+
+
+
+
+
+
+  </script>
+
+
+
+
+
+
+  <script>
+
+      src="Cart.cshtml"
+
+
+
+  </script>

@@ -8,9 +8,9 @@
     @{
         ItemModel item = ViewBag.item;
 
-            <div class="displayItem">
-                <div class="box picScaling wrap">
-                    @{
+                <div class="displayItem">
+                    <div class="box picScaling wrap">
+                @{
 
 
                     ViewBag.pictures = "";
@@ -22,80 +22,80 @@
                             ViewBag.pictures += "'" + img.FilePath + "', ";
                         }
                     }
-                            @*Billed placehodler*@
-                            <img class="midImg" src="" />
+                    @*Billed placehodler*@
+                                    <img class="midImg" src="" />
 
-                    }
+                }
 
-                </div>
-                @*Buttons*@
-                <div class="imageButtons" style="margin-top: 5%;">
-                    @*billed vælger*@
-                    <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
-                    <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
-                </div>
-            </div>
-
-            <div class="displayItem">
-                @*<------------------ModelName and price--------------------->*@
-                <div class="grid-containerTop">
-                    <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
-                    <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
+                    </div>
+            @*Buttons*@
+                    <div class="imageButtons" style="margin-top: 5%;">
+                @*billed vælger*@
+                        <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+                        <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+                    </div>
                 </div>
 
+                <div class="displayItem">
+            @*<------------------ModelName and price--------------------->*@
+                    <div class="grid-containerTop">
+                        <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
+                        <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
+                    </div>
 
-                @*<------------------Size--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Størrelse:</div>
-                    <div class="grid-containerShowcase" id="sizeChoices">
 
-                        @{
+            @*<------------------Size--------------------->*@
+                    <div class="box modelAttributes">
+                        <div>Størrelse:</div>
+                        <div class="grid-containerShowcase" id="sizeChoices">
+
+                    @{
                         int sizeIndex = 1;
                         foreach (string size in ViewBag.item.GetUniqueSize())
                         {
-                                    <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
+                                                <div class="grid-itemShowcase itemSize" value="@(size)" id="size@(sizeIndex)">@size</div>
                             sizeIndex += 1;
                         }
-                        }
+                    }
+                        </div>
                     </div>
-                </div>
 
-                @*<------------------Color--------------------->*@
-                <div class="box modelAttributes">
-                    <div>Farve:</div>
-                    <div class="grid-containerShowcase" id="colorChoices">
-                        @{
+            @*<------------------Color--------------------->*@
+                    <div class="box modelAttributes">
+                        <div>Farve:</div>
+                        <div class="grid-containerShowcase" id="colorChoices">
+                    @{
                         int colorIndex = 1;
                         foreach ((string, string) color in ViewBag.item.GetUniqueColor())
                         {
-                                    <div class="grid-itemShowcase itemColor colorStyle" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
+                                                <div class="grid-itemShowcase itemColor colorStyle" name="@(color.Item1)" value="@(color.Item2)" style="background-color: @(color.Item2);" id="color@(colorIndex)">@(color.Item1)</div>
                             colorIndex += 1;
                         }
-                        }
+                    }
+                        </div>
                     </div>
-                </div>
 
-                @*<------------------Description--------------------->
+            @*<------------------Description--------------------->
         *@
-                <div class="box modelAttributes">
-                    <div>Beskrivesle:</div>
-                    <div>@(item.Description)</div>
-                </div>
-
-
-                @*<------------------Cart--------------------->*@
-                <div class="box modelAttributes cartBtnLayout">
-                    <div>Antal:</div>
-
-                    <div class="counterGrid">
-                        <input class="counterItem" type="button" id="plus" value="+">
-                        <div class="counterItem" id="counter">1</div>
-                        <input class="counterItem" type="button" id="minus" value="-">
+                    <div class="box modelAttributes">
+                        <div>Beskrivesle:</div>
+                        <div>@(item.Description)</div>
                     </div>
 
-                    <input type="submit" value="Tilføj til kurv" id="addToCart">
+
+            @*<------------------Cart--------------------->*@
+                    <div class="box modelAttributes cartBtnLayout">
+                        <div>Antal:</div>
+
+                        <div class="counterGrid">
+                            <input class="counterItem" type="button" id="plus" value="+">
+                            <div class="counterItem" id="counter">1</div>
+                            <input class="counterItem" type="button" id="minus" value="-">
+                        </div>
+
+                        <input type="submit" value="Tilføj til kurv" id="addToCart">
+                    </div>
                 </div>
-            </div>
     }
 
 
@@ -187,12 +187,30 @@
             }
 
             console.log(itemData);
+
+               // Get the existing data
+            var existing = localStorage.getItem('itemsSavedForCart');
+
+            console.log(existing)
+            // If no existing data, create an array
+            // Otherwise, convert the localStorage string to an array
+            existing = existing ? existing.split(',') : [];
+
+            // Add new data to localStorage Array
+            existing.push(JSON.stringify(itemData));
+
+            // Save back to localStorage
+            localStorage.setItem('itemsSavedForCart', existing.toString());
+
+
         }
         else {
             console.log("intet valgt");
         }
-    }
 
+
+
+    }
 
 
     document.getElementById('minus').onclick = changeCount("minus");
