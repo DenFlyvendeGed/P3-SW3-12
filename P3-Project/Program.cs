@@ -1,4 +1,4 @@
-var builder = WebApplication.CreateBuilder(args);
+using P3_Project.Models.Orders;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -26,4 +26,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-

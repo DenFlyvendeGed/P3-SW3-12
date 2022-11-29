@@ -10,7 +10,7 @@ public class OrderShopUnit {
 }
 
 public class Order{
-	public int? Id {get; private set;} = null;
+	public int? Id {get; set;} = null;
 	public int Price {get; set;} = 0;
 	public int SalesTax {get; set;} = 0;
 	public DateTime ExpirationDate {get; set;} = DateTime.Now.AddDays(3);
@@ -56,7 +56,32 @@ public class OrderDB{
 	}
 
 	public Order Fetch(int id){
-		return new();
+		int name = 0, email = 0;
+		var order = db.ReadFromTable(table, $"Id='{id}'", (r) => {
+			name = (int)r[6];
+			email = (int)r[7];
+			return new Order() {
+				Id = (int)r[0],
+				Price = (int)r[1],
+				SalesTax = (int)r[2],
+				ExpirationDate = (DateTime)r[3],
+				IsActive = (string)r[4] == "T" ? true : false,
+				IsPaid = (string)r[5] == "T" ? true : false,
+			};
+		}).Last();
+
+		order.Name = Globals.CoustomerNameTable.Fetch(name);
+		order.Email = Globals.EmailTable.Fetch(email);
+
+		var unitTable = $"{table}_{id}";
+
+		foreach(var (unit_id, isPack, amount, discount) in 
+				db.ReadFromTable(unitTable, r => ((int)r[0], (string)r[1] == "T", (int)r[2], (int)r[3]))){
+			order.ShopUnits.Add(new(isPack ? Globals.PackSnapshotTable.Fetch(unit_id) : Globals.SnapshotTable.Fetch(unit_id)){
+				Discount = discount
+			});
+		}
+		return order;
 	}
 
 	public void Push(Order order) {
