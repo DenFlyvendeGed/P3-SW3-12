@@ -957,3 +957,11 @@ div.shopTagBox{
 .Clickable:hover{
     cursor:pointer;
 }
+
+.confHeadTable {
+    background-color: var(--ash-black);
+    color: var(--ash-yellow);
+    font-weight: bold;
+    font-size: 14px;
+    
+}

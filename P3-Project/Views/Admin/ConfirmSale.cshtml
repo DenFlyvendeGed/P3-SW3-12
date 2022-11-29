@@ -1,10 +1,94 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Bekræft Salg";
 }
+<body onload="checkIfAnyItems()">
+    <h4>Bekræft Salg</h4>
 
-<h4>Bekræft Salg</h4>
+    <h5>Bekræft køb af genstande</h5>
+    <div>
+        <table>
+            <tbody class="confHeadTable">
+            
+                <style>
+                    td, tr{
+                        border-width: 2px;
+                        border-color: black;
+                    }
+                </style>
+            
+                <tr>
+                    <td style="width: 10vw;">
+                        ID
+                    </td>
+                    <td style="width: 10vw;">
+                        Navn
+                    </td>
+                    <td style="width: 10vw;">
+                        Antal
+                    </td>
+                    <td style="width: 10vw;">
+                        Pris pr. stk. (DKK)
+                    </td>
+                    <td style="width: 10vw;">
+                        Samlet pris (DKK)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-top: 10px">
+            <tbody>
+                <tr>
+                    <td style="width: 10vw;">
+                    
+                    </td>
+                    <td style="width: 10vw;">
+                    
+                    </td>
+                    <td style="width: 10vw;">
+                    
+                    </td>
+                    <td style="width: 10vw;">
+                    
+                    </td>
+                    <td style="width: 10vw;">
+                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-top: 10px">
+            <tbody>
+                <tr>
+                    <td style="width: 10vw;">
+                    </td>
+                    <td style="width: 10vw;">
+                    </td>
+                    <td style="width: 10vw;">
+                    </td>
+                    <td style="width: 10vw;">
+                    </td>
+                    <td style="width: 10vw;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="center" style="display: inline; float: right">
+        <button class="ASHButton">Afvis</button>
+        <button class="ASHButton">Bekræft</button>
+    </div>
+</body>
+
+
+<script>
+    function checkIfAnyItems(){
+        console.log("halløj");
+    }
+</script>
