@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Utilities;
 using P3_Project.Models;
 using P3_Project.Models.DB;
 using System.Diagnostics;
@@ -35,7 +37,7 @@ namespace P3_Project.Controllers
             
 
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel(), "Type", "Tøj");
-
+            
             ViewBag.model = models;
 
             return View("Index",type);
@@ -54,8 +56,41 @@ namespace P3_Project.Controllers
 
         public IActionResult PackModels()
         {
-            return View();
+            var db = new StorageDB();
+            List<(int, string, int)> Packs;
+            try
+            {
+                Packs = db.DB.ReadFromTable("PackModel", new string[] { "Id", "Name", "Price" }, (r) => ((int)r[0], (string)r[1], (int)r[2]));
+            }
+            catch {
+                Packs = new List<(int, string, int)> { };
+            }
+            List<(int, string, int, string, string)> Packs2 = new();
+            Packs.ForEach(item =>
+            {
+                List<Tag> tags = Tag.GetAllTagsOfPackModel(item.Item1.ToString());
+                string nameString = "";
+                tags.ForEach(tag =>
+                {
+                    nameString += $" {tag.Name}";
+                });
+                Packs2.Add(
+                    (item.Item1,
+                    item.Item2,
+                    item.Item3,
+                    ImageModel.GetFirstImg(item.Item1, "PackModel").FilePath,
+                    nameString
+                    ));
+            });
+            return View(Packs2);
         }
+
+        public IActionResult PackPicker([FromQuery] int? PackID)
+        {
+            var packmodel = PackID != null ? new PackModel((int)PackID, new StorageDB()) : new PackModel();
+            return View(packmodel);
+        }
+
         
         //Webshop page - Accessoires
         public ActionResult Accessoires()

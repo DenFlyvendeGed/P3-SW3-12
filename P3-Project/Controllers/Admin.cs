@@ -75,15 +75,6 @@ namespace P3_Project.Controllers
         #endregion
 
         #region PackModel
-        //
-        //public ActionResult PackViewModel()
-        //{
-        //    var x = 5;
-        //    //PackModel test = new PackModel();
-        //    //test.Name = "Test";
-
-        //    return View(x);
-        //}
 
 
         public ActionResult PackViewModel()
@@ -110,7 +101,10 @@ namespace P3_Project.Controllers
             {
                 Items2.Add((item.Item1, item.Item2, ImageModel.GetFirstImg(item.Item1).FilePath));
             });
-
+            if(packmodel.PackID != null) { 
+                packmodel.LoadTags();
+                packmodel.LoadImages();
+            }
             var model = (packmodel, Items2);
             return View(model);
         }
@@ -139,9 +133,9 @@ namespace P3_Project.Controllers
         public ActionResult PromoCode()
         {
 
-			List<(int, string, DateTime)> psudoCodes;
+			List<(int, string, DateTime, int, PromoCodeDiscountType, PromoCodeItemType)> psudoCodes;
 			try {
-				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate"}, (r) => ((int)r[0], (string)r[1], (DateTime)r[2]));
+				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate", "Value", "DiscountType", "ItemType" }, (r) => ((int)r[0], (string)r[1], (DateTime)r[2], (int)r[3], (PromoCodeDiscountType)(short)r[4], (PromoCodeItemType)(short)r[5]));
 			} catch {
 				psudoCodes = new();
 			}

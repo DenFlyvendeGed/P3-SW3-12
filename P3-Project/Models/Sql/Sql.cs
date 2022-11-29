@@ -332,6 +332,8 @@ public class SqlDB : DataBase
 		SqlDataReader sdr = cmd.ExecuteReader();
 
 		////Retrieve data from table and Display result
+		///
+		try { 
 		while (sdr.Read())
 		{
 			T classInstance = (T)Activator.CreateInstance(typeof(T));
@@ -362,9 +364,17 @@ public class SqlDB : DataBase
 			}
 			list.Add(classInstance);
 		}
-		//Close the connection
-		conn.Close();
-
+        }
+		catch
+		{
+			throw new Exception("Error in reading table");
+		}
+		finally
+		{
+            //Close the connection
+            conn.Close();
+        }
+        
 		return list;
 	}
 	public void AddRowToTable(string table, List<(string, string)> keyValueSet)

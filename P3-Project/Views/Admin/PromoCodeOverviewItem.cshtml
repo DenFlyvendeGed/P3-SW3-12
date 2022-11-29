@@ -1,34 +1,75 @@
-@model (int, string, DateTime)
-<style>
-	.promo-code-psudo {
-		display : grid;
-		grid-template-columns: 1fr 1fr 1fr;	
-		margin : 1em;
-		align-items : center;
-	}
-
-	.promo-code-overview-button-container {
-		display : flex;
-		flex-direction : column;
-		justify-content : center;
-	}
-
-	.promo-code-item p {
-		display : inline;
-	}
-</style>
+@model (int, string, DateTime, int, PromoCodeDiscountType, PromoCodeItemType)
 
 <div id="psudo-promo-code-@Model.Item1" class="box promo-code-psudo">
+	@*PromoCode Name*@
 	<div class="promo-code-item">
 		<p>@Model.Item2</p>
 	</div>
-	<div class="promo-code-item">
-		<p><b>Expiration Date:</b> @Model.Item3.ToString("dd/MM/yyyy")</p>
-	</div>
-	<div class="promo-code-item promo-code-overview-button-container">
 
+	@*PromoCode Type*@
+	<div class="promo-code-item">
+		@{
+			if(Model.Item6 == PromoCodeItemType.All){
+				<p>Alt </p>
+			}
+			else if (Model.Item6 == PromoCodeItemType.AllItems)
+			{
+				<p>Alle genstande </p>
+			}
+			else if (Model.Item6 == PromoCodeItemType.AllPacks)
+			{
+				<p>Alle pakker </p>
+			}
+			else if (Model.Item6 == PromoCodeItemType.Some)
+			{
+				<p>Vælg selv </p>
+			}
+		}
+
+	</div>
+
+	@*PromoCode Discount and DiscountType*@
+	<div class="promo-code-item">
+		<p>@Model.Item4</p>
+		@{
+			if (Model.Item5 == PromoCodeDiscountType.Fixed){
+				<p>Kr.-</p>
+			}
+			else if (Model.Item5 == PromoCodeDiscountType.Percentage){
+				<p>%</p>
+			}
+		}
+	</div>
+
+	@*PromoCode ExpirationDate*@
+	<div class="promo-code-item">
+		<p><b>Udløbsdato:</b> @Model.Item3.ToString("dd/MM/yyyy")</p>
+	</div>
+
+	@*PromoCode Edit and Delete Btn*@
+	<div class="promo-code-item promo-code-overview-button-container">
 		<input type="button" value="Redigér Rabatkode" onclick="promoCodeEdit(@(Model.Item1))" />
 		<input type="button" value="Slet Rabatkode" onclick="promoCodeDelete(@(Model.Item1))" />
 
 	</div>
 </div>
+
+
+<style>
+	.promo-code-psudo {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		margin: 1em;
+		align-items: center;
+	}
+
+	.promo-code-overview-button-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.promo-code-item p {
+		display: inline;
+	}
+</style>

@@ -58,7 +58,10 @@
                     {
                         <div>
                             <label>@tag.Name</label>
-                            <input type="checkbox" id="@tag.Id" onclick="ToggleTag(this)" @(
+
+
+                            <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)" @(
+
                            modelTags != null ?
                            modelTags.Any(modeltag => modeltag.Name == tag.Name) ? Html.Raw("Checked") : ""
                            :
@@ -89,15 +92,21 @@
                 Pris: <input type="number" id="ItemModelPrice" name="ItemModelPrice" placeholder="Pris" style="width:120px;" @(ViewBag.model?.ModelPrice != null ? "value = " + ViewBag.model.ModelPrice : "") required />
                 Type:
                 @{
-                    <select name="itemModelType" id="itemModelType">
+
+                    <select name="itemModelType" id="itemModelType" class="Clickable">
                         @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
-                        @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj' >Tøj</option>") : Html.Raw("<option value='Tøj' >Tøj</option>"))
-                        @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' >Tilbehør</option>") : Html.Raw("<option value='Tilbehør' >Tilbehør</option>"))
+                        @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj'class='Clickable' >Tøj</option>") : Html.Raw("<option value='Tøj' class='Clickable'>Tøj</option>"))
+                        @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' class='Clickable'>Tilbehør</option>") : Html.Raw("<option value='Tilbehør' class='Clickable'>Tilbehør</option>"))
+
 
                         @*<option value="Tilbehør">Tilbehør</option>
                     *@
                     </select>
+
+                    string toolTip = "Type: Om varen skal vises i 'Tøj' sektionen eller 'Tilbehør' sektionen i webshoppen";
+
                 }
+                 <span class="hovertext" data-hover="@(toolTip)">?</span>
             </p>
 
 
@@ -144,7 +153,9 @@
 
                             <td id="@createIdColor" class="colStyle">
                                 <input value="@color.Item1" id="@createIdColor" style="width: 103px;">
-                                <input type="color" class="colorWheel" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+
+                                <input type="color" class="colorWheel Clickable" id="chosenColor" style="margin-left: -5px" name="chosenColor" value="@color.Item2">
+
                                 <input type="button" class="removeAttributeBTN" style="margin-left: -4px" value="-">
                             </td>
 
@@ -239,7 +250,9 @@
         <div style="margin-left: 30px; margin-top: 10px;">
             <input type="submit" id="AddRow" class="button" value="Tilføj størrelse" />
             <input type="submit" id="AddCol" class="button" value="Tilføj farve" />
-            <p>Notifikation ved lager beholdning: <input type="number" id="StockNotification" name="StockNotification" value="0" @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "") required /></p>
+
+            <p>Notifikation ved lager beholdning: <input type="number" id="StockNotification" name="StockNotification"  @(ViewBag.model?.StockAlarm != null ? "value = " + ViewBag.model.StockAlarm : "value='0'") required /></p>
+
 
         </div>
 
@@ -647,7 +660,7 @@
         const data = JSON.stringify(itemModel);
         console.log(grid.itemData);
 
-        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm)) || itemModel.StockAlarm == 0) {
+        if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm))) {
             alert("Pris eller notifikation ved lager skal være tal");
         }
         else if (itemModel.ModelName == "") {
@@ -711,6 +724,8 @@
         //console.log(currentPic);
         if (pictures[pic] != undefined)
             imgTag.setAttribute('src', pictures[pic]);
+        else
+            imgTag.src = "";
     }
 
     //Save picture in list
@@ -791,7 +806,9 @@
 
     function AddTag(Id) {
         const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
+
                 if (modelId != 0) {
+
             fetch("../api/Admin/AddTag?ItemModelId=" + modelId + "&TagId=" + Id,
                 {
                     method: "POST",
@@ -805,7 +822,9 @@
 
     function RemoveTag(Id) {
         const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
-                if (modelId != 0) {
+
+                    if (modelId != 0) {
+
             fetch("../api/Admin/RemoveTag?ItemModelId=" + modelId + "&TagId=" + Id,
                 {
                     method: "POST",
@@ -844,10 +863,12 @@
                     const div = document.createElement("div");
                     div.innerHTML =
                         `<div>
+
                             <label>`+ tagName + `</label>
                             <input type="checkbox" id= ` + Response.headers.get('Id') + `  onclick="ToggleTag(this)">
                             <input type="button" value="-" id="-1" onclick="DeleteTag(this)">
                         </div>`
+
 
                     parent.append(div);
                     container.remove();
