@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 public class MySqlDB : DataBase {
 	MySqlConnection conn = new();
 	MySqlCommand cmd = new();
+	static void log(string s) => Console.WriteLine($"Opening {s}");
 	public MySqlDB(string connectionString) {
 		conn.ConnectionString = connectionString;
 		cmd.CommandType = CommandType.Text;
@@ -18,6 +19,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = "SELECT "+ field + " FROM " + table + " Where " + key + " = '" + value + "'";
 
 		// Open Connection
+		log("GetField");
 		conn.Open();
 
 		// Exectute Query
@@ -35,6 +37,7 @@ public class MySqlDB : DataBase {
 		var rtn = new List<T>();
 		cmd.CommandText = "SELECT * FROM " + table + (where == null ? "" : " WHERE " + where);
 
+		log("GetItems");
 		conn.Open();
 		try {
 			var sdr = cmd.ExecuteReader();
@@ -56,6 +59,7 @@ public class MySqlDB : DataBase {
 		var list = new List<string>();
 		cmd.CommandText = "SELECT * FROM " + tableName;
 
+		log($"GetAllElements {tableName}");
 		conn.Open();
 		var sdr = cmd.ExecuteReader();
 		while(sdr.Read())
@@ -76,6 +80,7 @@ public class MySqlDB : DataBase {
 		var fields = objectClass.GetType().GetFields();
 		var list = new List<T>();
 
+		log($"GetAllElements {tableName}");
 		conn.Open();
 		var sdr = cmd.ExecuteReader();
 		while(sdr.Read()){
@@ -104,6 +109,7 @@ public class MySqlDB : DataBase {
 	public bool CheckRow(string table, string key, string value){
 		cmd.CommandText = "SELECT "+ key +" FROM " + table + " Where " + key + " = '" + value + "'";
 		// open database connection.
+		log($"CheckRow {table}");
 		conn.Open();
 
 		bool Result = true;
@@ -128,6 +134,7 @@ public class MySqlDB : DataBase {
 	public bool CheckTable(string table) {
 		cmd.CommandText = "SELECT * FROM " + table;
 		// open database connection.
+		log($"CheckTable {table}");
 		conn.Open();
 		bool Result = true;
 		try {
@@ -144,6 +151,7 @@ public class MySqlDB : DataBase {
 	public void UpdateField(string table, string selectorKey, string selectorValue, string field, string fieldValue){
 		if (CheckRow(table, selectorKey, selectorValue)) {
 			//open database connection.
+			log($"UpdateField {table}");
 			conn.Open();
 
 			cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= " + selectorValue;
@@ -161,6 +169,7 @@ public class MySqlDB : DataBase {
 	}
 	public void AddRowToTable<T>(string table, T classObject) where T : notnull {
 		cmd.CommandText = Helper.AddRowToTableQuryCreator(this, table, classObject);
+		log($"AddRowToTable {table}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -170,6 +179,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = cmd.CommandText.Replace("Id int,", "Id int NOT NULL AUTO_INCREMENT,  PRIMARY KEY(Id),");
 
 		Console.WriteLine(cmd.CommandText);
+		log($"CreateTable {name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -178,12 +188,14 @@ public class MySqlDB : DataBase {
 		cmd.CommandText = CheckTable(table)
 			? "DELETE FROM " + table + " WHERE " + key + " = '" + value + "'"
 			: throw new Exception("Table doesn't exist");
+		log($"RemoveRow {table}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
 	}
 	public void DeleteTable(string Name){
 		cmd.CommandText = "DROP TABLE " + Name;
+		log($"DeleteTable {Name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -192,6 +204,7 @@ public class MySqlDB : DataBase {
 	List<List<object>> RunCommand(string command){
 		cmd.CommandText = command;
 		var rtn = new List<List<object>>();
+		log($"RunCommand {command}");
 		conn.Open();
 		var sdr = cmd.ExecuteReader();
 
@@ -214,6 +227,7 @@ public class MySqlDB : DataBase {
 
 		var Properties = objectClass.GetType().GetProperties();
 		// open database connection.
+		log($"GetRow {tableName}");
 		conn.Open();
 
 		var fields = objectClass.GetType().GetFields();
@@ -269,6 +283,7 @@ public class MySqlDB : DataBase {
 
 
 		// open database connection.
+		log($"GetSortedList {tableName}");
 		conn.Open();
 
 		//Execute the query 
@@ -321,6 +336,7 @@ public class MySqlDB : DataBase {
 		}
 
 		cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.Length - 2) + ")";
+		log($"CreateTable {name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -332,6 +348,7 @@ public class MySqlDB : DataBase {
 		cmd.CommandText= $"INSERT INTO {name} VALUES ({string.Join(',', l)})";
 		
 		Console.WriteLine(cmd.CommandText);
+		log($"PushToTable {name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -345,6 +362,7 @@ public class MySqlDB : DataBase {
 		};
 		cmd.CommandText= $"INSERT INTO {name} ({string.Join(',', field)}) VALUES ({string.Join(',', vals)})";
 
+		log($"PushToTable {name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -358,6 +376,7 @@ public class MySqlDB : DataBase {
 
 		cmd.CommandText = $"UPDATE {name} SET {string.Join(',', fields)} WHERE {where}";
 
+		log($"UpdateTable {name}");
 		conn.Open();
 		cmd.ExecuteReader();
 		conn.Close();
@@ -376,6 +395,7 @@ public class MySqlDB : DataBase {
 
 	public List<T> ReadFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull{
 		cmd.CommandText = $"SELECT * FROM {name}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -388,6 +408,7 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
 		cmd.CommandText = $"SELECT * FROM {name} WHERE {where}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -399,6 +420,7 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -411,6 +433,7 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name} WHERE {where}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -426,6 +449,7 @@ public class MySqlDB : DataBase {
         cmd.CommandText = "SELECT SUM(Stock) FROM " + tableName;
 
         // open database connection.
+		log($"GetStockAmount {tableName}");
         conn.Open();
 
         //Execute the query 
@@ -435,18 +459,12 @@ public class MySqlDB : DataBase {
         int sum = 0;
         while (sdr.Read())
         {
-            sum = (int)sdr[""];
-
-
+            sum = (int)(decimal)sdr["SUM(Stock)"];
         }
         //Close the connection
         conn.Close();
 
         return sum;
     }
-
-
-
-
 }
 
