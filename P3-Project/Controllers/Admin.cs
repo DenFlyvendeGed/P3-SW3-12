@@ -148,5 +148,14 @@ namespace P3_Project.Controllers
         }
 
         #endregion
+
+        #region Settings
+
+        public ActionResult FakturaSettings()
+        {
+            return View();
+        }
+        #endregion
+
     }
 }

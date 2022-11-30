@@ -698,7 +698,6 @@ div.createTaxBox{
 
 .picScaling {
     margin-top: 40px;
-    height: 80%;
    
 }
 
@@ -742,13 +741,9 @@ div.shopTagBox{
 }
 
 .midImg {
-    margin: auto;
     position: relative;/*absolute; */
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
     width: 100%;
+    padding: 5px;
 }
 
 .mainIndexScale {
@@ -820,7 +815,7 @@ div.shopTagBox{
         width: 99.8%;
         height: 80%;
         background-color: #D9D9D9;
-        ;
+        
     }
 
     .displayItemBox {
@@ -887,19 +882,27 @@ div.shopTagBox{
         height: 5vh;
     }
 
+    div.shopTagBox {
+        width: 70vw;
+        height:9vh;
+        overflow: auto;
+    }
+
+    .midImg {
+    width: 100%;
+    padding: 5px;
+    }
+
 }
 
 /*Scalling for 1440px > window > 480px*/
 @media only screen and (min-device-width : 480px) and (max-device-width : 1250px) {
 
     .picScaling {
-        height: 80%;
         margin-top: 5vw;
-
     }
 
     .grid-container {
-        
         margin-left: 5%
     }
     
@@ -908,7 +911,6 @@ div.shopTagBox{
 .grid-container-PackPicker {
     display: grid;
     width: 100%;
-    row-gap: vh;
     column-gap: 6vw;
     grid-template-columns: repeat(2, 1fr);
 }
