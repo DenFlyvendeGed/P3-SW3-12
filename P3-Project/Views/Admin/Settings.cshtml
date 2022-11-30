@@ -3,8 +3,11 @@
 <style>
 	.setting {
 		width : 100%;
+		margin-top: 2%;
 	}
 </style>
+
+@*Email settings*@
 <div class="box setting">
 	<h2>E-mailliste til notifikationer</h2>
 	<input type="button" value="Tilføj ny E-mail" onclick="addEmail()"/>
@@ -12,6 +15,15 @@
 	<table id="setting-email-table">
 	</table>
 </div>
+
+@*Faktura settings*@
+<div class="box setting">
+	<h2>Faktura indstillinger</h2>
+	<input type="button" value="Rediger" onclick="location.href='FakturaSettings';" />
+</div>
+
+
+
 <script>
 	function onInit() {
 		// Email

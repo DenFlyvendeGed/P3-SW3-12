@@ -2,29 +2,40 @@
 
 <div id="psudo-promo-code-@Model.Item1" class="box promo-code-psudo">
 	@*PromoCode Name*@
-	<div class="promo-code-item">
-		<p>@Model.Item2</p>
+	<div class="promo-code-item" style="margin-left:20px;">
+		<p >@Model.Item2</p>
 	</div>
 
 	@*PromoCode Type*@
 	<div class="promo-code-item">
 		@{
+			//All item models and pack models
+			string toolTipIT = "";
 			if(Model.Item6 == PromoCodeItemType.All){
-				<p>Alt </p>
+																										<p>Alt </p>
+				toolTipIT = "Tilbud gælder alt."; 
 			}
+			//All items
 			else if (Model.Item6 == PromoCodeItemType.AllItems)
 			{
-				<p>Alle genstande </p>
+																										<p>Alle genstande </p>
+				toolTipIT = "Tilbud gælder alt tøj og tilbehør.";
 			}
+			//All packs
 			else if (Model.Item6 == PromoCodeItemType.AllPacks)
 			{
-				<p>Alle pakker </p>
+																										<p>Alle pakker </p>
+				toolTipIT = "Tilbud gælder alle pakker.";
 			}
+			//All
 			else if (Model.Item6 == PromoCodeItemType.Some)
 			{
-				<p>Vælg selv </p>
+																										<p>Vælg selv </p>
+				toolTipIT = "Tilbud gælder vaglte vare.";
 			}
+												<span class="hovertext" data-hover="@(toolTipIT)">?</span>
 		}
+		
 
 	</div>
 
@@ -33,17 +44,34 @@
 		<p>@Model.Item4</p>
 		@{
 			if (Model.Item5 == PromoCodeDiscountType.Fixed){
-				<p>Kr.-</p>
+																										<p>Kr.-</p>
 			}
 			else if (Model.Item5 == PromoCodeDiscountType.Percentage){
-				<p>%</p>
+																										<p>%</p>
 			}
+			string toolTipDT = "Rabat der fratrækkes i kassen.";
+																									<span class="hovertext" data-hover="@(toolTipDT)">?</span>
 		}
 	</div>
 
 	@*PromoCode ExpirationDate*@
 	<div class="promo-code-item">
-		<p><b>Udløbsdato:</b> @Model.Item3.ToString("dd/MM/yyyy")</p>
+		<b>Udløbsdato:</b>
+		<div>@Model.Item3.ToString("dd/MM/yyyy")</div>
+		<div class="smallGrid">
+			<div class="smallGridItem">Aktiv: </div>
+		@{
+			
+				DateTime setDate = Model.Item3;
+				if(setDate < DateTime.Now){
+					<div class="smallGridItem pcNotActive" id="PCActive"></div>
+				}
+				else{
+					<div class="smallGridItem pcActive" id="PCActive"></div>
+				}
+
+		}
+		</div>
 	</div>
 
 	@*PromoCode Edit and Delete Btn*@
@@ -56,6 +84,34 @@
 
 
 <style>
+	
+	.smallGrid{
+		display: grid;
+		grid-template-columns: 30% 20%;
+		align-items: center;
+	}	
+
+	.smallGridItem div {
+		display: inline;
+	}
+
+
+	.pcActive{
+		width: 10px;
+		height: 10px;
+		margin-top: 5px;
+		background-color: green;
+	}
+
+	.pcNotActive {
+		width: 10px;
+		height: 10px;
+		margin-top: 5px;
+		background-color: red;
+	}
+
+
+
 	.promo-code-psudo {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;

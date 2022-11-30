@@ -77,7 +77,7 @@ namespace P3_Project.Models
 					("Description", Description),
 					("NOptions", Options.Count)
 				});
-				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0])[0];
+				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0]).Last();
 			} else {
 				db.DB.UpdateTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),
