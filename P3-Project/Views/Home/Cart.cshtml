@@ -34,20 +34,25 @@
 
 <div class="box">
 
-    <h2>Produkter:</h2>
-   
-    <button type="button" id="itemInsert">Itemdata</button>
     
     <fieldset>
         <legend> Valgte Varer: </legend>
         
-        <div class="itemOutput"> 
-            
+        <div class="itemOutput">
+
+            <div id="LocalStorageInfo"></div>
+
+
+
+
 
         </div>
     
     
     </fieldset>
+   
+    <button type="button" id="itemInsert">Itemdata</button>
+   
 
 
 
@@ -83,29 +88,58 @@
 
 
 
-  <script>
+  <script type="text/javascript">
 
-      /*
-      item
-      Promocode
-      Cookies.
-      Packs.
-      */
 
-     //modelPrice prisen på items.
+      window.addEventListener('load', () => {
+
+         const itemString = "[" + localStorage.getItem('itemsSavedForCart') + "]";
+    
+       
+         let itemsSavedForCart = JSON.parse(itemString);
+
+
+         for (let item of itemsSavedForCart) {
+
+            console.log("| Id of Item: " + item.Id, "| Colour of Item: " + item.Color, "| Amount in cart: " + item.AmountToCart + " |")
+
+
+         }
+
+
+
+      })
+
+
+
+
+
+
+    /*
+    const buttonInsert = document.getElementById("buttonInsert")
+    var itemsSavedForCartId = JSON.parse(localStorage.getItem('itemsSavedForCart.Id'));
+     */
+    // Model
 
     itemInsert.onclick = function(){
-        var d="";
-        var json = JSON.parse(d);
+
+        const itemString = "[" + localStorage.getItem('itemsSavedForCart') + "]";
+    
+       
+        let itemsSavedForCart = JSON.parse(itemString);
+        //console.log("| Id of Item: " + itemsSavedForCart.Id,"| Colour of Item: " + itemsSavedForCart.Color,"| Amount in cart: " + itemsSavedForCart.AmountToCart + " |")
         
-        JSON.parse(localStorage.getItem('itemsSavedForCart'));
-        
+
     }   
-        
-   
+
+
+
+
+
+
 
     
-    const inputkey = document.getElementById("itemsSavedForCart: Id");
+    
 
 
 
@@ -140,12 +174,3 @@
 
 
 
-
-
-  <script>
-
-      src="Cart.cshtml"
-
-
-
-  </script>
