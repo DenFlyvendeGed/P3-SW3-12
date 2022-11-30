@@ -190,7 +190,7 @@ namespace P3_Project.Models
                 img.FilePath = img.GetFilePath();
                 return img;
             }
-            return null;
+            return new ImageModel();
         }
         public void AddItem(Item item)
         {
