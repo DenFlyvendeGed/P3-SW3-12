@@ -1,0 +1,91 @@
+﻿@using P3_Project.Models.Orders
+@model Order
+
+@{
+    Layout = "AdminLayout";
+
+    ViewData["Title"] = "Bekræft Salg";
+}
+
+<h4>Bekræft Salg</h4>
+
+<h5>Bekræft køb af genstande</h5>
+<div>
+    <table>
+        <tbody class="confHeadTable">
+            
+            <style>
+                td, tr{
+                    border-width: 2px;
+                    border-color: black;
+                }
+            </style>
+            
+            <tr>
+                <td style="width: 10vw;">
+                    ID
+                </td>
+                <td style="width: 10vw;">
+                    Navn
+                </td>
+                <td style="width: 10vw;">
+                    Antal
+                </td>
+                <td style="width: 10vw;">
+                    Pris pr. stk. (DKK)
+                </td>
+                <td style="width: 10vw;">
+                    Samlet pris (DKK)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div onload="checkIfAnyItems()">
+    <table style="margin-top: 10px">
+        <tbody>
+            <tr>
+                <td style="width: 10vw;">
+                    
+                </td>
+                <td style="width: 10vw;">
+                    
+                </td>
+                <td style="width: 10vw;">
+                    
+                </td>
+                <td style="width: 10vw;">
+                    
+                </td>
+                <td style="width: 10vw;">
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <table style="margin-top: 10px">
+        <tbody>
+            <tr>
+                <td style="width: 10vw;">
+                </td>
+                <td style="width: 10vw;">
+                </td>
+                <td style="width: 10vw;">
+                </td>
+                <td style="width: 10vw;">
+                </td>
+                <td style="width: 10vw;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="center" style="display: inline; float: right">
+    <button class="ASHButton">Afvis</button>
+    <button class="ASHButton">Bekræft</button>
+</div>
