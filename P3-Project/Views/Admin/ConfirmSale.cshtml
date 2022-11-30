@@ -1,10 +1,14 @@
 ﻿@using P3_Project.Models.Orders
+@using System.Text;
 @model Order
 
 @{
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Bekræft Salg";
+
+    List<string> shopUnit = new List<string>();
+
 }
 
 <h4>Bekræft Salg</h4>
@@ -13,14 +17,14 @@
 <div>
     <table>
         <tbody class="confHeadTable">
-            
+
             <style>
                 td, tr{
-                    border-width: 2px;
-                    border-color: black;
+                border-width: 2px;
+                border-color: black;
                 }
             </style>
-            
+
             <tr>
                 <td style="width: 10vw;">
                     ID
@@ -42,43 +46,57 @@
     </table>
 </div>
 
-<div onload="checkIfAnyItems()">
+<div>
     <table style="margin-top: 10px">
         <tbody>
+
+            @{
+                if()
+
+                foreach(int item in uniqueItemID)
+                {
+                    
+                }
+            }
             <tr>
                 <td style="width: 10vw;">
-                    
+
                 </td>
                 <td style="width: 10vw;">
-                    
+
                 </td>
                 <td style="width: 10vw;">
-                    
+
                 </td>
                 <td style="width: 10vw;">
-                    
+
                 </td>
                 <td style="width: 10vw;">
-                    
+
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<div>
+<div onload="" id="packs">
     <table style="margin-top: 10px">
         <tbody>
             <tr>
                 <td style="width: 10vw;">
+
                 </td>
                 <td style="width: 10vw;">
+
                 </td>
                 <td style="width: 10vw;">
+
                 </td>
                 <td style="width: 10vw;">
+
                 </td>
                 <td style="width: 10vw;">
+
                 </td>
             </tr>
         </tbody>
