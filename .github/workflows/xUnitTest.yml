@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Generate Test Reports
     env:
-      RESULTS_PATH: .\P3-Project_Test\TestResults
+      RESULTS_PATH: P3-Project_Test/TestResults
     steps:
       - name: Generate Report
         id: xunit-viewer
