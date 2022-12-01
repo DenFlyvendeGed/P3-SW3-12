@@ -16,10 +16,11 @@ using System.Web.Http;
 
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
-
+using P3_Project.Utilities;
 
 namespace P3_Project.Controllers
 {
+    [Authentication]
     public class Admin : Controller
     {
         // GET: Admin 

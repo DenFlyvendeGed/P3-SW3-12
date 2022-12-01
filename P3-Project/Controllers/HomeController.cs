@@ -15,6 +15,59 @@ namespace P3_Project.Controllers
 			
         }
 
+        public IActionResult Login()
+        {
+
+
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        //Post Action
+        [HttpPost]
+        public ActionResult Login(User u)
+        {
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+
+                if (ModelState.IsValid)
+                {
+                    StorageDB db = new StorageDB();
+                    List<bool> exist = db.DB.ReadFromTable("Users", "UserName='" + u.UserName + "' AND UserPassword='" + u.UserPassword +"'", arr => true);
+                    //var obj = db.Users.Where(a => a.UserName.Equals(u.UserName) && a.UserPassword.Equals(u.UserPassword)).FirstOrDefault();
+                    //if (obj != null)
+                    if(exist.Count() > 0)
+                    {
+                        HttpContext.Session.SetString("UserName", u.UserName.ToString());
+
+                        //set the key value in Cookie              
+                        CookieOptions option = new CookieOptions();
+                        option.Expires = DateTime.Now.AddMinutes(10);
+                        Response.Cookies.Append("UserName", u.UserName.ToString(), option);
+                        return RedirectToAction("Index");
+                    }
+                    
+                }
+            }
+            else
+            {
+
+
+
+                return RedirectToAction("Login");
+            }
+            return View();
+
+
+        }
+
+
         private void setup()
         {
             StorageDB db = new StorageDB();
@@ -29,8 +82,8 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             if (!db.DB.CheckTable("ItemModels"))
                 setup();
-            
 
+            string userName = Request.Cookies["UserName"];
             List<ItemModel> models = db.DB.GetAllElements("ItemModels", new ItemModel(), "Type", "Tøj");
 
             ViewBag.model = models;

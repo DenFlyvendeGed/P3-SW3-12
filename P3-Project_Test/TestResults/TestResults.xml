@@ -1,0 +1,25 @@
+<assemblies timestamp="12/01/2022 13:22:11">
+  <assembly name="C:\Users\User\source\repos\P3\P3-Project_Test\bin\Debug\net6.0\P3-Project_Test.dll" run-date="2022-12-01" run-time="13:22:11" total="3" passed="3" failed="0" skipped="0" time="3.171" errors="0">
+    <errors />
+    <collection total="3" passed="3" failed="0" skipped="0" name="Test collection for P3_Project_Test.UnitTest1" time="0.010">
+      <test name="P3_Project_Test.UnitTest1.Test2" type="P3_Project_Test.UnitTest1" method="Test2" time="0.0097457" result="Pass">
+        <output>This is output from my class2!
+
+</output>
+        <traits />
+      </test>
+      <test name="P3_Project_Test.UnitTest1.Test3" type="P3_Project_Test.UnitTest1" method="Test3" time="0.0002209" result="Pass">
+        <output>This is output from my class3!
+
+</output>
+        <traits />
+      </test>
+      <test name="P3_Project_Test.UnitTest1.Test1" type="P3_Project_Test.UnitTest1" method="Test1" time="0.0003873" result="Pass">
+        <output>This is output from my class!
+
+</output>
+        <traits />
+      </test>
+    </collection>
+  </assembly>
+</assemblies>

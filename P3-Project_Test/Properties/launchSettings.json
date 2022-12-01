@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "P3-Project_Test": {
+      "commandName": "Project",
+      "commandLineArgs": " --test-adapter-path:. --logger:xunit"
+    }
+  }
+}
