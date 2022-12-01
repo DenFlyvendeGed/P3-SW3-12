@@ -83,26 +83,31 @@ public class MySqlDB : DataBase {
 		log($"GetAllElements {tableName}");
 		conn.Open();
 		var sdr = cmd.ExecuteReader();
-		while(sdr.Read()){
-			T classInstance = (T)(Activator.CreateInstance(typeof(T)) ?? 
-				throw new Exception("Couldn't Create Instance of " + objectClass.ToString()));
-			foreach(var property in properties){
-				try {
-					property.SetValue(classInstance, sdr[property.Name]);
-				} catch {
-					Console.WriteLine(property.Name + " Can't be set");
+		try {
+			while(sdr.Read()){
+				T classInstance = (T)(Activator.CreateInstance(typeof(T)) ?? 
+					throw new Exception("Couldn't Create Instance of " + objectClass.ToString()));
+				foreach(var property in properties){
+					try {
+						property.SetValue(classInstance, sdr[property.Name]);
+					} catch {
+						Console.WriteLine(property.Name + " Can't be set");
+					}
 				}
-			}
-			foreach(var field in fields){
-				try {
-					field.SetValue(classInstance, sdr[field.Name]);
-				} catch {
-					Console.WriteLine(field.Name + " Can't be set");
+				foreach(var field in fields){
+					try {
+						field.SetValue(classInstance, sdr[field.Name]);
+					} catch {
+						Console.WriteLine(field.Name + " Can't be set");
+					}
 				}
+				list.Add(classInstance);
 			}
-			list.Add(classInstance);
+		} catch {
+			throw new Exception("Error in reading table");
+		} finally {
+			conn.Close();
 		}
-		conn.Close();
 		return list;
 	}
 	
@@ -361,6 +366,7 @@ public class MySqlDB : DataBase {
 			vals.Add($"'{v.ToString()}'");
 		};
 		cmd.CommandText= $"INSERT INTO {name} ({string.Join(',', field)}) VALUES ({string.Join(',', vals)})";
+		Console.WriteLine(cmd.CommandText);
 
 		log($"PushToTable {name}");
 		conn.Open();
@@ -413,6 +419,7 @@ public class MySqlDB : DataBase {
 
 		var rtn = new List<T>();
 		
+		Console.WriteLine(cmd.CommandText);
 		var sdr = cmd.ExecuteReader();
 		ReadToArrayFunc(sdr, rtn, initializer);
 		conn.Close();
@@ -420,7 +427,11 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name}";
+
 		log($"ReadFromTable {name}");
+
+		Console.WriteLine(cmd.CommandText);
+
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -433,7 +444,38 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name} WHERE {where}";
+
 		log($"ReadFromTable {name}");
+
+		Console.WriteLine(cmd.CommandText);
+		conn.Open();
+
+		var rtn = new List<T>();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {	
+			conn.Close();
+		}
+		return rtn;
+	}
+	public List<T> ReadLastFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull{
+		cmd.CommandText = $"SELECT LAST * FROM {name}";
+		Console.WriteLine(cmd.CommandText);
+
+		conn.Open();
+
+		var rtn = new List<T>();
+		
+		Console.WriteLine(cmd.CommandText);
+		var sdr = cmd.ExecuteReader();
+		ReadToArrayFunc(sdr, rtn, initializer);
+		conn.Close();
+		return rtn;
+	}
+	public List<T> ReadLastFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
+		cmd.CommandText = $"SELECT LAST * FROM {name} WHERE {where}";
+		Console.WriteLine(cmd.CommandText);
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -441,6 +483,33 @@ public class MySqlDB : DataBase {
 		var sdr = cmd.ExecuteReader();
 		ReadToArrayFunc(sdr, rtn, initializer);
 		conn.Close();
+		return rtn;
+	}
+	public List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
+		cmd.CommandText = $"SELECT LAST {string.Join(',', columns )} FROM {name}";
+		Console.WriteLine(cmd.CommandText);
+		conn.Open();
+
+		var rtn = new List<T>();
+		
+		var sdr = cmd.ExecuteReader();
+		ReadToArrayFunc(sdr, rtn, initializer);
+		conn.Close();
+		return rtn;
+
+	}
+	public List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
+		cmd.CommandText = $"SELECT LAST {string.Join(',', columns )} FROM {name} WHERE {where}";
+		Console.WriteLine(cmd.CommandText);
+		conn.Open();
+
+		var rtn = new List<T>();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {	
+			conn.Close();
+		}
 		return rtn;
 	}
 
@@ -460,6 +529,7 @@ public class MySqlDB : DataBase {
         while (sdr.Read())
         {
             sum = (int)(decimal)sdr["SUM(Stock)"];
+
         }
         //Close the connection
         conn.Close();
