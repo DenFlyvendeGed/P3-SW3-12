@@ -15,7 +15,7 @@
 <div style="width: 80vw;">
 
     @{
-        foreach (ItemModel item in ViewBag.model)
+        foreach (ItemModel item in ViewBag?.model)
         {
             @*Create box for each item in stock*@
             <div class="stockBox  box containerBox">

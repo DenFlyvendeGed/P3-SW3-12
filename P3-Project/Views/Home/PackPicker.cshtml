@@ -1,0 +1,31 @@
+﻿@using P3_Project.Models
+@model PackModel
+@{
+	Layout = "_Layout";
+    ViewData["Title"] = "Vælg pakkemuligheder";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="grid-container-PackPicker">
+	<div class="PackPickerHeader"><h3 style="text-align:start;"><b>Pakke: @Model.Name</b></h3><h3 style="text-align:end;"><b>Pris: @Model.Price kr.-</b></h3></div>
+	<div class="PackChoices"><h4><b>Valgmulighed 1</b></h4></div>
+	<div class="PackPickerItems">
+		<img class="PackPickerImg" src="../favicon.ico" />
+		<div class="box" style="position: relative; height: 50px; width:240px; top: 82px;">Navn</div>
+		<h5 style="position: relative; bottom: 50%;">Farve:</h5>
+		<div class="PackPickerFlexBox">
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+		</div>
+		<h5 style="position: relative; bottom: 50%; right: 2.5%;">Størrelse:</h5>
+		<select style="position: relative; bottom: 63%; left: 12%;">
+			<option>Hello</option>
+			<option>There</option>
+		</select>
+		<div class="box" style="position: relative; bottom: 40%; left: 90%; width: 40px; height: 40px; border-width: 2px;"></div>
+	</div>
+</div>
+
+
+<div class="box" style="position: relative; left:70vw; display: block; text-align: center; margin-top: 12px; margin-bottom: 12px; width: 220px; padding: 6px;">Tilføj pakke til indkøbskurv</div>
