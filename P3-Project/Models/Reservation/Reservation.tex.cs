@@ -2,7 +2,7 @@ namespace P3_Project.Models.ReservationPdf;
 
 public interface LatexReservationItem {}
 public class LatexItemModel :LatexReservationItem {
-	public int Id {get; set;} = 0;
+	public string Id {get; set;} = "";
 	public string Name {get; set;} = "";
 	public int Amount {get; set;} = 0;
 	public int IndividualPrice {get; set;} = 0;
@@ -36,7 +36,7 @@ public class LATEX_GLOBALS {
 \usepackage{{colortbl}}
 %% Primary
 \definecolor{{ASH-Black}}      {{RGB}}{{  0,   0,   0}}
-\definecolor{{ASH-Blue}}       {{RGB}}{{ 59, 146, 218}}
+\definecolor{{ASH-Blue}}       {{RGB}}{{ 59, 146, 178}}
 \definecolor{{ASH-LightBlue}}  {{RGB}}{{115, 174, 200}}
 %% Contrast
 \definecolor{{ASH-Red}}        {{RGB}}{{181,   4,  67}}
@@ -92,6 +92,7 @@ public class LATEX_GLOBALS {
 	\hline
 	\hline
 		{table}
+		\\\hline
 	\end{{tabularx}}
 	\par\vspace{{8pt}}
 	\begin{{flushright}}
