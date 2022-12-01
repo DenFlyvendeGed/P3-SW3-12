@@ -85,6 +85,7 @@ public class OrderDB{
 	}
 
 	public void Push(Order order) {
+		if(order.Id != null) return;
 		var name = Globals.CoustomerNameTable.PushIfNone(order.Name);
 		var email = Globals.EmailTable.PushIfNone(order.Email);
 
@@ -100,6 +101,7 @@ public class OrderDB{
 
 		var id = db.ReadFromTable(table, $"name='{name}' AND email='{email}'", e => (int)e[0]).Last();
 
+		order.Id = id;
 		var unitsTable = $"{table}_{id}";
 
 		db.CreateTable(unitsTable, (IEnumerable<(string, SQLType)>) new (string, SQLType) [] {
