@@ -6,9 +6,6 @@
     Layout = "AdminLayout";
 
     ViewData["Title"] = "Bekræft Salg";
-
-    List<string> shopUnit = new List<string>();
-
 }
 
 <h4>Bekræft Salg</h4>
@@ -20,7 +17,7 @@
 
             <style>
                 td, tr{
-                border-width: 2px;
+                border-width: 1px;
                 border-color: black;
                 }
             </style>
@@ -49,56 +46,99 @@
 <div>
     <table style="margin-top: 10px">
         <tbody>
-
+            <style>
+                td{
+                    width: 10vw;
+                }
+            </style>
             @{
-                if()
+                List<ItemSnapshot> itemSnapshots = new List<ItemSnapshot>();
 
-                foreach(int item in uniqueItemID)
+                if(Model?.ShopUnits.Count() > 0)
                 {
-                    
+                    foreach (OrderShopUnit unit in Model.ShopUnits)
+                    {
+                        if (unit.ShopUnit is ItemSnapshot)
+                        {
+
+                            itemSnapshots.Add((ItemSnapshot)unit.ShopUnit);
+                        }
+                        else if(unit.ShopUnit is PackSnapShot)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if(itemSnapshots.Count() > 0)
+                {
+                    int i = 0;
+                    foreach (ItemSnapshot unit in itemSnapshots)
+                    {
+                        <tr>
+                            <td>@unit.ItemId</td>
+                            <td>@unit.Name | @unit.Color @unit.Size</td>
+                            <td>@Model?.ShopUnits[i].Amount</td>
+                            <td>@unit.Price</td>
+                            <td style="background-color: var(--ash-blue)">@(unit.Price * Model.ShopUnits[i].Amount)</td>
+                        </tr>
+                        i++;
+                        //Empty the array
+                    }
                 }
             }
-            <tr>
-                <td style="width: 10vw;">
 
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>
 
-<div onload="" id="packs">
-    <table style="margin-top: 10px">
+<div>
+    <table>
         <tbody>
-            <tr>
-                <td style="width: 10vw;">
+            <style>
+                td {
+                width: 10vw;
+                }
+            </style>
+            @{
+                List<PackSnapShot> packSnapshots = new List<PackSnapShot>();
 
-                </td>
-                <td style="width: 10vw;">
+                if (Model?.ShopUnits.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (OrderShopUnit unit in Model.ShopUnits)
+                    {
+                        if (unit.ShopUnit is PackSnapShot)
+                        {
+                            PackSnapShot pack = (PackSnapShot)unit.ShopUnit;
+                            <tr style="margin-top: 10px">
+                                <td style="background-color: var(--ash-light-blue)">@pack.PackId</td>
+                                <td style="background-color: var(--ash-light-blue)">@pack.Name</td>
+                                <td style="background-color: var(--ash-light-blue)">@Model.ShopUnits[index].Amount</td>
+                                <td style="background-color: var(--ash-light-blue)">@pack.Price</td>
+                                <td style="background-color: var(--ash-light-blue)">@(pack.Price * Model.ShopUnits[index].Amount)</td>
+                            </tr>
 
-                </td>
-                <td style="width: 10vw;">
+                            int next = 0;
+                            while(Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
+                            {
+                                ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
 
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-                <td style="width: 10vw;">
-
-                </td>
-            </tr>
+                                <tr>
+                                    <td>@item.ItemId</td>
+                                    <td>@item.Name | @item.Color @item.Size</td>
+                                    <td>@Model?.ShopUnits[index + next].Amount</td>
+                                    <td>@item.Price</td>
+                                    <td style="background-color: var(--ash-blue)">@(item.Price * Model.ShopUnits[index + next].Amount)</td>
+                                </tr>
+                                next++;
+                            }
+                        }
+                        index++;
+                    }
+                }
+            }
+            
         </tbody>
     </table>
 </div>
