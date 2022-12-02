@@ -142,6 +142,8 @@ namespace P3_Project.Models
             return dict;
         }
 
+        
+
         //Create SQL table corresponding to the items in the ItemModel that is being created
         public void CreateItemTable()
         {
@@ -411,5 +413,7 @@ namespace P3_Project.Models
             }
             return new ImageModel();
         }
+
+        
     }
 }
