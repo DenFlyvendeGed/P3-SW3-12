@@ -133,4 +133,12 @@ public class OrderDB{
 			}
 		}
 	}
+
+	public void MarkAsPaid(int id) {
+		db.UpdateTable(table, new(string, object)[]{("IsPaid", 'T')}, $"Id='{id}'");
+	}
+	
+	public void MarkAsUnpaid(int id) {
+		db.UpdateTable(table, new(string, object)[]{("IsPaid", 'F')}, $"Id='{id}'");
+	}
 }

@@ -112,8 +112,6 @@ namespace P3_Project.Controllers
         [HttpPost("CreatePromoCode")]
         public async void CreatePromoCode() {
 			string json;
-
-
             using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
 			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
@@ -340,5 +338,12 @@ namespace P3_Project.Controllers
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
         #endregion
+	
+		[HttpPut("MarkOrderAsPaid/{id}")]
+		public IActionResult MarkAsPaid(int id){
+			P3_Project.Models.Orders.Globals.OrderDB.MarkAsPaid(id);
+			return Ok();
+		}
     }
+
 }

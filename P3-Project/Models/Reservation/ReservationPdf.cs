@@ -8,6 +8,8 @@ using P3_Project.Models.Orders;
 public static class ReservationPdf{	
 	public static readonly string COMPILE_FOLDER = System.Configuration.ConfigurationManager.AppSettings["latex-compile-folder"] 
 		?? throw new Exception("AppSetting latex-compile-folder not set in App.Config");
+	public static readonly string ADDRESS_OF_WEBSITE = System.Configuration.ConfigurationManager.AppSettings["address-of-website"] 
+		?? throw new Exception("AppSetting address-of-website not set in App.Config");
 
 	static LatexItemModel ParseItemsnapShot(ItemSnapshot unit, int amount) {
 			return new LatexItemModel (){

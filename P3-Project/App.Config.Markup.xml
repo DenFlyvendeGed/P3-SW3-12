@@ -11,8 +11,12 @@
 		<!-- What is the password of the email -->
 		<add key="email-password" value="crxygpmhabehdvmz"/>
 	<!-- END OF EMAIL -->
+
 	<!-- LATEX FOLDER -->
-		<add key="latex-compile-folder" value="/home/kamya/AAU/Projecter/P3/latex_compile/" />
+		<add key="latex-compile-folder" value="/home/kamya/AAU/Projecter/P3/latex_compile/"/>
+
+	<!-- Website Information -->
+		<add key="address-of-website" value="https://localhost:7101"/>
 
 	<!-- SQL Database -->
 		<!-- What database are you using (SQL OR MySQL)-->
