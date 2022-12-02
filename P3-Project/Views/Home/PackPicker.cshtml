@@ -6,6 +6,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+
 <div class="grid-container-PackPicker">
 	<div class="PackPickerHeader"><h3 style="text-align:start;"><b>Pakke: @Model.Name</b></h3><h3 style="text-align:end;"><b>Pris: @Model.Price kr.-</b></h3></div>
 	@{
@@ -19,43 +20,48 @@
 				model.LoadItems();
 
 																																																																							<div class="PackPickerItems" id="Option@(index)">
+																																																																							<div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"></div>
 																																																																								<div class="PackPickerImgContainer">
 																																																																								
 																																																																										
-																																																																										<img class="PackPickerImg" src="@(model.GetFirstImg().FilePath)"/>
+																																																																										<img class="PackPickerImg" src="@(model.GetFirstImg().FilePath)" onerror="this.src='../favicon.ico';"/>
 																																																																										
 																																																																								
 																																																																								</div>
-																																																																								<div class="box" id="NameBox" style="position: relative; height: 50px; width:240px; top: 26px; padding: 10px;">@(model.ModelName)</div>
+																																																																								<div class="box Name" id="NameBox">@(model.ModelName)</div>
 
-																																																																								<h5 class="smltext">Farve:</h5>
+																																																																							
+					<div class="SelectOption">
+						<h5>Størrelse: 
+							<select style="height: 10%; font-size:12pt;">
+							@{
+							int sizeIndex = 1;
+							foreach (string size in model.GetUniqueSize())
+							{
+									<option id="size@(sizeIndex)" style="font-size:12pt;">@(size)</option>
+									sizeIndex += 1;
+							}
+							}
+							</select>
+						</h5>
+					</div>
 
-																																																																								<div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)">
-																																																																									@{
+					<h5 class="smltext">Farve:</h5>
+
+					<div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)">
+						@{
 							int colorIndex = 1;
 							foreach ((string, string) color in model.GetUniqueColor())
 							{
-																																																																																																																																						<div class="colorBoxSelect" style="border: 2px solid transparent">
-																																																																																																																																							<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item2)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
-																																																																																																																																						</div>
+								<div class="colorBoxSelect" style="border: 2px solid transparent">
+									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item2)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
+								</div>
 								colorIndex += 1;
 							}
-																																																																									}
-																																																																								</div>
-
-																																																																								<h5 class="smltext size">Størrelse:</h5>
-																																																																								<select class="PackSelect" style="position: relative;">
-																																																																								@{
-						int sizeIndex = 1;
-						foreach (string size in model.GetUniqueSize())
-						{
-																																																																																																																																													<option id="size@(sizeIndex)">@(size)</option>
-							sizeIndex += 1;
 						}
-																																																																								}
-																																																																								</select>
+					</div>
 																																																																															
-																																																																								<div id="CheckMarkBox" class="box CheckMark" style="position: relative; width: 40px; height: 40px; border-width: 2px; padding: 4px; margin: 2px;" onclick="CheckBox(this)"></div>
+																																																																								
 																																																																							</div>
 					IdIndex++;
 					OptionCount++;
@@ -65,13 +71,14 @@
 	}
 </div>
 
-<div class="box" style="position: relative; left:70vw; display: block; text-align: center; margin-top: 12px; margin-bottom: 12px; width: 220px; padding: 6px;" onclick="addToCart()">Tilføj pakke til indkøbskurv</div>
+
+<div class="box AddToCart" onclick="addToCart()">Tilføj pakke til indkøbskurv</div>
 
 <script>
 	function CheckBox(CheckMarkBox) {
 		let ParentOption = CheckMarkBox.parentElement.id;
 		const CheckMark = document.createElement("img");
-		CheckMark.setAttribute("style", "width:22px; height: 22px;");
+		CheckMark.setAttribute("class", "CheckMark-Flag");
 		CheckMark.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
 		console.log(CheckMarkBox.children.length > 0);
 		console.log(ParentOption);
