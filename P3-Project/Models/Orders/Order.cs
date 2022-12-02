@@ -134,11 +134,35 @@ public class OrderDB{
 		}
 	}
 
+	public void UpdateDBStock(int id){
+		var order = this.Fetch(id);
+		foreach(var shopUnit in order.ShopUnits){
+			if(shopUnit.ShopUnit is ItemSnapshot){
+				var unit = (ItemSnapshot)shopUnit.ShopUnit;
+				var item = db.GetRow("Item" + unit.ModelId, new Item(), unit.ItemId.ToString());
+				item.ChangeStock(item.Stock - shopUnit.Amount);
+			}
+		}
+	}
+
 	public void MarkAsPaid(int id) {
 		db.UpdateTable(table, new(string, object)[]{("IsPaid", 'T')}, $"Id='{id}'");
 	}
 	
 	public void MarkAsUnpaid(int id) {
 		db.UpdateTable(table, new(string, object)[]{("IsPaid", 'F')}, $"Id='{id}'");
+	}
+
+	public void CheckExpirationDate() {
+		foreach(var (id, expiration_date) in 
+			db.ReadFromTable(table, new string[]{"Id", "ExpirationDate"}, "IsActive='T'", r => ((int)r[0], (DateTime)r[1]))){
+			if(expiration_date < DateTime.Now){
+				db.UpdateTable(table, new(string, object)[]{("IsActive", 'F')}, $"Id={id}");
+				Console.WriteLine($"{id} Is no longer active");
+			}
+			else{
+				Console.WriteLine($"{id} Is sill active");
+			}
+		}
 	}
 }

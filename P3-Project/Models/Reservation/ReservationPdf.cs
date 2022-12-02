@@ -66,7 +66,7 @@ public static class ReservationPdf{
 				order.SalesTax.ToString(), 
 				ParseOrderItems(order.ShopUnits)
 			));
-		OrderQRCode.Gennerate("Hello World", COMPILE_FOLDER);	
+		OrderQRCode.Gennerate(ADDRESS_OF_WEBSITE + "/admin/confirmsale/" + order.Id, COMPILE_FOLDER);	
 		await CompileLatex(tex_file);
 	}
 
