@@ -407,9 +407,12 @@ public class MySqlDB : DataBase {
 		var rtn = new List<T>();
 		
 		Console.WriteLine(cmd.CommandText);
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 	}
 	public List<T> ReadFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
@@ -420,9 +423,12 @@ public class MySqlDB : DataBase {
 		var rtn = new List<T>();
 		
 		Console.WriteLine(cmd.CommandText);
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
@@ -436,9 +442,12 @@ public class MySqlDB : DataBase {
 
 		var rtn = new List<T>();
 		
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 
 	}
@@ -468,9 +477,12 @@ public class MySqlDB : DataBase {
 		var rtn = new List<T>();
 		
 		Console.WriteLine(cmd.CommandText);
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 	}
 	public List<T> ReadLastFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
