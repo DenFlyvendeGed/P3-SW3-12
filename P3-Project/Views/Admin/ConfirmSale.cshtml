@@ -29,13 +29,13 @@
                 <td style="width: 10vw;">
                     Navn
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText style="width: 10vw;">
                     Antal
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText style="width: 10vw;">
                     Pris pr. stk. (DKK)
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText style="width: 10vw;">
                     Samlet pris (DKK)
                 </td>
             </tr>
@@ -52,7 +52,9 @@
                 }
             </style>
             @{
-                List<ItemSnapshot> itemSnapshots = new List<ItemSnapshot>();
+                List<(ItemSnapshot, int)> itemSnapshots = new List<(ItemSnapshot, int)>();
+
+                int itemPriceTotal = 0;
 
                 if(Model?.ShopUnits.Count() > 0)
                 {
@@ -61,7 +63,7 @@
                         if (unit.ShopUnit is ItemSnapshot)
                         {
 
-                            itemSnapshots.Add((ItemSnapshot)unit.ShopUnit);
+                            itemSnapshots.Add(((ItemSnapshot)unit.ShopUnit, unit.Amount));
                         }
                         else if(unit.ShopUnit is PackSnapShot)
                         {
@@ -73,16 +75,18 @@
                 if(itemSnapshots.Count() > 0)
                 {
                     int i = 0;
-                    foreach (ItemSnapshot unit in itemSnapshots)
+                    foreach (var (unit, amount) in itemSnapshots)
                     {
                         <tr>
-                            <td>@unit.ItemId</td>
-                            <td>@unit.Name | @unit.Color @unit.Size</td>
-                            <td>@Model?.ShopUnits[i].Amount</td>
-                            <td>@unit.Price</td>
-                            <td style="background-color: var(--ash-blue)">@(unit.Price * Model.ShopUnits[i].Amount)</td>
+                            <td class="centerTableText">@unit.ItemId</td>
+                            <td style="padding-left: 10px;">@unit.Name | @unit.Color @unit.Size</td>
+                            <td class="centerTableText">@amount</td>
+                            <td class="centerTableText">@unit.Price</td>
+                            <td class="centerTableText" style="background-color: var(--ash-blue)">@(unit.Price * amount)</td>
                         </tr>
+                        
                         i++;
+                        
                         //Empty the array
                     }
                 }
@@ -102,6 +106,8 @@
             </style>
             @{
                 List<PackSnapShot> packSnapshots = new List<PackSnapShot>();
+
+                int packPriceTotal = 0;
 
                 if (Model?.ShopUnits.Count() > 0)
                 {
@@ -129,7 +135,7 @@
                                     <td>@item.Name | @item.Color @item.Size</td>
                                     <td>@Model?.ShopUnits[index + next].Amount</td>
                                     <td>@item.Price</td>
-                                    <td style="background-color: var(--ash-blue)">@(item.Price * Model.ShopUnits[index + next].Amount)</td>
+                                    <td style="background-color: var(--ash-blue)"></td>
                                 </tr>
                                 next++;
                             }
@@ -141,6 +147,9 @@
             
         </tbody>
     </table>
+    <div style="float: right">
+        @*(packPriceTotal + itemPriceTotal)*@
+    </div>
 </div>
 
 <div class="center" style="display: inline; float: right">

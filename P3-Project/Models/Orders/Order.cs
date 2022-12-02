@@ -78,7 +78,8 @@ public class OrderDB{
 		foreach(var (unit_id, isPack, amount, discount) in 
 				db.ReadFromTable(unitTable, r => ((int)r[0], (string)r[1] == "T", (int)r[2], (int)r[3]))){
 			order.ShopUnits.Add(new(isPack ? Globals.PackSnapshotTable.Fetch(unit_id) : Globals.SnapshotTable.Fetch(unit_id)){
-				Discount = discount
+				Discount = discount,
+				Amount = amount
 			});
 		}
 		return order;

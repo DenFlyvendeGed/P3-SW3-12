@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using NuGet.ContentModel;
 using P3_Project.Models;
 using P3_Project.Models.DB;
+using P3_Project.Models.Orders;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 using System.Dynamic;
@@ -153,7 +154,8 @@ namespace P3_Project.Controllers
 
         public ActionResult ConfirmSale()
         {
-            return View();
+            Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(1);
+            return View(order);
         }
 
         #endregion
