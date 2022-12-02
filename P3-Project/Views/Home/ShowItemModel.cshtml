@@ -12,9 +12,6 @@
         <div class="displayItem">
             <div class="box picScaling wrap">
                 @{
-
-
-
                     ViewBag.pictures = "";
                     if (ViewBag.item != null)
                     {
@@ -27,7 +24,6 @@
 
                     @*Billed placehodler*@
                     <img class="midImg" src="" />
-
                 }
 
             </div>
@@ -49,9 +45,6 @@
                         <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
                     }
                 }
-
-
-
 
             </div>
         </div>
@@ -81,6 +74,7 @@
                 </div>
             </div>
 
+
             @*<------------------Color--------------------->*@
             <div class="box modelAttributes">
                 <div>Farve:</div>
@@ -96,8 +90,7 @@
                 </div>
             </div>
 
-            @*<------------------Description--------------------->
-        *@
+            @*<------------------Description--------------------->*@
             <div class="box modelAttributes">
                 <div>Beskrivesle:</div>
                 <div>@(item.Description)</div>
@@ -122,6 +115,7 @@
 
 </div>
 
+@*Cart script*@
 <script>
 
     //Size toggle
@@ -285,7 +279,7 @@
 
 </script>
 
-
+@*Picture script*@
 <script>
 
     let currentPic = 0;

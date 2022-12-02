@@ -7,49 +7,48 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="settingGrid">
-
     <div class="box fakturaSetting settingItem">
         <div class="textAllign">Virksomhedens navn:</div>
-        <input type="text" placeholder="Virksomheds navn" id="companyName" />
+        <input type="text" @(ViewBag.model[0]?.CompanyName != null ? Html.Raw($"value=\"{ViewBag.model[0]?.CompanyName}\"") : "Virksomhedens navn") id="companyName" />
     </div>
 
     <div class="box fakturaSetting settingItem">
         <div class="textAllign">Virksomhedens addresse:</div>
-        <input type="text" placeholder="Virksomheds addresse" id="companyAddress" />
+        <input type="text" @(ViewBag.model[0]?.CompanyAddress != null ? Html.Raw($"value=\"{ViewBag.model[0]?.CompanyAddress}\"") : "Virksomhedens addresse") id="companyAddress" />
     </div>
 
     <div class="box fakturaSetting settingItem">
         <div class="textAllign">Virksomheds CVR:</div>
-        <input type="text" placeholder="Virksomheds CVR" id="companyCVR" />
+        <input type="text" @(ViewBag.model[0]?.CompanyCVR != null ? "value = " + ViewBag.model[0].CompanyCVR : "Virksomhedens CVR") id="companyCVR" />
     </div>
 
     <div class="box fakturaSetting settingItem">
         @{
             string toolTipAddress = "Hvor varen skal afhentes.";
-                                        <div class="textAllign">Afhentnings addresse:<span class="hovertext" data-hover="@(toolTipAddress)">?</span></div>
-                                        <input type="text" placeholder="Afhentnings addresse" id="pickUpAddress"/>
+            <div class="textAllign">Afhentningsaddresse:<span class="hovertext" data-hover="@(toolTipAddress)">?</span></div>
+            <input type="text" @(ViewBag.model[0]?.PickUpAddress != null ? Html.Raw($"value=\"{ViewBag.model[0]?.PickUpAddress}\"") : "Afhentningsaddresse") id="pickUpAddress" />
         }
     </div>
 
     <div class="box fakturaSetting settingItem">
         @{
             string toolTipDeadline = "Antal dage hvorefter kunden senest kan hente bestilte vare";
-                                        <div class="textAllign">Afhentnings deadline:<span class="hovertext" data-hover="@(toolTipDeadline)">?</span></div>
-                                        <input type="text" placeholder="Afhentnings deadline" id="pickUpDeadline"/>
+            <div class="textAllign">Afhentningsdeadline:<span class="hovertext" data-hover="@(toolTipDeadline)">?</span></div>
+            <input type="text" @(ViewBag.model[0]?.PickUpDeadLine != null ? "value = " + ViewBag.model[0].PickUpDeadLine : "Afhentnings deadline i dage") id="pickUpDeadline" />
         }
     </div>
 
     <div class="box fakturaSetting settingItem">
         @{
             string toolTipMoms = "Moms i procent %";
-                                        <div class="textAllign">Moms %:<span class="hovertext" data-hover="@(toolTipMoms)">?</span></div>
-                                        <input type="text" placeholder="Moms %" id="moms"/>
+            <div class="textAllign">Moms %:<span class="hovertext" data-hover="@(toolTipMoms)">?</span></div>
+            <input type="text" @(ViewBag.model[0]?.Moms != null ? "value = " + ViewBag.model[0].Moms : "Moms %") id="moms" />
         }
     </div>
 
 </div>
 
-<div style="margin-left: 80vw;">
+<div style="margin-left: 80vw; margin-top: 7vw;">
     <input type="button" value="Opdater" id="update" />
 </div>
 
@@ -57,7 +56,7 @@
 
 <script>
 
-    function updateFaktura() {
+    async function updateFaktura() {
 
         let companyName = document.getElementById("companyName").value;
         let companyAddress = document.getElementById("companyAddress").value;
@@ -67,6 +66,7 @@
         let moms = document.getElementById("moms").value;
 
         let fakturaDate = {
+            Id: 1,
             CompanyName: companyName,
             CompanyAddress: companyAddress,
             CompanyCVR: companyCVR,
@@ -75,7 +75,26 @@
             Moms: moms,
         }
 
-        console.log(fakturaData);
+        console.log(fakturaDate);
+
+        const data = JSON.stringify(fakturaDate);
+
+        const response = await fetch("../api/Admin/UpdateFaktura", {
+            method: 'PUT',
+            redirect: 'follow',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
+
     }
 
     document.getElementById("update").addEventListener("click", updateFaktura);

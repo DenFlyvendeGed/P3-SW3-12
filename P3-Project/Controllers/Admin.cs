@@ -16,10 +16,11 @@ using System.Web.Http;
 
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
-
+using P3_Project.Utilities;
 
 namespace P3_Project.Controllers
 {
+    [Authentication]
     public class Admin : Controller
     {
         // GET: Admin 
@@ -37,6 +38,7 @@ namespace P3_Project.Controllers
 
             db.DB.CreateTable("ItemModels", new ItemModel());
             db.DB.CreateTable("Tags", new Tag());
+            db.DB.CreateTable("FakturaSettings", new Faktura());
 
         }
 
@@ -144,6 +146,8 @@ namespace P3_Project.Controllers
         
 		public ActionResult Settings()
         {
+
+
             return View();
         }
 
@@ -162,6 +166,12 @@ namespace P3_Project.Controllers
 
         public ActionResult FakturaSettings()
         {
+            StorageDB db = new StorageDB();
+
+            List<Faktura> models = db.DB.GetAllElements("FakturaSettings", new Faktura());
+
+            ViewBag.model = models;
+
             return View();
         }
         #endregion
