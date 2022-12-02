@@ -9,7 +9,9 @@
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "UserName", placeholder = "Email address", required = "required", autofocus = "autofocus" })
+
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "UserName", placeholder = "Brugernavn", required = "required", autofocus = "autofocus" })
+
                         @Html.TextBoxFor(m => m.UserPassword, new { @class = "form-control", type = "password", placeholder = "Password", required = "" })
                         <button type="submit">Sign in</button>
                                   

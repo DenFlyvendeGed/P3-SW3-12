@@ -13,6 +13,9 @@ using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
+using P3_Project.Utilities;
+using Google.Protobuf.WellKnownTypes;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -84,6 +87,7 @@ namespace P3_Project.Controllers
 
     [Route("api/Admin")]
     [ApiController]
+    [Authentication]
     public class AdminController :  ControllerBase
     {
         static StorageDB db = new StorageDB();
@@ -339,6 +343,58 @@ namespace P3_Project.Controllers
             db.DB.RemoveRow("Tags", "Id", TagId);
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
+        #endregion
+
+        #region User
+
+        [HttpGet("GetUsers")]
+        public ActionResult GetUsers()
+        {
+            List<User> users = db.DB.GetAllElements("Users", new User());
+            var json = JsonSerializer.Serialize(users);
+            Response.Headers.Add("Content-Type", "application/json");
+            //Response.Body = new MemoryStream(Encoding.UTF8.GetBytes(json ?? ""));
+            return Ok(json);
+        }
+
+        [HttpPost("AddUser")]
+        public ActionResult AddUser(User user)
+        {
+            db.DB.AddRowToTable("Users", user);
+            return Ok();
+        }
+
+        [HttpPost("UpdateUser")]
+        public ActionResult UpdateUser(List<User> users)
+        {
+            db.DB.UpdateField("Users", "UserName", users[0].UserName, "UserName", users[1].UserName);
+            db.DB.UpdateField("Users", "UserName", users[1].UserName, "UserPassword", users[1].UserPassword);
+            return Ok();
+        }
+
+        [HttpDelete("DeleteUser")]
+        public ActionResult DeleteUser(User user)
+        {
+            db.DB.RemoveRow("Users", "UserName", user.UserName);
+            return Ok();
+        }
+
+        #endregion
+
+        #region Settings
+
+        [HttpPut("UpdateFaktura")]
+        public IActionResult UpdateFaktura(Faktura faktura)
+        {
+            Faktura fakturaData = faktura;
+            int Id = fakturaData.Id;
+
+            fakturaData.UpdateFaktura();
+
+            return RedirectToActionPermanent("Settings", "Admin");
+        }
+
+
         #endregion
 
 
