@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-
-
-using P3_Project.Models.Mail;
-
+﻿using P3_Project.Models.Mail;
 using P3_Project.Models.DB;
+using P3_Project.Models.Orders;
 using P3_Project.Models;
+
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.Xml.Linq;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Net;
 using System.Web.Http;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
@@ -17,17 +13,11 @@ using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
-using NuGet.Protocol;
-using ActionNameAttribute = Microsoft.AspNetCore.Mvc.ActionNameAttribute;
-
-
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace P3_Project.Controllers
 {
-
-
     [Route("api")]
     [ApiController]
     public class CutomerApi : ControllerBase
@@ -65,7 +55,6 @@ namespace P3_Project.Controllers
         }
 
         [HttpGet("ValidatePromoCode/{code}")]
-
         [Produces("application/json")]
         public IActionResult ValidatePromoCode(string code)
         {
@@ -74,6 +63,23 @@ namespace P3_Project.Controllers
             return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
         }
 
+		[HttpPost("CreateOrder")]
+		public async Task<IActionResult> CreateOrder(InputOrder input_order){
+			var order = input_order.ToOrder();
+			P3_Project.Models.Orders.Globals.OrderDB.Push(order);
+			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
+
+			var compile_folder = P3_Project.Models.ReservationPdf.ReservationPdf.COMPILE_FOLDER;
+
+			new MailClient()
+				.To(order.Email)
+				.Attachment(compile_folder + "/order.pdf")
+				.Subject($"Reservation Ved Aalborg Sportshøjskole {order.Id}")
+				.Body("Du har nu lavet en reservation ved Aalborg Sportshøjskole")
+				.SendMail();
+
+			return Ok();
+		}
     }
 
     [Route("api/Admin")]
@@ -82,12 +88,11 @@ namespace P3_Project.Controllers
     {
         static StorageDB db = new StorageDB();
 
-
         #region Email
         [HttpGet("NotificationEmails")]
 		public ActionResult NotificationEmails() {
 			try {
-				return Ok(JsonSerializer.Serialize(new MailList(db).List));
+				return Ok(JsonSerializer.Serialize(new MailList(db)));
 			} catch {
 				return Ok("[]");
 			}
@@ -150,28 +155,15 @@ namespace P3_Project.Controllers
 
         
 		[HttpPost("CreatePackModel")]
-        public async Task<IActionResult> CreatePackModel(PackModel data) {
-            //string json;
-
-            //using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-            //var code = JsonSerializer.Deserialize<PackModel>(json);
-            //if(code == null) return BadRequest();
-
-
-
-            //code.PushToDB(db);
+        public IActionResult CreatePackModel(PackModel data) {
             data.PushToDB(db);
             return RedirectToActionPermanent("PackViewModel", "Admin");
         }
 
 		[HttpPut("EditPackModel/{id}")]
-		public async Task<IActionResult> EditPackModel(int id, PackModel data) {
+		public IActionResult EditPackModel(int id, PackModel data) {
 			var db = new StorageDB();
 			var code = new PackModel(id, db); 
-			//string json;
-			//using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
-			//var data = JsonSerializer.Deserialize<PackModel>(json);
-			//if( data == null ) {Response.StatusCode = 418; return BadRequest();}
 
             code.Description = data.Description;
             code.Name = data.Name;
@@ -231,8 +223,6 @@ namespace P3_Project.Controllers
         public IActionResult deleteModel(int Id)
         {
             ItemModel.Delete(Id);
-
-           
             return RedirectToAction("Stock","Admin");
         }
 
@@ -245,25 +235,22 @@ namespace P3_Project.Controllers
             string filepath = "";
             DirectoryInfo dir = new("path");
 
-
             dir = ImageModel.GetDir(int.Parse(Id));
             filepath = Path.Combine(dir.FullName, Name);
-
 
             FileInfo file = new FileInfo(filepath);
 
             if (file.Exists)
             {
                 file.Delete();
-
             }
             else
             {
-
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
             }
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
+
         [HttpDelete("DeleteImagePack")]
         public StatusCodeResult DeleteImage2(string Id, string Name , string FilePath = "")
         {
@@ -277,7 +264,6 @@ namespace P3_Project.Controllers
             {
                 string projectPath = Directory.GetCurrentDirectory();
                 filepath = Path.Combine(projectPath, "wwwroot" + FilePath);
-                
             }
 
             FileInfo file = new FileInfo(filepath);
@@ -285,47 +271,16 @@ namespace P3_Project.Controllers
             if (file.Exists)
             {
                 file.Delete();
-
             }
             else
             {
-                
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
             }
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
-
-        
-        //public StatusCodeResult DeleteImage(string Id, string Name, string FilePath)
-        //{
-
-
-        //    DirectoryInfo dir = ImageModel.GetDir(int.Parse(Id));
-        //    string filepath = Path.Combine(dir.FullName, Name);
-        //    FileInfo file = new FileInfo(filepath);
-
-        //    if (file.Exists)
-        //    {
-        //        file.Delete();
-
-        //    }
-        //    else
-        //    {
-
-        //        return new StatusCodeResult((int)HttpStatusCode.NotFound);
-        //    }
-        //    return new StatusCodeResult((int)HttpStatusCode.OK);
-        //}
-        //public HttpResponseMessage DeleteImage()
-        //{
-        //    var response = Request.CreateResponse(HttpStatusCode.OK);
-        //    //Response.StatusCode = 200;
-        //    return response;
-        //}
         #endregion
 
         #region Tags
-
         [HttpPost("AddTag")]
         //[ValidateAntiForgeryToken]
         public StatusCodeResult AddTag(string ItemModelId, string TagId)
@@ -364,7 +319,6 @@ namespace P3_Project.Controllers
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
 
-
         [HttpPost("CreateTag")]
         //[ValidateAntiForgeryToken]
         public IActionResult CreateTag(string TagName)
@@ -378,14 +332,11 @@ namespace P3_Project.Controllers
             return Ok();//new StatusCodeResult((int)HttpStatusCode.OK);
         }
 
-
         [HttpPost("DeleteTag")]
         //[ValidateAntiForgeryToken]
         public StatusCodeResult DeleteTag(string TagId)
         {
-            
             db.DB.RemoveRow("Tags", "Id", TagId);
-
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
         #endregion

@@ -209,7 +209,7 @@ namespace P3_Project.Models
                 img.FilePath = img.GetFilePath();
                 return img;
             }
-            return null;
+            return new ImageModel();
         }
         public void AddItem(Item item)
         {
@@ -307,7 +307,7 @@ namespace P3_Project.Models
         public void Save(int id)
         {
             string projectPath = Directory.GetCurrentDirectory();
-            string folderName = Path.Combine(projectPath, "wwwroot" ,"Pictures\\" + id);
+            string folderName = Path.Combine(projectPath, "wwwroot" ,"Pictures", id.ToString());
             DirectoryInfo dir = Directory.CreateDirectory(folderName);
             string fileName = Path.Combine(dir.FullName, Name);
             
@@ -336,7 +336,7 @@ namespace P3_Project.Models
         public static DirectoryInfo GetDir(int id)
         {
             string projectPath = Directory.GetCurrentDirectory();
-            string folderName = Path.Combine(projectPath, "wwwroot" , "Pictures\\" + id);
+            string folderName = Path.Combine(projectPath, "wwwroot" , "Pictures", id.ToString());
             return Directory.CreateDirectory(folderName);
         }
 
@@ -362,6 +362,7 @@ namespace P3_Project.Models
             fileName = Regex.Replace(fileName, "\\\\", "/");
             //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
+
             return fileName;
         }
 
