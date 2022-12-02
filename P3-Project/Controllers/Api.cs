@@ -19,11 +19,6 @@ using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
 using NuGet.Protocol;
 using ActionNameAttribute = Microsoft.AspNetCore.Mvc.ActionNameAttribute;
-using System.Drawing;
-using System.Web;
-
-
-
 
 
 
@@ -78,19 +73,6 @@ namespace P3_Project.Controllers
             var promoCodeJson = JsonSerializer.Serialize(promoCode);
             return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
         }
-
-        [HttpGet("getItemId")]
-        public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
-        {
-            
-            StorageDB db= new StorageDB();
-            color = HttpUtility.UrlDecode(color); 
-            var id = db.DB.ReadFromTable("Item" + modelId, new[] { "Id" }, $"Color='{color}' AND Size='{size}'", r => (int) r[0]).Last();
-            Response.Headers.Add("itemId",id.ToString());
-            return Ok();
-        }
-
-
 
     }
 

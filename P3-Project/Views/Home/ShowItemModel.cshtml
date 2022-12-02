@@ -60,7 +60,7 @@
         <div class="displayItem">
             @*<------------------ModelName and price--------------------->*@
             <div class="grid-containerTop">
-                <div class="grid-itemTop modelName" value="@(item.Id)^@(item.ModelName)" id="ModelName">@(item.ModelName)</div>
+                <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
                 <div class="grid-itemTop modelPrice" value="@(item.ModelPrice)" style="margin-top:16px;" id="ModelPrice">Pris: @(item.ModelPrice) kr.-</div>
             </div>
 
@@ -191,81 +191,39 @@
     }
 
     //Create cart object
-   async function addToCart() {
+    function addToCart() {
         if (currentColorToggle != undefined && currentSizeToggle != undefined) {
             let chosenModel = document.getElementById("ModelName").attributes.value.nodeValue;
             let chosenSize = document.getElementById(currentSizeToggle).attributes.value.nodeValue;
             let chosenColorCode = document.getElementById(currentColorToggle).attributes.value.nodeValue;
             let chosenColorName = document.getElementById(currentColorToggle).attributes.name.nodeValue;
             let chosenModelPrice = document.getElementById("ModelPrice").attributes.value.nodeValue;
-          
-
-
-            let NameId = chosenModel.split('^');
-
-          
-            const response = await fetch("/api/getItemId", 
-            {
-                method: 'GET',
-                redirect: 'follow',
-
-                headers: {
-                    
-                        color: encodeURI(chosenColorName),
-
-                        size: chosenSize,
-                        modelId: NameId[0],
-                },
-                
-
-            })
-                .then((response) => response.headers.get("itemId"));
-            
-               
 
             let itemData = {
-                Id: NameId[0],
-                ModelName: NameId[1],
+                Id: chosenModel,
                 Price: chosenModelPrice,
                 Size: chosenSize,
                 Color: chosenColorName,
                 ColoWheel: chosenColorCode,
                 AmountToCart: currentAmount,
-                ItemId: response,
             }
 
             console.log(itemData);
 
-            // Get the existing data
+               // Get the existing data 
             var existing = localStorage.getItem('itemsSavedForCart');
 
             console.log(existing)
             // If no existing data, create an array
             // Otherwise, convert the localStorage string to an array
-            let itemsSavedForCart = []
-            if (existing != null)
-                itemsSavedForCart = JSON.parse(existing);
+            existing = existing ? existing.split(',') : [];
 
-
-            let indexOfDuplicate = -1
-            if (itemsSavedForCart.length > 0) {
-                indexOfDuplicate = itemsSavedForCart.findIndex(item => {
-                    return (item.Size == itemData.Size && item.Color == itemData.Color)
-                })
-            }
-            if (indexOfDuplicate >= 0) {
-                itemsSavedForCart[indexOfDuplicate].AmountToCart += itemData.AmountToCart
-            }
-            else {
-                itemsSavedForCart.push(itemData);
-            }
-            //existing = existing ? existing.split(',') : [];
             // Add new data to localStorage Array
-            //existing.push(JSON.stringify(itemData));
+            existing.push(JSON.stringify(itemData));
 
             // Save back to localStorage
-            //localStorage.setItem('itemsSavedForCart', existing.toString());
-            localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
+            localStorage.setItem('itemsSavedForCart', existing.toString());
+
 
         }
         else {
