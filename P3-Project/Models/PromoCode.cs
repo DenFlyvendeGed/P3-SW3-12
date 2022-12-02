@@ -68,13 +68,12 @@ public class PromoCode
 
 		if(Id != null){
 			db.DB.UpdateTable(TABLE_NAME, new (string, object)[] {
-				("Id", Id),
 				("Code", Code),
 				("Value", this.Value),
 				("DiscountType", (int)DiscountType),
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
-			}, $"Id = {Id}");
+			}, $"Id = '{Id}'");
 		} else {
 			db.DB.PushToTable(TABLE_NAME, new (string, object)[] {
 				("Code", Code),
@@ -87,6 +86,10 @@ public class PromoCode
 		}
 
 		if(this.ItemType == PromoCodeItemType.Some){
+			if (db.DB.CheckTable($"{TABLE_NAME}_{Id}"))
+			{
+				db.DB.DeleteTable($"{TABLE_NAME}_{Id}");
+			}
 			db.DB.CreateTable($"{TABLE_NAME}_{Id}", (IEnumerable<(string, SQLType)>)new(string,SQLType)[]{
 				("IsPack", SQLType.Bool),
 				("ShopModelID", SQLType.Int)
