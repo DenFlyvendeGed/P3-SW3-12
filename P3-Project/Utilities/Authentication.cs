@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+
 using P3_Project.Models;
 using P3_Project.Models.DB;
+
 
 namespace P3_Project.Utilities
 {
@@ -10,6 +12,7 @@ namespace P3_Project.Utilities
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+
             StorageDB db = new();
             
             if(!db.DB.CheckTable("Users"))
@@ -21,6 +24,7 @@ namespace P3_Project.Utilities
                     UserPassword = "admin123"
                 });
             }
+
             if(filterContext.HttpContext.Request.Cookies["UserName"] != null) 
             {
                 filterContext.HttpContext.Session.SetString("UserName", filterContext.HttpContext.Request.Cookies["UserName"]);
