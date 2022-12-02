@@ -396,22 +396,6 @@ namespace P3_Project.Controllers
 
 
         #endregion
-
-
-        #region Settings
-
-        [HttpPut("UpdateFaktura")]
-        public IActionResult UpdateFaktura(Faktura faktura)
-        {
-            Faktura fakturaData = faktura;
-            int Id = fakturaData.Id;
-
-            fakturaData.UpdateFaktura();
-
-            return RedirectToActionPermanent("Settings", "Admin");
-        }
-
-
-        #endregion
+        
     }
 }
