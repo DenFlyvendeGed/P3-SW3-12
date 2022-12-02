@@ -321,9 +321,12 @@ public class SqlDB : DataBase
 
 
 		PropertyInfo[] Properties = objectClass.GetType().GetProperties();
-		// open database connection.
-		conn.Open();
-
+		// open database connection
+		try
+		{
+			conn.Open();
+		}
+		catch { }
 		FieldInfo[] fields = objectClass.GetType().GetFields();
 
 		List<T> list = new List<T>();

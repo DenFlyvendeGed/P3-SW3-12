@@ -146,6 +146,8 @@ namespace P3_Project.Controllers
         
 		public ActionResult Settings()
         {
+
+
             return View();
         }
 
