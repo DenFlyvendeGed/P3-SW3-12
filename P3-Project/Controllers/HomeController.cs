@@ -23,6 +23,7 @@ namespace P3_Project.Controllers
 
             db.DB.CreateTable("ItemModels", new ItemModel());
             db.DB.CreateTable("Tags", new Tag());
+            db.DB.CreateTable("FakturaSettings", new Faktura());
         }
 
         //Main webshop page - Clothes
