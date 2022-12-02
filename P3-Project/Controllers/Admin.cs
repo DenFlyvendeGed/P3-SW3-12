@@ -38,6 +38,7 @@ namespace P3_Project.Controllers
 
             db.DB.CreateTable("ItemModels", new ItemModel());
             db.DB.CreateTable("Tags", new Tag());
+            db.DB.CreateTable("FakturaSettings", new Faktura());
 
         }
 
@@ -145,9 +146,26 @@ namespace P3_Project.Controllers
         
 		public ActionResult Settings()
         {
+
+
             return View();
         }
 
         #endregion
+
+        #region Settings
+
+        public ActionResult FakturaSettings()
+        {
+            StorageDB db = new StorageDB();
+
+            List<Faktura> models = db.DB.GetAllElements("FakturaSettings", new Faktura());
+
+            ViewBag.model = models;
+
+            return View();
+        }
+        #endregion
+
     }
 }

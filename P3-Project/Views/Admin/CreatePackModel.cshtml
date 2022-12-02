@@ -17,56 +17,63 @@
         foreach (ImageModel img in Model.Item1.Pictures)
         {
             ViewBag.pictures += "'" + img.FilePath + "', ";
-            }
+        }
     }
 }
-<div class="flexbox-createPack">
-    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
-        Angiv navn: <input type="text" class="topBar-Input" id="LeftInput">
-    </h5>
-    <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
-        Angiv pris: <input type="text" class="topBar-Input" id="RightInput">
-    </h5>
+<div class="box">
+    <div class="flexbox-createPack">
+        <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
+            Angiv navn: <input type="text" class="topBar-Input" id="LeftInput">
+        </h5>
+        <h5 style="margin-left:1%; margin-right:30%; display:inline; font-weight: bolder; -ms-transform: translateY(25%); transform: translateY(25%);">
+            Angiv pris: <input type="text" class="topBar-Input" id="RightInput">
+        </h5>
 
 
+    </div>
 
-    <div id="imgBox" class="item">
-        <div id="img" class="picSize" style="display:block;">
-            <input type="button" class="delBut" value="X" />
-            @*Billed placehodler*@
-            <img id="prodImg" class="picSize" src="" />
+    <div class="packGrid">
+        <div id="imgBox" class="packItem" style="margin-left: 20%;">
+            Tilføj billede
+            <div id="img" class="picSize" style="display:block;">
+                <input type="button" class="delBut" value="X" />
+                @*Billed placehodler*@
+                <img id="prodImg" class="picSize" src="" />
+
+            </div>
+
+            @*Buttons*@
+            <div style="margin-left: 7%;">
+                @*billed vælger*@
+                <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+                <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+                @*Upload knap*@
+                <button class="ASHButton" onclick="document.getElementById('imgUp').click();" style="margin-top:1px;">Upload Billed</button>
+                <input class="uploadBut" type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
+            </div>
 
         </div>
 
-        @*Buttons*@
-        <div class="imageButtons center">
-            @*billed vælger*@
-            <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
-            <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
-            @*Upload knap*@
-            <button class="ASHButton" onclick="document.getElementById('imgUp').click();" style="margin-top:1px;">Upload Billed</button>
-            <input class="uploadBut" type="file" multiple accept="image/*" id="imgUp" style="visibility: hidden;" onchange="saveImg">
-        </div>
 
-        <div class="box TagBox">
-            <div>
+        <div class="packItem">
+            Tilføj tag
+            <div class="box TagBox">
                 @{
                     List<Tag>? modelTags = (Model.Item1 != null ? Model.Item1.Tags : null);
 
                     foreach (Tag tag in Tag.GetAllTags())
                     {
-                            <div>
-                                <label>@tag.Name</label>
+                        <div>
+                            <label>@tag.Name</label>
                             <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)"
                                @(
                            modelTags != null ?
                            modelTags.Any(modeltag => modeltag.Name == tag.Name) ? Html.Raw("Checked") : ""
                            :
                            ""
-                                   )
-                                   >
-                                <input type="button" value="-" id="@tag.Id" onclick="DeleteTag(this)">
-                            </div>
+                               )>
+                            <input type="button" value="-" id="@tag.Id" onclick="DeleteTag(this)">
+                        </div>
                     }
 
                 }
@@ -196,7 +203,7 @@
 
     function AddTag(Id) {
         const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
-            if (modelId != 0) {
+                            if (modelId != 0) {
             fetch("../api/Admin/AddTag?ItemModelId=" + modelId + "&TagId=" + Id,
                 {
                     method: "POST",
@@ -210,7 +217,7 @@
 
     function RemoveTag(Id) {
         const modelId = @(ViewBag?.model != null ? ViewBag.model.Id : 0)
-            if (modelId != 0) {
+                            if (modelId != 0) {
             fetch("../api/Admin/RemoveTag?ItemModelId=" + modelId + "&TagId=" + Id,
                 {
                     method: "POST",
@@ -249,10 +256,10 @@
                     const div = document.createElement("div");
                     div.innerHTML =
                         `<div>
-                        <label>`+ tagName + `</label>
-                        <input type="checkbox" id= ` + Response.headers.get('Id') + `  onclick="ToggleTag(this)">
-                        <input type="button" value="-" id="-1" onclick="DeleteTag(this)">
-                    </div>`
+                                        <label>`+ tagName + `</label>
+                                        <input type="checkbox" id= ` + Response.headers.get('Id') + `  onclick="ToggleTag(this)">
+                                        <input type="button" value="-" id="-1" onclick="DeleteTag(this)">
+                                    </div>`
 
                     parent.append(div);
                     container.remove();
@@ -291,32 +298,35 @@
 
 <textarea id="DescriptionBox" style="position: static; width: 50vw; resize: none;" rows="5" placeholder="Beskrivelse"></textarea>
 
-<p class="buttonBox" onclick="UpdateDB()" style="top: 20px; left: 73vw; width: 100px; height: 36px; margin-top: 26px; cursor: pointer;">@(Packs.PackID != null ? Html.Raw("Opdater"):Html.Raw("Opret pakke"))</p>
+<p class="buttonBox" onclick="UpdateDB()" style="top: 20px; left: 73vw; width: 100px; height: 36px; margin-top: 26px; cursor: pointer;">@(Packs.PackID != null ? Html.Raw("Opdater") : Html.Raw("Opret pakke"))</p>
 
 
 
 <script>
 
-    
+
 
     let arraylist = [
-        @foreach(var i in Packs.Options){
-            <text>[</text>
-            @foreach(var j in i){
-                <text>@j,</text>
-            }
-            <text>],</text>
+    @foreach (var i in Packs.Options)
+    {
+        <text>[</text>
+        @foreach (var j in i)
+        {
+            <text>@j, </text>
         }
-    ];
+        <text>], </text>
+    }
+                    ];
     console.log(arraylist);
-    window.onload = LoadExistingPack(arraylist.length, arraylist , "@Packs.Name", "@Packs.Price", "@Packs.Description");
+    window.onload = LoadExistingPack(arraylist.length, arraylist, "@Packs.Name", "@Packs.Price", "@Packs.Description");
 
-    function AddOption(ChoiceNumber){
-    let ItemArray = [
-        @foreach(var (id, name, imgPath) in Items){
-            <text>{Name:"@name",Id:"@id", ImgPath:"@Html.Raw(imgPath)"},</text>
-        }
-    ]
+    function AddOption(ChoiceNumber) {
+        let ItemArray = [
+    @foreach (var (id, name, imgPath) in Items)
+    {
+        <text>{ Name: "@name", Id: "@id", ImgPath: "@Html.Raw(imgPath)" }, </text>
+    }
+                    ]
         const Array = ["hættetrøje-uden-lynlås", "t-shirt", "Hello there", "General Kenobi"];
 
 
@@ -324,10 +334,10 @@
         const LargeDiv = document.createElement("div");
         LargeDiv.className = "LargeDiv";
         const FlexBox = document.querySelector(`#flexBox-Packcreator-${ChoiceNumber}`); // selecting the pack choice flexbox
-        FlexBox.insertBefore(LargeDiv, FlexBox.children[(FlexBox.children.length)-1]); // inserting into found flexbox and inserting it before all already existing optionfields(The LargeDiv class)
+        FlexBox.insertBefore(LargeDiv, FlexBox.children[(FlexBox.children.length) - 1]); // inserting into found flexbox and inserting it before all already existing optionfields(The LargeDiv class)
         let number = FlexBox.children.length - 1;
 
-        //creating and appending the option box to the main box 
+        //creating and appending the option box to the main box
         const Options = document.createElement("div");
         Options.setAttribute("class", "OptionBox");
         Options.setAttribute("style", "left: 65px; height: 158px; width:120px;");
@@ -348,8 +358,7 @@
 
         //sæt billedet af første option som Select indeholder
         ModelImage.src = DropDown.selectedOptions[0].imgPath;
-        function loadImg(e)
-        {
+        function loadImg(e) {
             //console.log(e.target.selectedOptions[0].imgPath)
             ModelImage.src = e.target.selectedOptions[0].imgPath;
         }
@@ -369,27 +378,27 @@
     }
 
 
-    function DeleteOption(ID){
-        
+    function DeleteOption(ID) {
+
         let OptionElement = document.getElementById(ID);
         let ParentElement = OptionElement.parentElement;
         ParentElement.remove();
     }
 
 
-    function DeleteChoice(ID){
+    function DeleteChoice(ID) {
         let Element = document.getElementById(ID);
         let ParentElement = Element.parentElement;
         ParentElement.remove();
     }
-    function AddChoice(){
+    function AddChoice() {
 
         const ChoiceDiv = document.createElement("div");
         const Title = document.createElement("h3");
 
         const Container = document.querySelector(".pb-3");
-        const ChoiceNumber = Container.children.length - 6;
-        ChoiceDiv.setAttribute("id",`Choice${ChoiceNumber}`);
+        const ChoiceNumber = Container.children.length - 7;
+        ChoiceDiv.setAttribute("id", `Choice${ChoiceNumber}`);
         Title.appendChild(document.createTextNode(`Valgmulighed ${ChoiceNumber}:`));
 
         const MinusBox = document.createElement("div");
@@ -409,7 +418,7 @@
         ChoiceDiv.appendChild(Title);
         ChoiceDiv.appendChild(FlexBox);
         ChoiceDiv.appendChild(MinusBox);
-        
+
 
         const AddButton = document.createElement("div");
         AddButton.setAttribute("class", "OptionBox");
@@ -456,18 +465,18 @@
         document.getElementById(`${value1}Dropdown-Option${value2}`).value = OptionValue;
     }
 
-    function LoadExistingPack(Choices, Options, Name, Price, Description){
+    function LoadExistingPack(Choices, Options, Name, Price, Description) {
         document.getElementById("LeftInput").value = Name;
         document.getElementById("RightInput").value = Price;
         document.getElementById("DescriptionBox").value = Description;
-        if(Options != 0){
-            for(j = 1; j<=Choices; j++){
+        if (Options != 0) {
+            for (j = 1; j <= Choices; j++) {
                 AddChoice();
-                for(k=1; k<=Options[j-1].length; k++){
+                for (k = 1; k <= Options[j - 1].length; k++) {
                     AddOption(j);
                     console.log(j);
                     console.log(k);
-                    ChangeOption(`flexBox-Packcreator-${j}`, Options[j-1][k-1] , j , k);
+                    ChangeOption(`flexBox-Packcreator-${j}`, Options[j - 1][k - 1], j, k);
                 }
             }
         }
@@ -497,8 +506,8 @@
                 }
             )
         })
-        
-        
+
+
         let PayLoad = {
             Name: name,
             Price: price,
@@ -510,7 +519,7 @@
         let PackModel = JSON.stringify(PayLoad);
         //console.log(PackModel)
 
-        if(@((Packs.PackID != null).ToString().ToLower())){
+        if (@((Packs.PackID != null).ToString().ToLower())) {
             fetch(`/api/admin/EditPackModel/@Packs.PackID`, {
                 method: "PUT",
                 headers: {
@@ -523,7 +532,7 @@
                         window.location.href = response.url;
                     }
                 });
-        }else{
+        } else {
             fetch("/api/admin/CreatePackModel", {
                 method: "POST",
                 headers: {
@@ -538,7 +547,7 @@
                 });
         }
 
-        
+
 
         /*
         [
@@ -552,3 +561,20 @@
 
 </script>
 
+
+<style>
+    .packGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin: 1em;
+        align-items: center;
+        gap: 10%;
+    }
+
+    .packItem {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+</style>

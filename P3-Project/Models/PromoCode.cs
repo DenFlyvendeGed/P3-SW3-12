@@ -82,14 +82,16 @@ public class PromoCode
 				("ItemType", (int)ItemType),
 				("ExpirationDate", ExpirationDate.ToString("yyyy-MM-dd"))
 			});
-			this.Id = db.DB.ReadFromTable($"{TABLE_NAME}", $"Code='{Code}'", (r) => (int)r[0])[0];
+			this.Id = db.DB.ReadFromTable($"{TABLE_NAME}", $"Code='{Code}'", (r) => (int)r[0]).Last();
 		}
 
-		if(this.ItemType == PromoCodeItemType.Some){
-			if (db.DB.CheckTable($"{TABLE_NAME}_{Id}"))
-			{
-				db.DB.DeleteTable($"{TABLE_NAME}_{Id}");
-			}
+        if (db.DB.CheckTable($"{TABLE_NAME}_{Id}"))
+        {
+            db.DB.DeleteTable($"{TABLE_NAME}_{Id}");
+        }
+
+        if (this.ItemType == PromoCodeItemType.Some){
+			
 			db.DB.CreateTable($"{TABLE_NAME}_{Id}", (IEnumerable<(string, SQLType)>)new(string,SQLType)[]{
 				("IsPack", SQLType.Bool),
 				("ShopModelID", SQLType.Int)

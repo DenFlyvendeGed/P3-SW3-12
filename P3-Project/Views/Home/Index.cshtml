@@ -18,6 +18,7 @@
         Tags:
         <div>
             @{
+                
 
                 foreach (Tag tag in Tag.GetAllTags())
                 {
@@ -29,7 +30,7 @@
             }
         </div>
     </div>
-
+    
     <div class="grid-container">
 
         @{
@@ -37,51 +38,51 @@
             foreach (ItemModel item in ViewBag.model)
             {
                 item.LoadTags();
-                                                        <a style="color: black; text-decoration: none;" class="Clickable @Html.Raw(item.GetTagString()) " href="../Home/ShowItemModel?id=@(item.Id)">
-                                                                                                                                <div class="item@(index) itemShowCase">
-                                                                                                                                    <div class="itemShowCasePic wrap">
-                                                                                                                                        @{
+                <a style="color: black; text-decoration: none;" class="Clickable @Html.Raw(item.GetTagString()) " href="../Home/ShowItemModel?id=@(item.Id)">
+                    <div class="item@(index) itemShowCase">
+                        <div class="itemShowCasePic wrap">
+                            @{
+                               
                                 ImageModel img = item.GetFirstImg();
                                 if (img != null)
                                 {
 
-                                                                                                                                                                                                                                                            <img class="picSize midImg" src='@img.FilePath' />
+                                    <img class="picSize midImg" src='@img.FilePath' />
                                 }
 
-                                                                                                                                        }
-                                                                                                                                    </div>
-                                                                                                                                    <div class="itemShowCaseName "  )>
-                                                                                                                                        <div>@(item.ModelName)</div>
-                                                                                                                                        <div>Pris: @(item.ModelPrice) kr.-</div>
-                                                                                                                                    </div>
+                            }
+                        </div>
+                        <div class="itemShowCaseName " )>
+                            <div>@(item.ModelName)</div>
+                            <div>Pris: @(item.ModelPrice) kr.-</div>
+                        </div>
 
-                                                                                                                                </div>
-                                                                                                                            </a>
+                    </div>
+                </a>
                 index += 1;
             }
         }
 
     </div>
 </div>
+
 <script>
     const tagList = [];
     const itemContainer = document.querySelector(".grid-container");
     const items = itemContainer.children;
-    function ToggleTag(dom)
-    {
+    function ToggleTag(dom) {
         const text = dom.previousElementSibling.innerText;
-        if(dom.checked)
-        {
+        if (dom.checked) {
             tagList.push(text);
         }
-        else{
+        else {
             tagList.splice(tagList.indexOf(text), 1);
         }
         //console.log(tagList)
 
-       
 
-        if(tagList.length > 0){
+
+        if (tagList.length > 0) {
             let searchString = "\\s?(";
             tagList.forEach(name => {
                 searchString += name + "\\s|";
@@ -90,7 +91,7 @@
             searchString += ")"//{" + tagList.length + "}";
 
 
-            const regex = new RegExp(searchString,"gm");
+            const regex = new RegExp(searchString, "gm");
 
             console.log(searchString);
             //console.log(items)
@@ -99,21 +100,21 @@
                 //console.log(item.classList.value)
                 //console.log(item.classList.value.match(regex))
 
-                if (item.classList.value.match(regex)?.length != tagList.length){
+                if (item.classList.value.match(regex)?.length != tagList.length) {
                     item.style.display = "none";
                 }
-                else{
+                else {
                     item.style.display = "";
                 }
             }
         }
-        else{
+        else {
             for (item of items) {
                 item.style.display = "";
             }
         }
 
-        
+
         //\s((test\s+|test1\s+|test2\s+)){3}
 
     }
