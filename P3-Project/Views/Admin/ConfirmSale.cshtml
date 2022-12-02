@@ -26,16 +26,16 @@
                 <td style="width: 10vw;">
                     ID
                 </td>
-                <td style="width: 10vw;">
+                <td style="width: 20vw;">
                     Navn
                 </td>
-                <td class="centerTableText style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
                     Antal
                 </td>
-                <td class="centerTableText style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
                     Pris pr. stk. (DKK)
                 </td>
-                <td class="centerTableText style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
                     Samlet pris (DKK)
                 </td>
             </tr>
@@ -46,11 +46,6 @@
 <div>
     <table style="margin-top: 10px">
         <tbody>
-            <style>
-                td{
-                    width: 10vw;
-                }
-            </style>
             @{
                 List<(ItemSnapshot, int)> itemSnapshots = new List<(ItemSnapshot, int)>();
 
@@ -78,15 +73,23 @@
                     foreach (var (unit, amount) in itemSnapshots)
                     {
                         <tr>
-                            <td class="centerTableText">@unit.ItemId</td>
-                            <td style="padding-left: 10px;">@unit.Name | @unit.Color @unit.Size</td>
-                            <td class="centerTableText">@amount</td>
-                            <td class="centerTableText">@unit.Price</td>
-                            <td class="centerTableText" style="background-color: var(--ash-blue)">@(unit.Price * amount)</td>
+                            <td class="centerTableText" style="width: 10vw;">
+                            @unit.ItemId
+                            </td>
+                            <td style="padding-left: 10px; width: 20vw;">
+                            @unit.Name | @unit.Color @unit.Size
+                            </td>
+                            <td class="centerTableText" style="width: 10vw;">
+                            @amount
+                            </td>
+                            <td class="centerTableText" style="width: 10vw;">
+                            @unit.Price
+                            </td>
+                            <td class="centerTableText" style="background-color: var(--ash-blue); width: 10vw;">@(unit.Price * amount)</td>
                         </tr>
-                        
+
                         i++;
-                        
+                        itemPriceTotal = itemPriceTotal + (unit.Price * amount);
                         //Empty the array
                     }
                 }
@@ -96,14 +99,9 @@
     </table>
 </div>
 
-<div>
+<div style="width: 60vw;">
     <table>
         <tbody>
-            <style>
-                td {
-                width: 10vw;
-                }
-            </style>
             @{
                 List<PackSnapShot> packSnapshots = new List<PackSnapShot>();
 
@@ -118,12 +116,23 @@
                         {
                             PackSnapShot pack = (PackSnapShot)unit.ShopUnit;
                             <tr style="margin-top: 10px">
-                                <td style="background-color: var(--ash-light-blue)">@pack.PackId</td>
-                                <td style="background-color: var(--ash-light-blue)">@pack.Name</td>
-                                <td style="background-color: var(--ash-light-blue)">@Model.ShopUnits[index].Amount</td>
-                                <td style="background-color: var(--ash-light-blue)">@pack.Price</td>
-                                <td style="background-color: var(--ash-light-blue)">@(pack.Price * Model.ShopUnits[index].Amount)</td>
+                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
+                                @pack.PackId
+                                </td>
+                                <td style="background-color: var(--ash-light-blue); width: 20vw;">
+                                @pack.Name
+                                </td>
+                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
+                                @Model.ShopUnits[index].Amount
+                                </td>
+                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
+                                @pack.Price
+                                </td>
+                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
+                                @(pack.Price * Model.ShopUnits[index].Amount)
+                                </td>
                             </tr>
+                            packPriceTotal = packPriceTotal + (pack.Price * Model.ShopUnits[index].Amount);
 
                             int next = 0;
                             while(Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
@@ -131,11 +140,19 @@
                                 ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
 
                                 <tr>
-                                    <td>@item.ItemId</td>
-                                    <td>@item.Name | @item.Color @item.Size</td>
-                                    <td>@Model?.ShopUnits[index + next].Amount</td>
-                                    <td>@item.Price</td>
-                                    <td style="background-color: var(--ash-blue)"></td>
+                                    <td style="width: 10vw;">
+                                    @item.ItemId
+                                    </td>
+                                    <td style="width: 20vw;">
+                                    @item.Name | @item.Color @item.Size
+                                    </td>
+                                    <td style="width: 10vw;">
+                                    @Model?.ShopUnits[index + next].Amount
+                                    </td>
+                                    <td style="width: 10vw;">
+                                    @item.Price
+                                    </td>
+                                    <td style="background-color: var(--ash-blue); width: 10vw;"></td>
                                 </tr>
                                 next++;
                             }
@@ -147,12 +164,26 @@
             
         </tbody>
     </table>
-    <div style="float: right">
-        @*(packPriceTotal + itemPriceTotal)*@
+    <div style="text-align: right;">
+        <div style="white-space: nowrap;">
+            <div style="font-weight: bold; display: inline-block;">Total:</div>
+            <div style="display: inline-block;">@(packPriceTotal + itemPriceTotal)</div>
+        </div>
+    </div>
+    <div class="center" style="display: inline; float: right">
+        <button class="ASHButton" onclick="cancelOrder()">Afvis</button>
+        <button class="ASHButton" onclick="confirmOrder()">Bekræft</button>
     </div>
 </div>
 
-<div class="center" style="display: inline; float: right">
-    <button class="ASHButton">Afvis</button>
-    <button class="ASHButton">Bekræft</button>
-</div>
+<script>
+    function confirmOrder(){
+        //fetch(url), {
+
+        //}
+    }
+
+    function cancelOrder(){
+        //fetch()
+    }
+</script>
