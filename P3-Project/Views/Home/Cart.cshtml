@@ -496,7 +496,7 @@
 
     })
 
-    function placeOrder(){
+    async function placeOrder(){
         let buyerName = document.getElementById("buyerName").value;
         let buyerEmail = document.getElementById("buyerEmail").value;
         let TotalPrice = document.getElementById("total").innerHTML;
@@ -534,18 +534,36 @@
 
                 ShopUnit.IsPack = true
                 ShopUnit.Name = item.packname;
-                ShopUnit.PackId = item.packid;
+                ShopUnit.PackId = parseInt(item.packid);
                 ShopUnit.Price = item.Price;
                 ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
 
                 for(let i = 0; item[""+i] != undefined; i++){
-                    console.log(item[""+i]);
-                    //ShopUnit.ModelId = item.Id;
-                    //ShopUnit.ItemId = item.ItemId;
-                    //ShopUnit.Name = item.ModelName;
-                    //ShopUnit.Color = item.Color;
-                    //ShopUnit.Size = item.Size;
-                    //ShopUnit.Price = item.Price;
+                    ShopUnit = {};
+                    ShopUnit.ModelId = parseInt(item[""+i].id);
+                    ShopUnit.Name = item[""+i].name;
+                    ShopUnit.Color = item[""+i].ItemColors;
+                    ShopUnit.Size = item[""+i].size;
+
+
+                    const response = await fetch("/api/getItemId", 
+                    {
+                        method: 'GET',
+                        redirect: 'follow',
+
+                        headers: {
+                                color: encodeURI(ShopUnit.Color),
+                                size: encodeURI(ShopUnit.Size),
+                                modelId: ShopUnit.ModelId,
+                        },
+
+
+                    })
+                    .then((response) => response.headers.get("itemId"));
+
+                    ShopUnit.Price = parseInt(item[""+i].ModelPrice);
+                    ShopUnit.ItemId = parseInt(response);
+                    ShopUnits.push({"Amount" : 1, ShopUnit});
                 }
 
 

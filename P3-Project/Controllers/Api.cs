@@ -79,7 +79,8 @@ namespace P3_Project.Controllers
             
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
-            var id = db.DB.ReadFromTable("Item" + modelId, new[] { "Id" }, $"Color='{color}' AND Size='{size}'", r => (int) r[0]).Last();
+            size = HttpUtility.UrlDecode(size);
+            var id = db.DB.ReadFromTable("Item" + modelId, new[] { "Id" } , $"Color='{color}' AND Size='{size}'", r => (int) r[0]).Last();
             Response.Headers.Add("itemId",id.ToString());
             return Ok();
         }
