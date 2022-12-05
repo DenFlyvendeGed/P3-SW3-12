@@ -926,7 +926,7 @@ div.shopTagBox{
 .PackPickerItems {
     background-color: #D9D9D9;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 2%;
 }
 .PackPickerImg {
     position: relative;
@@ -982,7 +982,7 @@ div.shopTagBox{
     height: 40px;
     border-width: 2px;
     padding: 4px;
-    margin: 2px;
+    margin: 0px;
     left: 90%;
     top: 84%
 }
@@ -990,6 +990,7 @@ div.shopTagBox{
     position: relative;
     bottom: 60%;
     right : 0%;
+    margin: 0%;
 }
 .SelectOption {
     position: relative;
@@ -1001,7 +1002,7 @@ div.shopTagBox{
     position: relative;
     height: 50px;
     width: 240px;
-    top: 4%;
+    bottom: 2%;
     padding: 10px;
 }
 .AddToCart {
@@ -1029,7 +1030,7 @@ div.shopTagBox{
     }
 
     .smltext {
-        bottom: 50%;
+        bottom: 40%;
         right: 38%;
     }
     .size {
@@ -1037,7 +1038,7 @@ div.shopTagBox{
         right: 32.5%;
     }
     .PackPickerFlexBox {
-        bottom: 61.5%;
+        bottom: 48.5%;
         left: 24%;
         width: 136px;
     }
@@ -1054,25 +1055,28 @@ div.shopTagBox{
         right: 0%;
         top: 0%;
     }
+    .PackPickerItems {
+        margin-bottom: 6%;
+    }
     .SelectOption {
-        bottom: 52%;
+        bottom: 42%;
         left: 2%;
         width: 30%;
     }
     .Name {
         height: 50px;
         width: 240px;
-        top: 5%;
+        bottom: 0%;
+        top: 21%;
     }
-    .PackPickerItems {
-        height: 35vh;
-    }
+    
     .PackPickerHeader{
         width: 94vw;
     }
     .AddToCart {
         left: 40vw;
         width: 180px;
+        top: 0.7%;
     }
 }
 
