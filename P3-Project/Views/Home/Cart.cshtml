@@ -40,9 +40,6 @@
             <div id="LocalStorageInfo"></div>
 
 
-
-
-
         </div>
 
 
@@ -66,7 +63,7 @@
 
 
             <tr>
-                
+
                 <td style="width: 10vw;">
                     Navn
                 </td>
@@ -89,7 +86,7 @@
                 </td>
 
             </tr>
-            
+
 
         </tbody>
 
@@ -103,10 +100,8 @@
 
 <div class="checkout">
 
-
-
-    <div class="total" id="subTotal">Total:</div>
-    <button class="button">Reservér</button>
+    <div class="total" id="total"></div>
+    <button class="button" id="createOrder">Reservér</button>
 
     <div class="PromoCode">
         <label for="PromoKodeInput">
@@ -115,12 +110,10 @@
         <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
     </div>
 
-    <div class="total">Total:</div>
-
-
-
-
-
+    <div>
+        <input type="text" placeholder="Navn" id="buyerName"/>
+        <input type="text" placeholder="Email" id="buyerEmail"/>
+    </div>
 
 
 </div>
@@ -130,104 +123,139 @@
 
 <script>
 
-
-
-
-
-
-   
     window.addEventListener('load', () => {
 
         const itemString = localStorage.getItem('itemsSavedForCart');
-
 
         let itemsSavedForCart = JSON.parse(itemString);
 
         const table = document.querySelector(".confHeadTable");
         let index = 0;
+
+        //Load items
         for (let item of itemsSavedForCart) {
 
-            console.log("| Id of Item: " + item.Id, "| Name of Item: " + item.ModelName, "| Colour of Item: " + item.Color, "| Amount in cart: " + item.AmountToCart + " |")
+            if (item.packid != undefined) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+
+                                    <td style="width: 10vw;" >
+                                        ` + item.packname + //Navn
+                    `</td>
+                                         <td style = "width: 10vw; border-style: none;" >
+                                        ` + //Tom Felt til visual
+                    `</td>
+                                      <td style = "width: 10vw; border-style: none;" >
+                                    ` + //Tom Felt til visual
+                    `</td>
+                                     <td style = "width: 10vw;" >
+
+
+                                        <div class="counterGrid">
+                                            <input class="counterItem" type="button" id="minus" value="-">
+                                                <div class="counterItem" id="${"pack"},${item.packid},${index}">` + item.AmountToCart + `</div>
+                                            <input class="counterItem" type="button" id="plus" value="+">
+                                        </div>
+
+                                      </td>
+
+                                         <td style = "width: 10vw; border-style: none;" >
+                                        ` + //Tom Felt til visual
+                    `</td>
+                                    <td style = "width: 10vw;" >
+                                        ` + item.Price + //Pris pr.stk. (DKK)
+                    `</td>
+                                    <td style = "width: 10vw;" > <div id="${index}">
+                                                ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
+                    `</div>
+                                     </td>
+
+                                     `;
+
+                table.append(row)
+                index += 1;
+            }else{
 
             const row = document.createElement("tr");
             row.innerHTML = `
 
-                        <td style="width: 10vw;" >
-                            ` + item.ModelName + //Navn
+                                <td style="width: 10vw;" >
+                                    ` + item.ModelName + //Navn
                 `</td>
-                        <td style = "width: 10vw;" >
-                            ` + item.Size + //Størelse
+                                <td style = "width: 10vw;" >
+                                    ` + item.Size + //Størelse
                 `</td>
-                        <td style = "width: 10vw;" >
-                            ` + item.Color + //Farve
+                                <td style = "width: 10vw;" >
+                                    ` + item.Color + //Farve
                 `</td>
-                         <td style = "width: 10vw;" >
+                                 <td style = "width: 10vw;" >
 
 
-                            <div class="counterGrid">
-                                <input class="counterItem" type="button" id="minus" value="-">
-                                <div class="counterItem" id="${item.Id},${item.ItemId},${index}">`+ item.AmountToCart + `</div>
-                                <input class="counterItem" type="button" id="plus" value="+">
-                            </div>
+                                    <div class="counterGrid">
+                                        <input class="counterItem" type="button" id="minus" value="-">
+                                        <div class="counterItem" id="${item.Id},${item.ItemId},${index}">` + item.AmountToCart + `</div>
+                                        <input class="counterItem" type="button" id="plus" value="+">
+                                    </div>
 
-                          </td>
+                                  </td>
 
-                             <td style = "width: 10vw; border-style: none;" >
-                            ` + //Tom Felt til visual
+                                     <td style = "width: 10vw; border-style: none;" >
+                                    ` + //Tom Felt til visual
                 `</td>
-                        <td style = "width: 10vw;" >
-                            ` + item.Price + //Pris pr.stk. (DKK)
+                                <td style = "width: 10vw;" >
+                                    ` + item.Price + //Pris pr.stk. (DKK)
                 `</td>
-                        <td style = "width: 10vw;" > <div id="${index}">
-                            ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
-                         `</div> 
-                         </td>
+                                <td style = "width: 10vw;" > <div id="${index}">
+                                    ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
+                `</div>
+                                 </td>
 
-                         `;
+                                 `;
 
             table.append(row)
             index += 1;
-
+            }
         }
 
+        
+
         function subTotal(itemsSavedForCart, index) {
-            
+
             let SubIndex = 0;
             for (let item of itemsSavedForCart) {
                 let SubTotal = 0;
                 let Total = item.Price * item.AmountToCart;
                 SubTotal += Total;
 
-                console.log(item.AmountToCart);
-                console.log(SubTotal);
-                console.log(SubIndex);
-
-                document.getElementById(SubIndex).innerHTML  = SubTotal;
+              
+                document.getElementById(SubIndex).innerHTML = SubTotal;
+                document.getElementById(SubIndex).value = SubTotal;
 
                 SubIndex += 1;
 
             }
-            /*
-            console.log("");
-           if(index != itemsSavedForCart.length){
-                document.getElementById(index).innerHTML = "Total: " + SubTotal;
+             total();
+        }
+        subTotal(itemsSavedForCart, index);
+
+
+
+        function total() {
+            let totalPrice = 0;
+            for (let i = 0; i < itemsSavedForCart.length; i++) {
+               let currentValue = parseInt(document.getElementById(i).textContent);
+               totalPrice += currentValue;
            }
-        */
-           }
+           
+           document.getElementById("total").innerHTML = "Total: " + totalPrice;
+        }
 
-
-         subTotal(itemsSavedForCart, index);
-            
-
-      
-
-        
         function changeCount(delta) {
 
             return function (e) {
                 let dom = e.target.parentElement.querySelector("div").id;
                 let newDom = dom.split(',');
-                
+
                 let newIndex = newDom[2];
                 if (delta == "plus") {
 
@@ -240,16 +268,16 @@
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
-                    
-                       
+
+
                     itemsSavedForCart[newIndex].AmountToCart += 1;
 
                     //console.log(itemsSavedForCart[0]);
-                    
+
                     localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
-                    
+
                     document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
-                   
+
                     document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
                     subTotal(itemsSavedForCart, newIndex);
                 }
@@ -276,29 +304,189 @@
 
         }
 
-
-        /*
-
         //Promocode input.
         const selectObject = document.querySelector('#PromoKodeInput');
-
-        selectElement.addEventListener('change', sfbwgrb =>
-        {
-          fetch("api/ValidatePromoCode/{code}")
-          const result = document.querySelector('.result');
-          result.textContent = `Promokode aktiveret.`;
-        });
-
-        */
-
-
-        //ValidatePromoCode/{code}
-
-
-
         
+        selectObject.addEventListener('change', e =>
+        {
 
-        document.querySelectorAll('#minus').forEach( Minus => {
+            let promoCodeInput = e.target.value;
+
+          
+             let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
+             .then((response) => response.json())
+             .then((data) => {
+                 console.log(data);
+
+                 let cartIndex = 0;
+                 for(let item of itemsSavedForCart){
+                        if (data.result != true) { 
+                            console.log("Promo code Not Valid");
+                            break;
+                        }
+
+                        let discount = data.promoCode.Value;
+                        let discountType = data.promoCode.DiscountType;
+                        let price = parseInt(document.getElementById(cartIndex).textContent);
+                        let newPrice = 0;
+
+                        switch(data.promoCode.ItemType)
+                        {
+                            //validate all
+                            case 0:
+                                if(discountType == 0){
+                                    if(discount == 100){
+                                        newPrice = price * 0;
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+                                    }
+                                    else{
+                                        discount = discount/100;
+                                        newPrice = price - (price * discount);
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                    }
+
+                                }
+                                else if(discountType == 1){
+                                    newPrice = price - discount;
+                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                }
+                                
+                                //console.log("All");
+                                break;
+
+                            //validate all packs
+                             case 1:
+                                if(item.packid == undefined){
+                                    break;
+                                }
+                                if(discountType == 0){
+                                    if(discount == 100){
+                                        newPrice = price * 0;
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+                                    }
+                                    else{
+                                        discount = discount/100;
+                                        newPrice = price - (price * discount);
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                    }
+
+                                }
+                                else if(discountType == 1){
+                                    newPrice = price - discount;
+                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                }
+
+                               
+                                //console.log("All Packs");
+                                break;
+
+                            //validate All items
+                             case 2:
+                                if (item.packid != undefined) {
+                                    break;
+                                }
+                                if (discountType == 0) {
+                                    if (discount == 100) {
+                                        newPrice = price * 0;
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+                                    }
+                                    else {
+                                        discount = discount / 100;
+                                        newPrice = price - (price * discount);
+                                        document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                    }
+
+                                }
+                                else if (discountType == 1) {
+                                    newPrice = price - discount;
+                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                }
+                                //console.log("All items");
+                                break;
+
+
+                            //validate some
+                             case 3:
+                             if(discountType == 0){
+                                    if (discount == 100) {
+                                        discount = 0;
+                                        for (let i = 0; i < data.promoCode.Items.length; i++) {
+                                        
+                                            if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
+                                                newPrice = price * discount;
+                                                document.getElementById(cartIndex).innerHTML = newPrice;
+                                            }
+                                            else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
+                                                newPrice = price * discount;
+                                                document.getElementById(cartIndex).innerHTML = newPrice;
+                                            }
+                                        }
+
+                                    }else{
+                                        for (let i = 0; i < data.promoCode.Items.length; i++) {
+
+                                            if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
+                                                newPrice = price - (price * (discount/100));
+                                                document.getElementById(cartIndex).innerHTML = newPrice;
+                                            }
+                                            else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
+                                                newPrice = price - (price * (discount / 100));
+                                                document.getElementById(cartIndex).innerHTML = newPrice;
+                                            }
+                                        }
+                                    }
+                                    
+
+                             }else if(discountType == 1){
+                                    for (let i = 0; i < data.promoCode.Items.length; i++) {
+                                        if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
+                                            newPrice = price - discount;
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+                                        }
+                                        else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
+                                            newPrice = price - discount;
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+                                        }
+
+                                    }
+                             }
+                                
+                             
+                                 //console.log("Some");
+                                 break;
+
+
+                            default:
+
+                                 console.log("you fucked up");
+                                 break;
+
+                        }
+                       
+                        cartIndex += 1;
+
+                    
+
+                 }
+
+
+                 
+             });
+           
+        });
+        
+       
+
+
+
+
+
+
+
+        document.querySelectorAll('#minus').forEach(Minus => {
             Minus.onclick = changeCount("minus");
         });
         document.querySelectorAll('#plus').forEach(Plus => {
@@ -308,11 +496,79 @@
 
     })
 
-    
+    function placeOrder(){
+        let buyerName = document.getElementById("buyerName").value;
+        let buyerEmail = document.getElementById("buyerEmail").value;
+        let TotalPrice = document.getElementById("total").innerHTML;
+        TotalPrice = TotalPrice.split(': ');
 
 
+        const itemString = localStorage.getItem('itemsSavedForCart');
 
-    
+        let itemsSavedForCart = JSON.parse(itemString);
+        let ShopUnits = [];
+
+        
+
+
+        for(let item of itemsSavedForCart){
+            let ShopUnit = {};
+            //console.log(item);
+            if(item.packid == undefined){
+
+                ShopUnit.ModelId = item.Id;
+                ShopUnit.ItemId = item.ItemId;
+                ShopUnit.Name = item.ModelName;
+                ShopUnit.Color = item.Color;
+                ShopUnit.Size = item.Size;
+                ShopUnit.Price = item.Price;
+
+                ShopUnits.push({"Amount" : item.AmountToCart, ShopUnit : ShopUnit});
+            }
+        }
+
+        for(let item of itemsSavedForCart){
+            let ShopUnit = {};
+            //console.log(item);
+            if(item.packid != undefined){
+
+                ShopUnit.IsPack = true
+                ShopUnit.Name = item.packname;
+                ShopUnit.PackId = item.packid;
+                ShopUnit.Price = item.Price;
+                ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
+
+                for(let i = 0; item[""+i] != undefined; i++){
+                    console.log(item[""+i]);
+                    //ShopUnit.ModelId = item.Id;
+                    //ShopUnit.ItemId = item.ItemId;
+                    //ShopUnit.Name = item.ModelName;
+                    //ShopUnit.Color = item.Color;
+                    //ShopUnit.Size = item.Size;
+                    //ShopUnit.Price = item.Price;
+                }
+
+
+            }
+
+
+        }
+
+
+        let order = {
+            Name: buyerName,
+            Email: buyerEmail,
+            Price: parseInt(TotalPrice[1]),
+            ShopUnits: ShopUnits,
+        }
+
+        console.log(order);
+
+    }
+
+
+    document.getElementById("createOrder").addEventListener("click", placeOrder);
+
 
 </script>
 

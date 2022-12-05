@@ -147,12 +147,51 @@
 			let itemData = {
 				packid: "@Model.PackID",
 				packname: "@Model.Name",
-				price: @Model.Price
+				Price: @Model.Price,
+				AmountToCart: 1,
 			};
 			itemData = Object.assign(itemData, SelectedValues);
 
 			console.log(itemData);
-			
+
+		// Get the existing data
+		var existing = localStorage.getItem('itemsSavedForCart');
+
+		console.log(existing)
+		// If no existing data, create an array
+		// Otherwise, convert the localStorage string to an array
+		let itemsSavedForCart = []
+		if (existing != null)
+			itemsSavedForCart = JSON.parse(existing);
+
+/*
+		let indexOfDuplicate = -1
+		if (itemsSavedForCart.length > 0) {
+			indexOfDuplicate = itemsSavedForCart.findIndex(item => {
+				return (item.Size == itemData.Size && item.Color == itemData.Color)
+			})
+		}
+		if (indexOfDuplicate >= 0) {
+			itemsSavedForCart[indexOfDuplicate].AmountToCart += itemData.AmountToCart
+		}
+		else {
+			itemsSavedForCart.push(itemData);
+		}
+		//existing = existing ? existing.split(',') : [];
+		// Add new data to localStorage Array
+		//existing.push(JSON.stringify(itemData));
+
+		// Save back to localStorage
+		//localStorage.setItem('itemsSavedForCart', existing.toString());
+		localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
+		*/
+
+					itemsSavedForCart.push(itemData);
+					localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
+
+
+
+
 	}
 
 </script>
