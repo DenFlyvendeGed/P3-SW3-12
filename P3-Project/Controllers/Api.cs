@@ -89,7 +89,7 @@ namespace P3_Project.Controllers
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
 			var order = input_order.ToOrder();
 			P3_Project.Models.Orders.Globals.OrderDB.Push(order);
-			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
+			/*await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
 
 			var compile_folder = P3_Project.Models.ReservationPdf.ReservationPdf.COMPILE_FOLDER;
 
@@ -99,8 +99,8 @@ namespace P3_Project.Controllers
 				.Subject($"Reservation Ved Aalborg Sportshøjskole {order.Id}")
 				.Body("Du har nu lavet en reservation ved Aalborg Sportshøjskole")
 				.SendMail();
-
-			return Ok();
+            */
+			    return Ok();
 		}
     }
 

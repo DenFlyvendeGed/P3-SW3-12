@@ -217,7 +217,7 @@
             }
         }
 
-        
+
 
         function subTotal(itemsSavedForCart, index) {
 
@@ -227,7 +227,7 @@
                 let Total = item.Price * item.AmountToCart;
                 SubTotal += Total;
 
-              
+
                 document.getElementById(SubIndex).innerHTML = SubTotal;
                 document.getElementById(SubIndex).value = SubTotal;
 
@@ -246,7 +246,7 @@
                let currentValue = parseInt(document.getElementById(i).textContent);
                totalPrice += currentValue;
            }
-           
+
            document.getElementById("total").innerHTML = "Total: " + totalPrice;
         }
 
@@ -281,10 +281,10 @@
                     document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
                     subTotal(itemsSavedForCart, newIndex);
                 }
-                else if (delta == "minus") {
+                else if (delta == "minus", itemsSavedForCart[newIndex].AmountToCart >= 0) {
                     // Get the existing data
                     var existing = localStorage.getItem('itemsSavedForCart');
-
+                    
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
                     let itemsSavedForCart = []
@@ -306,13 +306,15 @@
 
         //Promocode input.
         const selectObject = document.querySelector('#PromoKodeInput');
-        
+
+        const viewValidatedPromoCodes = [];
+
         selectObject.addEventListener('change', e =>
         {
 
             let promoCodeInput = e.target.value;
 
-          
+
              let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
              .then((response) => response.json())
              .then((data) => {
@@ -352,6 +354,7 @@
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
                                 
+
                                 //console.log("All");
                                 break;
 
@@ -404,6 +407,7 @@
                                     newPrice = price - discount;
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
+                                
                                 //console.log("All items");
                                 break;
 
@@ -414,7 +418,7 @@
                                     if (discount == 100) {
                                         discount = 0;
                                         for (let i = 0; i < data.promoCode.Items.length; i++) {
-                                        
+
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
                                                 newPrice = price * discount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
@@ -438,7 +442,7 @@
                                             }
                                         }
                                     }
-                                    
+
 
                              }else if(discountType == 1){
                                     for (let i = 0; i < data.promoCode.Items.length; i++) {
@@ -453,37 +457,25 @@
 
                                     }
                              }
-                                
-                             
+
                                  //console.log("Some");
                                  break;
 
 
                             default:
-
-                                 console.log("you fucked up");
-                                 break;
+                                
+                                break;
 
                         }
-                       
+                        
                         cartIndex += 1;
-
-                    
+                        total();
 
                  }
 
-
-                 
              });
-           
+
         });
-        
-       
-
-
-
-
-
 
 
         document.querySelectorAll('#minus').forEach(Minus => {
@@ -508,7 +500,7 @@
         let itemsSavedForCart = JSON.parse(itemString);
         let ShopUnits = [];
 
-        
+
 
 
         for(let item of itemsSavedForCart){
@@ -582,14 +574,22 @@
 
         console.log(order);
 
+        const response = await fetch("/api/CreateOrder", 
+        {
+            method: 'POST',
+            headers: 
+            {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order),
+            
+
+        })
     }
+
 
 
     document.getElementById("createOrder").addEventListener("click", placeOrder);
 
 
 </script>
-
-
-
-
