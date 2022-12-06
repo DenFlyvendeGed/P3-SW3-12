@@ -50,7 +50,8 @@ namespace P3_Project.Controllers
 
                         //set the key value in Cookie              
                         CookieOptions option = new CookieOptions();
-                        option.Expires = DateTime.Now.AddMinutes(10);
+                        option.Expires = DateTime.Now.AddDays(14);
+                        
                         Response.Cookies.Append("UserName", u.UserName.ToString(), option);
                         return RedirectToAction("Index","Admin");
                     }
