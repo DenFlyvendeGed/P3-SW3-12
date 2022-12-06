@@ -120,6 +120,7 @@ namespace P3_Project.Controllers
             catch {
                 Packs = new List<(int, string, int)> { };
             }
+
             List<(int, string, int, string, string)> Packs2 = new();
             Packs.ForEach(item =>
             {
