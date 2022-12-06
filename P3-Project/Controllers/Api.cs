@@ -76,7 +76,6 @@ namespace P3_Project.Controllers
         [HttpGet("getItemId")]
         public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
         {
-            
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
             size = HttpUtility.UrlDecode(size);
