@@ -319,7 +319,7 @@ namespace P3_Project.Models
         public void Save(int id , string parentFolderName)
         {
             string projectPath = Directory.GetCurrentDirectory();
-            string folderName = Path.Combine(projectPath, "wwwroot", "Pictures\\",parentFolderName, id.ToString());
+            string folderName = Path.Combine(projectPath, "wwwroot", "Pictures",parentFolderName, id.ToString());
             DirectoryInfo dir = Directory.CreateDirectory(folderName);
             string fileName = Path.Combine(dir.FullName, Name);
 

@@ -164,6 +164,11 @@ namespace P3_Project.Controllers
             return View("Index", type);
         }
 
+        public ActionResult Cart()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

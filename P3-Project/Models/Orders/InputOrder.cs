@@ -9,6 +9,7 @@ public class InputShopUnit {
 	public string Color{get; set;} = "";
 	public string Size{get; set;} = "";
 	public int Price {get; set;} = 0;
+	public int Discount {get; set;} = 0;
 }
 
 public class InputItem {
@@ -55,6 +56,69 @@ public class InputOrder{
 		}
 
 		return order;
+	}
+
+	int getDiscout(int price, PromoCode code){
+		switch(code.DiscountType){
+			case PromoCodeDiscountType.Fixed:
+				return price - code.Value >= 0 ? code.Value : 0;
+			case PromoCodeDiscountType.Percentage:
+				return (price * code.Value) / 100; 
+			default:
+				throw new Exception("Not gonna happen");
+		}	
+	}
+
+	int getPriceItem(int modelId) {
+		return DB.Globals.StorageDB.DB.GetRow("ItemModels", new ItemModel(), modelId.ToString()).ModelPrice;
+	}
+	
+	int getPricePack(int packId) {
+		return new PackModel(packId, DB.Globals.StorageDB).Price;
+	}
+
+	public bool Validate(){
+		bool saw_pack = false;
+		var codes = new List<PromoCode>();
+		foreach(var code in this.PromoCodes) {
+			var (item, promo_code) = PromoCode.Validate(code, DB.Globals.StorageDB);
+			if(!item) return false;
+			codes.Add(promo_code);
+		}
+
+		for(int i = 0; i < this.ShopUnits.Count; i++){
+			if(!saw_pack && !this.ShopUnits[i].ShopUnit.IsPack){
+				var price = getPriceItem(this.ShopUnits[i].ShopUnit.ModelId);
+				foreach(var code in codes){
+					if(code.ItemType == PromoCodeItemType.All || code.ItemType == PromoCodeItemType.AllItems){
+						this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
+					} else if(code.ItemType == PromoCodeItemType.Some) {
+						foreach(var item in code.Items)
+							if(!item.IsPack && item.Id == this.ShopUnits[i].ShopUnit.ModelId){
+								this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
+								break;
+							}
+					}
+				}
+			} else { 
+				saw_pack = true;
+				if(!this.ShopUnits[i].ShopUnit.IsPack)
+					continue;
+				var price = getPricePack(this.ShopUnits[i].ShopUnit.PackId);
+				foreach(var code in codes){
+					if(code.ItemType == PromoCodeItemType.All || code.ItemType == PromoCodeItemType.AllItems){
+						this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
+					} else if(code.ItemType == PromoCodeItemType.Some) {
+						foreach(var item in code.Items)
+							if(item.IsPack && item.Id == this.ShopUnits[i].ShopUnit.PackId){
+								this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
+								break;
+							}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
 

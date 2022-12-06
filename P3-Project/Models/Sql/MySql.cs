@@ -522,7 +522,9 @@ public class MySqlDB : DataBase {
 		}
 		return rtn;
 	}
-
+	
+	
+	
     public int GetStockAmount(string tableName)
     {
         cmd.CommandText = "SELECT SUM(Stock) FROM " + tableName;

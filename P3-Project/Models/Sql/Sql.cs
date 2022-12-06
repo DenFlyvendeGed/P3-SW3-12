@@ -812,7 +812,6 @@ public class SqlDB : DataBase
 		conn.Close();
 		return rtn;
 	}
-
 	public List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT LAST {string.Join(',', columns )} FROM {name}";
 		conn.Open();

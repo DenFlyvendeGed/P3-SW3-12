@@ -13,6 +13,13 @@ using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
+using NuGet.Protocol;
+using ActionNameAttribute = Microsoft.AspNetCore.Mvc.ActionNameAttribute;
+using System.Drawing;
+using System.Web;
+
+
+
 using P3_Project.Utilities;
 using Google.Protobuf.WellKnownTypes;
 using System.Text;
@@ -66,10 +73,22 @@ namespace P3_Project.Controllers
             return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
         }
 
+        [HttpGet("getItemId")]
+        public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
+        {
+            
+            StorageDB db= new StorageDB();
+            color = HttpUtility.UrlDecode(color); 
+            size = HttpUtility.UrlDecode(size);
+            var id = db.DB.ReadFromTable("Item" + modelId, new[] { "Id" } , $"Color='{color}' AND Size='{size}'", r => (int) r[0]).Last();
+            Response.Headers.Add("itemId",id.ToString());
+            return Ok();
+        }
+
 		[HttpPost("CreateOrder")]
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
 			var order = input_order.ToOrder();
-			P3_Project.Models.Orders.Globals.OrderDB.Push(order);
+			P3_Project.Models.Orders.Globals.OrderDB.PushReserve(order);
 			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
 
 			var compile_folder = P3_Project.Models.ReservationPdf.ReservationPdf.COMPILE_FOLDER;
@@ -80,14 +99,14 @@ namespace P3_Project.Controllers
 				.Subject($"Reservation Ved Aalborg Sportshøjskole {order.Id}")
 				.Body("Du har nu lavet en reservation ved Aalborg Sportshøjskole")
 				.SendMail();
-
+			
 			return Ok();
 		}
     }
 
     [Route("api/Admin")]
     [ApiController]
-    [Authentication]
+    //[Authentication]
     public class AdminController :  ControllerBase
     {
         static StorageDB db = new StorageDB();
@@ -345,6 +364,7 @@ namespace P3_Project.Controllers
 	
 		[HttpPut("MarkOrderAsPaid/{id}")]
 		public IActionResult MarkAsPaid(int id){
+			Console.WriteLine("Im in " + id);
 			P3_Project.Models.Orders.Globals.OrderDB.MarkAsPaid(id);
 			return Ok();
 		}
