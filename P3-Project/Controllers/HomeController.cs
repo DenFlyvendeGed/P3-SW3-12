@@ -145,8 +145,6 @@ namespace P3_Project.Controllers
             return View(packmodel);
         }
 
-        
-        //Webshop page - Accessoires
         public ActionResult Accessoires()
         {
             string type = "Tilbehør";
