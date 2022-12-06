@@ -101,16 +101,20 @@
 
 		users = JSON.parse(users);
 		for (user of users) {
+
 			//console.log(user)
+
 			let divDom = document.createElement("div");
 
 			divDom.innerHTML = `
 				<label>Brugernavn: </label>
 				<input placeholder = "Indsæt brugernavn" class="UserNameNew" value="`+ user.UserName +`"/>
+
 				<label style="display: none" class="UserName">`+ user.UserName + `</label>
 				<label¨> Kodeord: </label¨>
 				<input placeholder = "Indsæt kodeord"  class="UserPasswordNew" value="`+ user.UserPassword + `"/>
 				<label style="display: none" class="UserPassword">`+ user.UserPassword + `</label>
+
 				<input type=button value="Update" onclick="updateUser(this)"/>
 				<input type=button value="Slet" onclick="deleteUser(this)" />
 				`;
@@ -118,7 +122,9 @@
 
 
 		}
+
 		//console.log(users)
+
 	}
 
 	function addUserDom()
@@ -129,6 +135,7 @@
 					<input class="UserNameNew" placeholder = "Indsæt brugernavn" />
 					<label¨> Kodeord: </label¨>
 					<input class="UserPasswordNew" placeholder = "Indsæt kodeord" />
+
 					<input type=button value="Tilføj" onclick="createUser(this)"/>
 					`;
 		userDom.append(divDom)
@@ -138,6 +145,7 @@
 	{
 		console.log(dom)
 		const parent = dom.parentElement;
+
 		let newUsername = parent.querySelector(".UserNameNew").value;
 		let newUserpassword = parent.querySelector(".UserPasswordNew").value;
 
@@ -145,6 +153,7 @@
 		let data = {
 			UserName: newUsername.trim(),
 			UserPassword: newUserpassword.trim()
+
 		}
 
 		fetch("/api/admin/AddUser", 
@@ -188,6 +197,7 @@
 					parent.append(slet);
 					parent.append(hiddenName);
 					parent.append(hiddenPassword);
+
 				}
 				else{
 					alert("Oops, der skete en fejl")
@@ -207,7 +217,9 @@
 		
 		let data = {
 			UserName: username.trim(),
+
 			UserPassword: UserPassword.trim()
+
 		}
 
 		fetch("/api/admin/DeleteUser",

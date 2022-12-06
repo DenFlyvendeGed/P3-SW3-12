@@ -752,7 +752,9 @@ div.shopTagBox{
 
 .midImg {
     position: relative;/*absolute; */
+
     /*width: 100%;*/
+
     padding: 5px;
 }
 
@@ -901,6 +903,7 @@ div.shopTagBox{
 
     div.shopTagBox {
         width: 70vw;
+
         height: 9vh;
         overflow: auto;
         padding: 0px;
@@ -909,6 +912,7 @@ div.shopTagBox{
 
     .midImg {
     /*width: 100%;*/
+
     padding: 5px;
     }
 
