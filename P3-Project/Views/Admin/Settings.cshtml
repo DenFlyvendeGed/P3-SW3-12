@@ -101,16 +101,16 @@
 
 		users = JSON.parse(users);
 		for (user of users) {
-			console.log(user)
+			//console.log(user)
 			let divDom = document.createElement("div");
 
 			divDom.innerHTML = `
 				<label>Brugernavn: </label>
 				<input placeholder = "Indsæt brugernavn" class="UserNameNew" value="`+ user.UserName +`"/>
-				<label style="display: none" class="UserName"> `+ user.UserName + ` </label>
+				<label style="display: none" class="UserName">`+ user.UserName + `</label>
 				<label¨> Kodeord: </label¨>
 				<input placeholder = "Indsæt kodeord"  class="UserPasswordNew" value="`+ user.UserPassword + `"/>
-				<label style="display: none" class="UserPassword"> `+ user.UserPassword + ` </label>
+				<label style="display: none" class="UserPassword">`+ user.UserPassword + `</label>
 				<input type=button value="Update" onclick="updateUser(this)"/>
 				<input type=button value="Slet" onclick="deleteUser(this)" />
 				`;
@@ -118,7 +118,7 @@
 
 
 		}
-		console.log(users)
+		//console.log(users)
 	}
 
 	function addUserDom()
@@ -126,9 +126,9 @@
 		let divDom = document.createElement("div");
 		divDom.innerHTML = `
 					<label>Brugernavn: </label>
-					<input class="UserName" placeholder = "Indsæt brugernavn" />
+					<input class="UserNameNew" placeholder = "Indsæt brugernavn" />
 					<label¨> Kodeord: </label¨>
-					<input class="UserPassword" placeholder = "Indsæt kodeord" />
+					<input class="UserPasswordNew" placeholder = "Indsæt kodeord" />
 					<input type=button value="Tilføj" onclick="createUser(this)"/>
 					`;
 		userDom.append(divDom)
@@ -138,12 +138,13 @@
 	{
 		console.log(dom)
 		const parent = dom.parentElement;
-		let username = parent.querySelector(".UserName").value;
-		let UserPassword = parent.querySelector(".UserPassword").value;
+		let newUsername = parent.querySelector(".UserNameNew").value;
+		let newUserpassword = parent.querySelector(".UserPasswordNew").value;
+
 
 		let data = {
-			UserName: username,
-			UserPassword: UserPassword
+			UserName: newUsername.trim(),
+			UserPassword: newUserpassword.trim()
 		}
 
 		fetch("/api/admin/AddUser", 
@@ -171,9 +172,22 @@
 					slet.value = "Slet";
 					slet.addEventListener("click",deleteUser);
 
+					let hiddenName = document.createElement("label");
+					hiddenName.innerText = newUsername;
+					hiddenName.style.display = "none";
+					hiddenName.classList = "UserName";
+
+
+					let hiddenPassword = document.createElement("label");
+					hiddenPassword.innerText = newUserpassword;
+					hiddenPassword.style.display = "none";
+					hiddenPassword.classList = "UserPassword";
+
 
 					parent.append(update);
 					parent.append(slet);
+					parent.append(hiddenName);
+					parent.append(hiddenPassword);
 				}
 				else{
 					alert("Oops, der skete en fejl")
@@ -193,7 +207,7 @@
 		
 		let data = {
 			UserName: username.trim(),
-			UserPassword: UserPassword
+			UserPassword: UserPassword.trim()
 		}
 
 		fetch("/api/admin/DeleteUser",

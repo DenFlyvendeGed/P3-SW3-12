@@ -27,7 +27,7 @@ namespace P3_Project.Controllers
         public ActionResult Index()
         {
 
-            return View("Stock");
+            return RedirectToAction("Stock", "Admin");
         }
 
 
