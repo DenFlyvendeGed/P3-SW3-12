@@ -8,9 +8,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Alle pakker.</p>
-
-<div style="display:grid; grid-template-columns: repeat(2, auto)">
+<div class="mainIndexScale" > 
     <div class="box shopTagBox">
         Tags:
 
@@ -30,7 +28,7 @@
         
     </div>
 
-    <div class="grid-container-2">
+    <div class="grid-container">
         @foreach(var part in Model){
             <a style="color: black; text-decoration: none;" href="/Home/PackPicker?PackId=@part.Item1"  onclick="PackModelEdit(@part.Item1)" class="Clickable @part.Item5 ">
 
@@ -43,7 +41,7 @@
 
                             
                         </div>
-                        <div class="itemShowCaseName-2">
+                        <div class="itemShowCaseName">
 
                             
                             <div>@part.Item2</div>
