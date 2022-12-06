@@ -393,7 +393,6 @@ body {
 }*/
     
 #imgBox {
-    margin-top: 50px;
     display:grid;
 }
 
@@ -553,7 +552,7 @@ img {
 }
 
 .itemShowCase {
-    width: 20vw;
+    width: 100%;
     height: 25vw;
     border-style: solid;
     border-width: 1px;
@@ -573,12 +572,23 @@ img {
     width: 100%;
     height: 80%;
     background-color: #D9D9D9;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 25vw 25vw 25vw;
-    margin-left: 8%;
+    grid-template-columns: 33% 33% 33%;
+    padding-left: 8%;
+    width: 100%;
+    min-width: 50vw;
+}
+
+.grid-container a {
+    padding: 0px 10px;
+    width: 100%;
 }
 
 .item1 {
@@ -698,7 +708,6 @@ div.createTaxBox{
 
 .picScaling {
     margin-top: 40px;
-    height: 80%;
    
 }
 
@@ -733,7 +742,7 @@ div.createTaxBox{
 }
 
 div.shopTagBox{
-    width: 12vw;
+    width: 100%;
     height:50vh;
 }
 
@@ -742,13 +751,45 @@ div.shopTagBox{
 }
 
 .midImg {
-    margin: auto;
     position: relative;/*absolute; */
+
+    /*width: 100%;*/
+
+    padding: 5px;
+}
+
+.mainIndexScale {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+}
+
+
+.hovertext {
+    position: relative;
+    border-bottom: 1px dotted black;
+}
+
+.hovertext:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    width: 20vw;
+    min-width: 50px;
+    opacity: 0;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 5px;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    z-index: 1;
     left: 0;
+
     right: 0;
     top: 0;
     bottom: 0;
     width: 100%;
+
 }
 
 
@@ -769,7 +810,6 @@ div.shopTagBox{
 
 /*Scalling for window < 480px*/
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-
     .mainIndex {
         overflow: auto;
     }
@@ -778,7 +818,14 @@ div.shopTagBox{
         display: grid;
         grid-template-columns: 70vw;
         gap: 1%;
-        margin-left:12%
+        padding: 0px;
+        margin: auto;
+        justify-content: center;
+    }
+
+    .grid-container a {
+        /*padding: 0px;*/
+        margin: auto;
     }
 
     .grid-container-2 {
@@ -876,21 +923,44 @@ div.shopTagBox{
         height: 60vw;
         margin-top: 5vw;
     }
-   
+
+    .mainIndexScale {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+    }
+
+    div.shopTagBox {
+        margin-left: 11vw;
+        width: 70vw;
+        height: 5vh;
+    }
+
+    div.shopTagBox {
+        width: 70vw;
+
+        height: 9vh;
+        overflow: auto;
+        padding: 0px;
+        margin: auto;
+    }
+
+    .midImg {
+    /*width: 100%;*/
+
+    padding: 5px;
+    }
+
 }
 
 /*Scalling for 1440px > window > 480px*/
 @media only screen and (min-device-width : 480px) and (max-device-width : 1250px) {
 
     .picScaling {
-        height: 80%;
         margin-top: 5vw;
-
     }
 
     .grid-container {
-        
-        margin-left: 12%
+        margin-left: 5%
     }
     
 }
@@ -898,7 +968,9 @@ div.shopTagBox{
 .grid-container-PackPicker {
     display: grid;
     width: 100%;
+
     row-gap: 1vh;
+
     column-gap: 6vw;
     grid-template-columns: repeat(2, 1fr);
 }
@@ -926,6 +998,7 @@ div.shopTagBox{
 .PackPickerItems {
     background-color: #D9D9D9;
     text-align: center;
+
     margin-bottom: 2%;
 }
 .PackPickerImg {
@@ -1079,4 +1152,3 @@ div.shopTagBox{
         top: 0.7%;
     }
 }
-

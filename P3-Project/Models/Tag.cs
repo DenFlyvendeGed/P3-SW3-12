@@ -4,7 +4,7 @@ namespace P3_Project.Models
 {
     public class Tag
     {
-
+    
         public int Id { get; set; }
         public string Name { get; set; }
 
@@ -16,6 +16,15 @@ namespace P3_Project.Models
             list = db.DB.GetAllElements($"ItemModel_{itemModelId}_Tags", new Tag());
 
             
+            return list;
+        }
+
+        public static List<Tag> GetAllTagsOfPackModel(string packModelId)
+        {
+            var list = new List<Tag>();
+            list = db.DB.GetAllElements($"PackModel_{packModelId}_Tags", new Tag());
+
+
             return list;
         }
 
