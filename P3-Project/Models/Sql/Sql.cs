@@ -159,13 +159,23 @@ public class SqlDB : DataBase
 			//open database connection.
 			conn.Open();
 
-			cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= " + selectorValue;
+			cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= '" + selectorValue + "'";
 
-			//Execute the query 
-			cmd.ExecuteReader();
+			try
+			{
 
-			//Close the connection
-			conn.Close();
+				//Execute the query 
+				cmd.ExecuteReader();
+
+            }
+            catch (SqlException ex)
+            {
+                conn.Close();
+                throw new Exception(ex.Message);
+            }
+
+            //Close the connection
+            conn.Close();
 
 
 		}

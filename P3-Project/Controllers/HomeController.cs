@@ -52,7 +52,7 @@ namespace P3_Project.Controllers
                         CookieOptions option = new CookieOptions();
                         option.Expires = DateTime.Now.AddMinutes(10);
                         Response.Cookies.Append("UserName", u.UserName.ToString(), option);
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index","Admin");
                     }
                     
                 }
