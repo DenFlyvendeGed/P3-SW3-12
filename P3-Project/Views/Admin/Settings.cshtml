@@ -3,8 +3,11 @@
 <style>
 	.setting {
 		width : 100%;
+		margin-top: 2%;
 	}
 </style>
+
+@*Email settings*@
 <div class="box setting">
 	<h2>E-mailliste til notifikationer</h2>
 	<input type="button" value="Tilføj ny E-mail" onclick="addEmail()"/>
@@ -12,6 +15,31 @@
 	<table id="setting-email-table">
 	</table>
 </div>
+
+@*Faktura settings*@
+<div class="box setting">
+	<h2>Faktura indstillinger</h2>
+	<input type="button" value="Rediger" onclick="location.href='FakturaSettings';" />
+</div>
+
+@*Bruger settings*@
+<div class="box setting">
+	<h2>Bruger indstillinger</h2>
+	<div class="userContainer">
+		@*<div >
+			<label>Brugernavn: </label>
+			<input placeholder="Indsæt brugernavn" />
+			<label¨>Kodeord: </label¨>
+			<input placeholder="Indsæt kodeord" />
+
+		</div>*@
+		
+		
+	</div>
+	<input type="button" value="Tilføj login" onclick="addUserDom()"/>
+	@*<input type="button" value="Rediger" onclick="location.href='FakturaSettings';" />*@
+</div>
+
 <script>
 	function onInit() {
 		// Email
@@ -62,6 +90,174 @@
 	}
 
 	onInit()
+
+
+
+	const userDom = document.querySelector(".userContainer");
+
+	async function getUsers(){
+		let users = await fetch("/api/admin/GetUsers")
+		.then(Response => Response.json())
+
+		users = JSON.parse(users);
+		for (user of users) {
+			console.log(user)
+			let divDom = document.createElement("div");
+
+			divDom.innerHTML = `
+				<label>Brugernavn: </label>
+				<input placeholder = "Indsæt brugernavn" class="UserNameNew" value="`+ user.UserName +`"/>
+				<label style="display: none" class="UserName"> `+ user.UserName + ` </label>
+				<label¨> Kodeord: </label¨>
+				<input placeholder = "Indsæt kodeord"  class="UserPasswordNew" value="`+ user.UserPassword + `"/>
+				<label style="display: none" class="UserPassword"> `+ user.UserPassword + ` </label>
+				<input type=button value="Update" onclick="updateUser(this)"/>
+				<input type=button value="Slet" onclick="deleteUser(this)" />
+				`;
+			userDom.append(divDom)
+
+
+		}
+		console.log(users)
+	}
+
+	function addUserDom()
+	{
+		let divDom = document.createElement("div");
+		divDom.innerHTML = `
+					<label>Brugernavn: </label>
+					<input class="UserName" placeholder = "Indsæt brugernavn" />
+					<label¨> Kodeord: </label¨>
+					<input class="UserPassword" placeholder = "Indsæt kodeord" />
+					<input type=button value="Tilføj" onclick="createUser(this)"/>
+					`;
+		userDom.append(divDom)
+	}
+
+	function createUser(dom) //Update to add hidden labels with porper data
+	{
+		console.log(dom)
+		const parent = dom.parentElement;
+		let username = parent.querySelector(".UserName").value;
+		let UserPassword = parent.querySelector(".UserPassword").value;
+
+		let data = {
+			UserName: username,
+			UserPassword: UserPassword
+		}
+
+		fetch("/api/admin/AddUser", 
+			{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+			.then(Response => 
+			{
+				if(Response.ok){
+					let button = parent.querySelector("input[type='button']");
+					button.remove();
+
+					let update = document.createElement("input");
+					update.type = "button"; 
+					update.value = "Update";
+					update.addEventListener("click", updateUser);
+					
+
+					let slet = document.createElement("input");
+					slet.type = "button";
+					slet.value = "Slet";
+					slet.addEventListener("click",deleteUser);
+
+
+					parent.append(update);
+					parent.append(slet);
+				}
+				else{
+					alert("Oops, der skete en fejl")
+				}
+			})
+	}
+
+	function deleteUser(dom)
+	{
+		if(dom.type=="click"){
+			dom = dom.target;
+		}
+		console.log(dom)
+		const parent = dom.parentElement;
+		let username = parent.querySelector(".UserName").innerText;
+		let UserPassword = parent.querySelector(".UserPassword").innerText;
+		
+		let data = {
+			UserName: username.trim(),
+			UserPassword: UserPassword
+		}
+
+		fetch("/api/admin/DeleteUser",
+			{
+				method: "DELETE",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+			.then(response => {
+				if(response.ok)
+				{
+					parent.remove();
+				}
+
+			})
+	}
+
+	function updateUser(dom)
+	{
+		if(dom.type=="click")
+			dom = dom.target;
+
+		const parent = dom.parentElement;
+		let username = parent.querySelector(".UserName").innerText;
+		let UserPassword = parent.querySelector(".UserPassword").innerText;
+		let newUsername = parent.querySelector(".UserNameNew").value;
+		let newUserpassword = parent.querySelector(".UserPasswordNew").value;
+
+
+		let data = [{
+				UserName: username.trim(),
+				UserPassword: UserPassword.trim()
+			},
+			{
+				UserName: newUsername.trim(),
+				UserPassword: newUserpassword.trim()
+			}
+		]
+
+
+		console.log(dom)
+		fetch("/api/admin/UpdateUser",
+			{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+			.then(response => {
+				if(response.ok)
+				{
+					username = newUsername;
+					UserPassword = newUserpassword;
+				}
+
+
+			})
+	}
+
+	getUsers();
+
 </script>
 
 

@@ -142,6 +142,8 @@ namespace P3_Project.Models
             return dict;
         }
 
+        
+
         //Create SQL table corresponding to the items in the ItemModel that is being created
         public void CreateItemTable()
         {
@@ -207,7 +209,7 @@ namespace P3_Project.Models
                 img.FilePath = img.GetFilePath();
                 return img;
             }
-            return null;
+            return new ImageModel();
         }
         public void AddItem(Item item)
         {
@@ -411,5 +413,7 @@ namespace P3_Project.Models
             }
             return new ImageModel();
         }
+
+        
     }
 }

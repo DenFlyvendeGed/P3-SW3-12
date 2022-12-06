@@ -52,7 +52,9 @@ namespace P3_Project.Models
 			foreach(var i in new Counter(table_data.Item5)){
 				var l = new List<int>();
 				var itemIds = db.DB.ReadFromTable($"{TABLE_NAME}_{this.PackID}_{i}", (e) => e[0].ToString() ?? "");
-				var data = db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0]);
+				var data = itemIds.Count != 0 
+					? db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0])
+					: new();
 				foreach(var d in data) l.Add(d);
 				this.Options.Add(l);
 			}
@@ -77,7 +79,7 @@ namespace P3_Project.Models
 					("Description", Description),
 					("NOptions", Options.Count)
 				});
-				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0])[0];
+				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0]).Last();
 			} else {
 				db.DB.UpdateTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),

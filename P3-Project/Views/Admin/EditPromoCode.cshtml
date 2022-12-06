@@ -5,9 +5,6 @@
 	Layout = "AdminLayout";
 	ViewData["Title"] = "Rediger Rabat Kode";
 
-	string before = "PriceBefore";
-	string after = "PriceAfter";
-
 	var (promoCode, itemList, packList) = Model;
 
 
@@ -23,16 +20,6 @@
 
 <h1>@isModel()</h1>
 
-
-	.edit{
-		display: flex;
-		align-items: center;
-		height: inherit;
-		padding: 2px;
-	}
-	.promo-code-price {
-		display: inline;
-	}
 
 
 <div id="editPromoCodeContent">
@@ -82,32 +69,32 @@
 					<option value="" id="1">Alle pakker</option>
 					<option value="" id="2">Alle genstande</option>
 					<option value="" selected id="3">Vælg selv</option>
-				}
+					}
 					else if(promoCode.ItemType == PromoCodeItemType.All){
 					<option value="" selected id="0">Alt</option>
 					<option value="" id="1">Alle pakker</option>
 					<option value="" id="2">Alle genstande</option>
 					<option value="" id="3">Vælg selv</option>
-				}
+					}
 					else if(promoCode.ItemType == PromoCodeItemType.AllItems){
 					<option value="" id="0">Alt</option>
 					<option value="" id="1">Alle pakker</option>
 					<option value="" selected id="2">Alle genstande</option>
 					<option value="" id="3">Vælg selv</option>
-				}
+					}
 					else if(promoCode.ItemType == PromoCodeItemType.AllPacks){
 					<option value="" id="0">Alt</option>
 					<option value="" selected id="1">Alle pakker</option>
 					<option value="" id="2">Alle genstande</option>
 					<option value="" id="3">Vælg selv</option>
+					}
 				}
-					else{
+				else{
 					<option value="" selected hidden>Vælg indholds type</option>
 					<option value="" id="0">Alt</option>
 					<option value="" id="1">Alle pakker</option>
 					<option value="" id="2">Alle genstande</option>
 					<option value="" id="3">Vælg selv</option>
-				}
 				}
 				
 			}

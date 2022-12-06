@@ -3,6 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHostedService<P3_Project.Models.Orders.OrderCheckExpirationDate>();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -21,6 +22,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

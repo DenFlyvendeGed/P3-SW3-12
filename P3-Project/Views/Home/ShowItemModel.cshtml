@@ -12,9 +12,6 @@
         <div class="displayItem">
             <div class="box picScaling wrap">
                 @{
-
-
-
                     ViewBag.pictures = "";
                     if (ViewBag.item != null)
                     {
@@ -27,15 +24,28 @@
 
                     @*Billed placehodler*@
                     <img class="midImg" src="" />
-
                 }
 
             </div>
             @*Buttons*@
             <div class="imageButtons" style="margin-top: 5%;">
+
                 @*billed vælger*@
-                <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
-                <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+
+                @{
+                    int picAmount = 0;
+                    foreach (ImageModel jj in ViewBag?.item?.Pictures)
+                    {
+                        picAmount += 1;
+                    }
+                    Console.WriteLine(picAmount);
+                    if (picAmount > 1)
+                    {
+                        <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
+                        <button class="ASHButton" onclick="nextPic()" style="margin:1px;">Næste</button>
+                    }
+                }
+
             </div>
         </div>
 
@@ -44,7 +54,7 @@
             @*<------------------ModelName and price--------------------->*@
             <div class="grid-containerTop">
                 <div class="grid-itemTop modelName" value="@(item.Id)" id="ModelName">@(item.ModelName)</div>
-                <div class="grid-itemTop modelPrice" style="margin-top:16px;">Pris: @(item.ModelPrice) kr.-</div>
+                <div class="grid-itemTop modelPrice" value="@(item.ModelPrice)" style="margin-top:16px;" id="ModelPrice">Pris: @(item.ModelPrice) kr.-</div>
             </div>
 
 
@@ -64,6 +74,7 @@
                 </div>
             </div>
 
+
             @*<------------------Color--------------------->*@
             <div class="box modelAttributes">
                 <div>Farve:</div>
@@ -79,8 +90,7 @@
                 </div>
             </div>
 
-            @*<------------------Description--------------------->
-        *@
+            @*<------------------Description--------------------->*@
             <div class="box modelAttributes">
                 <div>Beskrivesle:</div>
                 <div>@(item.Description)</div>
@@ -92,9 +102,9 @@
                 <div>Antal:</div>
 
                 <div class="counterGrid">
-                    <input class="counterItem" type="button" id="plus" value="+">
-                    <div class="counterItem" id="counter">1</div>
                     <input class="counterItem" type="button" id="minus" value="-">
+                    <div class="counterItem" id="counter">1</div>
+                    <input class="counterItem" type="button" id="plus" value="+">
                 </div>
 
                 <input type="submit" value="Tilføj til kurv" id="addToCart">
@@ -105,6 +115,7 @@
 
 </div>
 
+@*Cart script*@
 <script>
 
     //Size toggle
@@ -180,10 +191,11 @@
             let chosenSize = document.getElementById(currentSizeToggle).attributes.value.nodeValue;
             let chosenColorCode = document.getElementById(currentColorToggle).attributes.value.nodeValue;
             let chosenColorName = document.getElementById(currentColorToggle).attributes.name.nodeValue;
-
+            let chosenModelPrice = document.getElementById("ModelPrice").attributes.value.nodeValue;
 
             let itemData = {
                 Id: chosenModel,
+                Price: chosenModelPrice,
                 Size: chosenSize,
                 Color: chosenColorName,
                 ColoWheel: chosenColorCode,
@@ -207,10 +219,12 @@
 
 </script>
 
-
+@*Picture script*@
 <script>
+
     let currentPic = 0;
     let pictures = @(ViewBag.pictures != "" ? Html.Raw("[" + "" + ViewBag.pictures + "" + "]") : Html.Raw("[]"));
+
     //Scroll last picture
     function lastPic() {
         if (currentPic == 0) {
