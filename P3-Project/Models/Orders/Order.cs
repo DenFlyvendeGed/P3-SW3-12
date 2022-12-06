@@ -147,6 +147,7 @@ public class OrderDB{
 
 	public void MarkAsPaid(int id) {
 		db.UpdateTable(table, new(string, object)[]{("IsPaid", 'T')}, $"Id='{id}'");
+		db.UpdateTable(table, new(string, object)[]{("IsActive", 'F')}, $"Id='{id}'");
 	}
 	
 	public void MarkAsUnpaid(int id) {
@@ -166,3 +167,4 @@ public class OrderDB{
 		}
 	}
 }
+
