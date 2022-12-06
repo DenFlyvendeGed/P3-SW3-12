@@ -552,7 +552,7 @@ img {
 }
 
 .itemShowCase {
-    width: 20vw;
+    width: 100%;
     height: 25vw;
     border-style: solid;
     border-width: 1px;
@@ -572,12 +572,23 @@ img {
     width: 100%;
     height: 80%;
     background-color: #D9D9D9;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 25vw 25vw 25vw;
-    margin-left: 8%;
+    grid-template-columns: 33% 33% 33%;
+    padding-left: 8%;
+    width: 100%;
+    min-width: 50vw;
+}
+
+.grid-container a {
+    padding: 0px 10px;
+    width: 100%;
 }
 
 .item1 {
@@ -731,7 +742,7 @@ div.createTaxBox{
 }
 
 div.shopTagBox{
-    width: 12vw;
+    width: 100%;
     height:50vh;
 }
 
@@ -741,7 +752,7 @@ div.shopTagBox{
 
 .midImg {
     position: relative;/*absolute; */
-    width: 100%;
+    /*width: 100%;*/
     padding: 5px;
 }
 
@@ -790,7 +801,14 @@ div.shopTagBox{
         display: grid;
         grid-template-columns: 70vw;
         gap: 1%;
-        margin-left:12%
+        padding: 0px;
+        margin: auto;
+        justify-content: center;
+    }
+
+    .grid-container a {
+        /*padding: 0px;*/
+        margin: auto;
     }
 
     .itemShowCase {
@@ -883,12 +901,14 @@ div.shopTagBox{
 
     div.shopTagBox {
         width: 70vw;
-        height:9vh;
+        height: 9vh;
         overflow: auto;
+        padding: 0px;
+        margin: auto;
     }
 
     .midImg {
-    width: 100%;
+    /*width: 100%;*/
     padding: 5px;
     }
 
