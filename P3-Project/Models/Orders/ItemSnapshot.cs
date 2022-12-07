@@ -29,7 +29,7 @@ public class ItemSnapshot: SnapShot{
 		ModelId = dbInfo.ModelId;
 		ItemId = dbInfo.ItemId;
 
-		Name = Globals.ItemNameTable.Fetch(dbInfo.Color);
+		Name = Globals.ItemNameTable.Fetch(dbInfo.Name);
 		Color = Globals.ItemColorTable.Fetch(dbInfo.Color);
 		Size = Globals.ItemSizeTable.Fetch(dbInfo.Size);
 

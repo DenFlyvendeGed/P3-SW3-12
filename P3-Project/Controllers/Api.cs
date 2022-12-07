@@ -76,7 +76,6 @@ namespace P3_Project.Controllers
         [HttpGet("getItemId")]
         public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
         {
-            
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
             size = HttpUtility.UrlDecode(size);
@@ -364,8 +363,13 @@ namespace P3_Project.Controllers
 	
 		[HttpPut("MarkOrderAsPaid/{id}")]
 		public IActionResult MarkAsPaid(int id){
-			Console.WriteLine("Im in " + id);
 			P3_Project.Models.Orders.Globals.OrderDB.MarkAsPaid(id);
+			return Ok();
+		}
+
+		[HttpPut("CancelOrder/{id}")]
+		public IActionResult CancelOrder(int id){
+			P3_Project.Models.Orders.Globals.OrderDB.Cancel(id);
 			return Ok();
 		}
 
