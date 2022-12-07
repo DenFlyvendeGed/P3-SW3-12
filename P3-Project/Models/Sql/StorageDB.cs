@@ -43,6 +43,10 @@ namespace P3_Project.Models.DB
 		List<T> ReadFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull;
 		List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull;
 		List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull;
+		List<T> ReadLastFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull;
+		List<T> ReadLastFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull;
+		List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull;
+		List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull;
 
 		void RemoveRow(string table, string key, string value);
 		void DeleteTable(string Name);

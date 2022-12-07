@@ -1,0 +1,243 @@
+﻿@using P3_Project.Models
+@model PackModel
+@{
+	Layout = "_Layout";
+
+	ViewData["Title"] = "Vælg pakkemuligheder";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="grid-container-PackPicker">
+	<div class="PackPickerHeader"><h3 style="text-align:start;"><b>Pakke: @Model.Name</b></h3><h3 style="text-align:end;"><b>Pris: @Model.Price kr.-</b></h3></div>
+	@{
+		int index = 1;
+		var IdIndex = 1;
+		foreach (var option in Model.Options)
+		{
+			<div class="PackChoices"><h4><b>Valgmulighed @index</b></h4></div>
+			var OptionCount = 1;
+			foreach (var ItemModelId in option)
+			{
+				ItemModel model = ItemModel.LoadModel(ItemModelId.ToString());
+				model.LoadItems();
+
+				<div class="PackPickerItems" id="Option@(index)">
+					
+					<div class="PackPickerImgContainer">
+
+
+						<img class="PackPickerImg" src="@(model.GetFirstImg().FilePath)" alt="@(model.Id)" onerror="this.src='../favicon.ico';" />
+
+
+					</div>
+					<div class="box Name" id="NameBox">@(model.ModelName)</div>
+
+
+					<div class="SelectOption">
+						<h5>
+							Størrelse:
+							<select style="height: 100%; font-size:12pt;">
+								@{
+									int sizeIndex = 1;
+									foreach (string size in model.GetUniqueSize())
+									{
+										<option id="size@(sizeIndex)" style="font-size:12pt;">@(size)</option>
+										sizeIndex += 1;
+									}
+								}
+							</select>
+						</h5>
+					</div>
+
+					
+
+					<div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)" onload="SetFirstColor(this)">
+						@{
+							int colorIndex = 1;
+							<h5 class="smltext">Farve:</h5>
+							foreach ((string, string) color in model.GetUniqueColor())
+							{
+								
+								<div class="colorBoxSelect" style="border: 2px solid transparent">
+									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item2)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
+								</div>
+								colorIndex += 1;
+							}
+						}
+					</div>
+
+					<div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"> </div>
+				</div>
+				IdIndex++;
+				OptionCount++;
+			}
+			index += 1;
+		}
+	}
+</div>
+
+
+<div class="box Clickable AddToCart" onclick="addToCart()">Tilføj pakke til kurv</div>
+<a style="display='none'" href="PackModels" id="redirect"></a>
+<script>
+
+	document.querySelector("body").onload = function () {
+		SetFirstCheckMark();
+		SetFirstColor();
+	}
+
+	function CheckBox(CheckMarkBox) {
+		let ParentOption = CheckMarkBox.parentElement.id;
+		const CheckMark = document.createElement("img");
+		CheckMark.setAttribute("class", "CheckMark-Flag");
+		CheckMark.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
+		console.log(CheckMarkBox.children.length > 0);
+		console.log(ParentOption);
+		let deleteIndex = 0;
+
+
+
+		document.querySelectorAll(`#${ParentOption}`).forEach(element => {
+			console.log(element.querySelector("#CheckMarkBox"));
+			let box = element.querySelector("#CheckMarkBox");
+			if (box.children.length > 0) {
+				box.removeChild(box.firstChild);
+			}
+		})
+
+		if (CheckMarkBox.children.length == 0) {
+			CheckMarkBox.appendChild(CheckMark);
+		}
+
+
+	}
+
+	function SetFirstCheckMark() {
+		//[document.querySelectorAll(".PackChoices")]
+
+		let Elems = document.querySelectorAll(".PackChoices");
+		let Index = Elems.length;
+		let lastElem = Elems[Index - 1];
+		let text = lastElem.firstChild.firstChild.textContent;
+
+		let RegPattern = /[0-9]/i;
+		let result = text.match(RegPattern);
+		let count = parseInt(result[0]);
+
+
+		console.log(Elems);
+		console.log(lastElem);
+		console.log(count);
+
+		//let i = 1;
+		//document.querySelector(`#Option${i}`).querySelector("#CheckMarkBox").appendChild(CheckMark);
+
+		for (let i = 1; i <= count; i++) {
+			console.log(i);
+			let Flag = document.createElement("img");
+			Flag.setAttribute("class", "CheckMark-Flag");
+			Flag.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
+			document.querySelector(`#Option${i}`).querySelector(".CheckMark").appendChild(Flag);
+		}
+	}
+
+
+	function SetFirstColor() {
+		document.querySelectorAll(".PackPickerItems").forEach(element => {
+			let FlexBox = element.querySelector(".PackPickerFlexBox");
+			let NodeList = FlexBox.querySelectorAll(".colorBoxSelect");
+			let FirstElem = NodeList[0];
+			FirstElem.style.border = "2px solid DodgerBlue";
+			console.log(NodeList[0]);
+			console.log(FlexBox);
+		})
+	}
+
+	function ColorSelect(ID) {
+
+		let ColorChoice = document.getElementById(ID);
+		let ParentFlex = ColorChoice.parentElement.parentElement;
+		if (ColorChoice.parentElement.style.border == "2px solid transparent") {
+			ParentFlex.querySelectorAll(".colorBox").forEach(color => { color.parentElement.style.border = "2px solid transparent" })
+			ColorChoice.parentElement.style.border = "2px solid DodgerBlue";
+		}
+	}
+
+
+	function addToCart() {
+
+		let SelectedValues = {
+
+		}
+		let obj = [];
+		let loopindex = 0;
+		document.querySelectorAll(".PackPickerItems").forEach(element => {
+			if (element.querySelector("#CheckMarkBox").children.length > 0) {
+				let Name = element.querySelector("#NameBox").textContent;
+				let Size = element.querySelector("select").value;
+				let Id = element.querySelector(".PackPickerImg").alt;
+				option = element;
+				let FlagChoice = 0;
+				let Colors = [];
+				let ColArray = 0;
+				option.querySelectorAll(".colorBoxSelect").forEach(color => {
+					if ((color.style.border).toString() == "2px solid dodgerblue") {
+						Colors[ColArray] = color.querySelector(".colorBox").getAttribute('value');
+						ColArray++;
+						FlagChoice++;
+					}
+				})
+				console.log(Colors);
+				console.log(FlagChoice);
+				obj[loopindex] = { id: Id, name: Name, size: Size, ItemColors: Colors[0] };
+				loopindex++;
+			}
+		})
+		SelectedValues = Object.assign(SelectedValues, obj);
+		console.log(SelectedValues);
+
+		let itemData = {
+			packid: "@Model.PackID",
+			packname: "@Model.Name",
+			price: @Model.Price
+				};
+		itemData = Object.assign(itemData, SelectedValues);
+
+		console.log(itemData);
+
+		document.querySelector("#redirect").click()
+	}
+
+</script>
+
+@*
+    ViewData["Title"] = "Vælg pakkemuligheder";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="grid-container-PackPicker">
+	<div class="PackPickerHeader"><h3 style="text-align:start;"><b>Pakke: @Model.Name</b></h3><h3 style="text-align:end;"><b>Pris: @Model.Price kr.-</b></h3></div>
+	<div class="PackChoices"><h4><b>Valgmulighed 1</b></h4></div>
+	<div class="PackPickerItems">
+		<img class="PackPickerImg" src="../favicon.ico" />
+		<div class="box" style="position: relative; height: 50px; width:240px; top: 82px;">Navn</div>
+		<h5 style="position: relative; bottom: 50%;">Farve:</h5>
+		<div class="PackPickerFlexBox">
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+			<div class="box" style="width: 31px; height: 31px; margin: 2px; border-radius: 15px;"></div>
+		</div>
+		<h5 style="position: relative; bottom: 50%; right: 2.5%;">Størrelse:</h5>
+		<select style="position: relative; bottom: 63%; left: 12%;">
+			<option>Hello</option>
+			<option>There</option>
+		</select>
+		<div class="box" style="position: relative; bottom: 40%; left: 90%; width: 40px; height: 40px; border-width: 2px;"></div>
+	</div>
+</div>
+
+
+<div class="box" style="position: relative; left:70vw; display: block; text-align: center; margin-top: 12px; margin-bottom: 12px; width: 220px; padding: 6px;">Tilføj pakke til indkøbskurv</div>
+*@
+

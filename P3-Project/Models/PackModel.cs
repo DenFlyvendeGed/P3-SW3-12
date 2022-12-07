@@ -33,7 +33,11 @@ namespace P3_Project.Models
 		//                ID   ModelName
         public List<List<int>> Options { get; set; } = new();
 
-		public PackModel() {
+        public List<ImageModel>? Pictures { get; set; }
+
+        public List<Tag>? Tags { get; set; }
+
+        public PackModel() {
 			PackID = null;
 		}
 
@@ -48,7 +52,9 @@ namespace P3_Project.Models
 			foreach(var i in new Counter(table_data.Item5)){
 				var l = new List<int>();
 				var itemIds = db.DB.ReadFromTable($"{TABLE_NAME}_{this.PackID}_{i}", (e) => e[0].ToString() ?? "");
-				var data = db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0]);
+				var data = itemIds.Count != 0 
+					? db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0])
+					: new();
 				foreach(var d in data) l.Add(d);
 				this.Options.Add(l);
 			}
@@ -73,7 +79,7 @@ namespace P3_Project.Models
 					("Description", Description),
 					("NOptions", Options.Count)
 				});
-				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0])[0];
+				PackID = db.DB.ReadFromTable(TABLE_NAME, new string[] {"Id"}, $"Name='{Name}'", (i) => (int)i[0]).Last();
 			} else {
 				db.DB.UpdateTable(TABLE_NAME,  new (string, object)[] {
 					("Name", Name),
@@ -99,13 +105,82 @@ namespace P3_Project.Models
 			// Delete tables if options were deleted in edit
 			for(; db.DB.CheckTable($"{TABLE_NAME}_{this.PackID}_{i}"); i++) 
 				db.DB.DeleteTable($"{TABLE_NAME}_{this.PackID}_{i}");
+
+
+
+            if (Pictures != null)
+            {
+                foreach (ImageModel item in Pictures)
+                {
+                    if (item.Data != null)
+                        item.Save((int)PackID, "PackModel");
+                }
+            }
+            if (Tags != null)
+            {
+				if(!db.DB.CheckTable($"PackModel_{PackID}_Tags"))
+					db.DB.CreateTable($"PackModel_{PackID}_Tags", new Tag());
+                foreach (Tag tag in Tags)
+                {
+                    if (db.DB.CheckRow("Tags", "Id", tag.Id.ToString()))
+                    {
+                        Tag dbTag = db.DB.GetRow("Tags", new Tag(), tag.Id.ToString());
+                        db.DB.AddRowToTable($"PackModel_{PackID}_Tags", dbTag);
+                    }
+                }
+            }
+        }
+        public void LoadTags()
+        {
+            StorageDB db = new StorageDB();
+            Tags = db.DB.GetAllElements($"PackModel_{PackID}_Tags", new Tag());
         }
 
+        public void LoadImages()
+        {
+            DirectoryInfo dir = ImageModel.GetDir((int)PackID, "PackModel");
 
-		public void DeleteFromDB(StorageDB db){
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                ImageModel img = new();
+                img.Name = file.Name;
+                img.Type = file.Extension;
+                img.Id = PackID;
+                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
+                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
+                img.FilePath = img.GetFilePath("PackModel");
+
+				if (Pictures == null)
+					Pictures = new List<ImageModel>();
+                Pictures.Add(img);
+            }
+        }
+
+        public ImageModel GetFirstImg()
+        {
+            DirectoryInfo dir = ImageModel.GetDir((int)PackID, "PackModel");
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                ImageModel img = new();
+                img.Name = file.Name;
+                img.Type = file.Extension;
+                img.Id = PackID;
+                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
+                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
+                img.FilePath = img.GetFilePath("PackModel");
+
+                return img;
+            }
+            return null;
+        }
+
+        public void DeleteFromDB(StorageDB db){
 			for(int i = 0; db.DB.CheckTable($"{TABLE_NAME}_{this.PackID}_{i}"); i++)
 				db.DB.DeleteTable($"{TABLE_NAME}_{this.PackID}_{i}");
 			db.DB.RemoveRow($"{TABLE_NAME}", "Id", (this.PackID ?? throw new Exception("Item Pack isn't saved")).ToString());
+
+			db.DB.DeleteTable($"PackModel_{PackID}_Tags");
 		}
     }
 }

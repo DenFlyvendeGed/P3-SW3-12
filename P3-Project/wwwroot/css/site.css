@@ -43,7 +43,11 @@ body {
 }
 
 
-.topBar{
+.Clickable {
+    cursor: pointer;
+}
+
+.topBar {
     height: 42px;
     background-color: rgb(59, 146, 178);
 }
@@ -73,24 +77,6 @@ body {
 .navBarPlacement {
     font-family: 'DINMittelschrift',sans-serif;
     font-size: 90%;
-}
-
-.navBarText {
-    padding-top: 5px;
-    padding-left: 20px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    
-}
-
-.navBarText:hover {
-    padding-top: 5px;
-    padding-left: 20px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(59, 146, 178);
 }
 
 /*centers some elements*/
@@ -180,43 +166,14 @@ body {
     font-family: 'DINMittelschrift',sans-serif;
 }
 
-a.BoxLink:link {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 
-a.BoxLink:visited {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:hover {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:active {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 .Flex-Container-PackBoxes {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px;
 }
-.box {
-    box-sizing: content-box;
-    display: block;
-    position: relative;
-  
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
+
 .topBar-Input {
     display: inline-block;
     margin-left: 32%;
@@ -287,11 +244,7 @@ a.BoxLink:active {
     top: 1%;
 }
 
-a.BoxLink:link {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
+
 .packBox-plus {
     position: absolute;
     max-width: inherit;
@@ -304,37 +257,13 @@ a.BoxLink:link {
     top: 30%;
 }
 
-a.BoxLink:visited {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:hover {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-a.BoxLink:active {
-    color: black;
-    text-decoration: none;
-    font-weight: normal;
-}
 .Flex-Container-PackBoxes {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px;
 }
-.box {
-    box-sizing: content-box;
-    display: block;
-    position: relative;
-  
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
+
 .topBar-Input {
     display: inline-block;
     -ms-transform: translateY(-80%);
@@ -353,24 +282,6 @@ a.BoxLink:active {
     box-shadow: 2px 2px 5px black;
 }
 
-.valgmulighedPakke {
-    position: absolute;
-    
-    
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    width: 98%;
-    height: auto;
-    right: 1%;
-    top: 1%;
-
-
-    background-color: #D9D9D9;
-    border: 1px solid #000000;
-}
-
 #LeftInput {
     margin-left: 50%;
 }
@@ -381,7 +292,7 @@ a.BoxLink:active {
 
 
 .delBut {
-    position: absolute;
+    /*position: absolute;*/
     justify-self: end;
 }
 
@@ -486,7 +397,6 @@ a.BoxLink:active {
 }*/
     
 #imgBox {
-    margin-top: 50px;
     display:grid;
 }
 
@@ -511,7 +421,10 @@ img {
 .picSize {
     box-sizing: border-box;
     padding: 5px;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .imageButtons {
@@ -617,6 +530,9 @@ img {
     min-width: 140px;
     min-height: 120px;
     margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .stockList {
@@ -646,7 +562,7 @@ img {
 }
 
 .itemShowCase {
-    width: 20vw;
+    width: 100%;
     height: 25vw;
     border-style: solid;
     border-width: 1px;
@@ -666,12 +582,23 @@ img {
     width: 100%;
     height: 80%;
     background-color: #D9D9D9;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 25vw 25vw 25vw;
-    margin-left: 8%;
+    grid-template-columns: 33% 33% 33%;
+    padding-left: 8%;
+    width: 100%;
+    min-width: 50vw;
+}
+
+.grid-container a {
+    padding: 0px 10px;
+    width: 100%;
 }
 
 .item1 {
@@ -779,8 +706,8 @@ div.modelAttributes {
 }
 
 div.tagBox{
-    width: 15vw;
-    height:25vw;
+    width: 20vw;
+    height:10vw;
 }
 
 div.createTaxBox{
@@ -791,8 +718,10 @@ div.createTaxBox{
 
 .picScaling {
     margin-top: 40px;
-    height: 80%;
-   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
 }
 
 .colorStyle {
@@ -826,31 +755,74 @@ div.createTaxBox{
 }
 
 div.shopTagBox{
-    height:3vw;
+    width: 100%;
+    height:50vh;
 }
-
-
 
 .wrap {
     position: relative;
-    
+}
+
+.midImg {
+    position: relative;/*absolute; */
+
+    /*width: 100%;*/
+
+    padding: 5px;
+}
+
+.mainIndexScale {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
 }
 
 
-.midImg {
-    margin: auto;
-    position: relative;/*absolute; */
+.hovertext {
+    position: relative;
+    border-bottom: 1px dotted black;
+}
+
+.hovertext:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    width: 20vw;
+    min-width: 50px;
+    opacity: 0;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 5px;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    z-index: 1;
     left: 0;
+
     right: 0;
     top: 0;
     bottom: 0;
     width: 100%;
-} 
 
+}
+
+
+/*.grid-container-2 {
+    display: grid;
+    grid-template-columns: 25vw 25vw 25vw;
+    margin-left: 8%;
+}
+
+.itemShowCaseName-2 {
+    height: 20%;
+    width: 100%;
+    background-color: #D9D9D9;
+    box-sizing: border-box;
+    font-size: 1.3vw;
+    text-align: center;
+}*/
 
 /*Scalling for window < 480px*/
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-
+@media only screen and (max-device-width : 480px) {
     .mainIndex {
         overflow: auto;
     }
@@ -859,7 +831,22 @@ div.shopTagBox{
         display: grid;
         grid-template-columns: 70vw;
         gap: 1%;
-        margin-left:12%
+        padding: 0px;
+        margin: auto;
+        justify-content: center;
+    }
+
+    .grid-container a {
+        /*padding: 0px;*/
+        margin: auto;
+    }
+
+    .grid-container-2 {
+        display: grid;
+        grid-template-columns: 70vw;
+        gap: 1%;
+        row-gap: 0%;
+        margin-left: 12%
     }
 
     .itemShowCase {
@@ -879,11 +866,22 @@ div.shopTagBox{
         text-align: center;
     }
 
+    .itemShowCaseName-2 {
+        position: relative;
+        top: 20%;
+        height: 20%;
+        width: 100%;
+        background-color: #D9D9D9;
+        box-sizing: border-box;
+        font-size: 3.3vw;
+        text-align: center;
+    }
+
     .itemShowCasePic {
         width: 99.8%;
         height: 80%;
         background-color: #D9D9D9;
-        ;
+        
     }
 
     .displayItemBox {
@@ -935,24 +933,243 @@ div.shopTagBox{
     }
 
     .picScaling {
-        height: 60vw;
+
         margin-top: 5vw;
     }
-   
+
+    .mainIndexScale {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+    }
+
+    div.shopTagBox {
+        margin-left: 11vw;
+        width: 70vw;
+        height: 5vh;
+    }
+
+    div.shopTagBox {
+        width: 70vw;
+
+        height: 9vh;
+        overflow: auto;
+        padding: 0px;
+        margin: auto;
+    }
+
+    .midImg {
+    /*width: 100%;*/
+
+    padding: 5px;
+    }
+
 }
 
 /*Scalling for 1440px > window > 480px*/
 @media only screen and (min-device-width : 480px) and (max-device-width : 1250px) {
 
     .picScaling {
-        height: 80%;
         margin-top: 5vw;
-
     }
 
-    .grid-container {
+    /*.grid-container {
+        margin-left: 5%
+    }*/
+    
+}
+
+.grid-container-PackPicker {
+    display: grid;
+    width: 100%;
+    row-gap: 1vh;
+    column-gap: 10%;
+    grid-template-columns: repeat(2, 45%);
+}
+
+.PackPickerHeader {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-area: 1 / 1 / span 1 / span 2;
+    background-color: #D9D9D9;
+    text-align: center;
+    height: 63px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.PackChoices {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: start;
+    height: 63px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.PackPickerItems {
+    background-color: #D9D9D9;
+    text-align: center;
+
+    margin-bottom: 2%;
+}
+.PackPickerImg {
+    /*position: relative;*/
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    right: 0%;
+    top: 0%;
+    
+}
+
+.PackPickerImgContainer {
+    /*position: relative;*/
+    /* height: 68%;
+    width: 34%;*/
+    /*height: 50%;*/
+    bottom: 2%;
+    left: 3.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.PackPickerFlexBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*position: relative;*/
+    /*    bottom: 70.5%;
+    left: 22vw;*/
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 5px;
+}
+.colorBox {
+    background-color: #D9D9D9;
+    border-style: solid;
+    border-width: 1px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+}
+.colorBoxSelect {
+    width: 36px;
+    height: 36px;
+    border-radius: 15px;
+    padding-top: 2px;
+    padding-top: 1px;
+    padding-left: 1px;
+}
+.CheckMark-Flag {
+    width: 22px;
+    height: 22px;
+}
+
+.CheckMark {
+    /*position: relative;*/
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+    padding: 4px;
+    margin: 0px;
+    left: 90%;
+    /*top: 84%*/
+}
+.smltext {
+    /*position: relative;*/
+    bottom: 60%;
+    right : 0%;
+    margin: 0%;
+}
+.SelectOption {
+    /*position: relative;*/
+    bottom: 64%;
+    left: 41%;
+    width: 100%;
+    display: flex;
+}
+.Name {
+    /*position: relative;*/
+    height: 50px;
+    max-width: 100%;
+    bottom: 2%;
+    padding: 10px;
+    margin: 4px 0px;
+}
+.AddToCart {
+    position: relative;
+    left: 70vw;
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 220px;
+    padding: 6px;
+}
+
+@media (max-width: 676px) {
+    .CheckMark {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+        left: 80%;
+        /*top: 66%;*/
+    }
+    .CheckMark-Flag {
+        width: 22px;
+        height: 22px;
+    }
+
+    .smltext {
+        bottom: 40%;
+        right: 38%;
+    }
+    .size {
+        bottom: 48%;
+        right: 32.5%;
+    }
+    .PackPickerFlexBox {
+        bottom: 48.5%;
+        left: 24%;
+        width: 100%;
+    }
+    .PackPickerImgContainer {
+        /*height: 50%;*/
+        /*width: 68%;*/
+        bottom: 14%;/*
+        left: 3.5%;*/
+        /*margin-bottom: 23%;*/
         
-        margin-left: 12%
+    }
+    .PackPickerImg {
+        /*width: 100%;
+        height: 100%;*/
+        right: 0%;
+        top: 0%;
+    }
+    .PackPickerItems {
+        margin-bottom: 6%;
+    }
+    .SelectOption {
+        /*bottom: 42%;*/
+        /*left: 2%;*/
+        /*width: 30%;*/
+    }
+    .Name {
+        height: 50px;
+        /*width: 240px;*/
+        bottom: 0%;
+        top: 21%;
     }
     
+    /*.PackPickerHeader{
+        width: 94vw;
+    }*/
+    .AddToCart {
+        left: 40vw;
+        width: 180px;
+        top: 0.7%;
+    }
 }

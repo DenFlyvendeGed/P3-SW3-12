@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 public class SqlDB : DataBase
 {
+	static void log(string s) => Console.WriteLine($"Opening {s}");
 	private SqlConnection conn = new SqlConnection();
 	private SqlCommand cmd = new SqlCommand();
 	private string sqlType = "SQLServer";
@@ -86,8 +87,8 @@ public class SqlDB : DataBase
 		}
 		catch(SqlException ex)
 		{
-			
-			throw new Exception(ex.Message);
+            conn.Close();
+            throw new Exception(ex.Message);
 		}
 
 		//Close the connection
@@ -158,19 +159,30 @@ public class SqlDB : DataBase
 			//open database connection.
 			conn.Open();
 
-			cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= " + selectorValue;
+			cmd.CommandText = "UPDATE " + table + " Set " + field + "  = '" + fieldValue + "' Where " + selectorKey + "= '" + selectorValue + "'";
 
-			//Execute the query 
-			cmd.ExecuteReader();
+			try
+			{
 
-			//Close the connection
-			conn.Close();
+				//Execute the query 
+				cmd.ExecuteReader();
+
+            }
+            catch (SqlException ex)
+            {
+                conn.Close();
+                throw new Exception(ex.Message);
+            }
+
+            //Close the connection
+            conn.Close();
 
 
 		}
 		else
 		{
-			throw new Exception("Row with given field dosent exist");
+            conn.Close();
+            throw new Exception("Row with given field dosent exist");
 		}
 	}
 
@@ -320,9 +332,12 @@ public class SqlDB : DataBase
 
 
 		PropertyInfo[] Properties = objectClass.GetType().GetProperties();
-		// open database connection.
-		conn.Open();
-
+		// open database connection
+		try
+		{
+			conn.Open();
+		}
+		catch { }
 		FieldInfo[] fields = objectClass.GetType().GetFields();
 
 		List<T> list = new List<T>();
@@ -331,6 +346,8 @@ public class SqlDB : DataBase
 		SqlDataReader sdr = cmd.ExecuteReader();
 
 		////Retrieve data from table and Display result
+		///
+		try { 
 		while (sdr.Read())
 		{
 			T classInstance = (T)Activator.CreateInstance(typeof(T));
@@ -361,9 +378,17 @@ public class SqlDB : DataBase
 			}
 			list.Add(classInstance);
 		}
-		//Close the connection
-		conn.Close();
-
+        }
+		catch
+		{
+			throw new Exception("Error in reading table");
+		}
+		finally
+		{
+            //Close the connection
+            conn.Close();
+        }
+        
 		return list;
 	}
 	public void AddRowToTable(string table, List<(string, string)> keyValueSet)
@@ -675,7 +700,7 @@ public class SqlDB : DataBase
 				case SQLType.Int              : cmd.CommandText += "INT"; break;
 				case SQLType.Large            : cmd.CommandText += "BIGINT"; break;
 				case SQLType.IntAutoIncrement : cmd.CommandText += "INT IDENTITY(1,1) PRIMARY KEY"; break;
-				case SQLType.Bool             : cmd.CommandText += "BIT"; break;
+				case SQLType.Bool             : cmd.CommandText += "char(1)"; break;
 				
 				case SQLType.Char             : cmd.CommandText += "char(1)"; break;
 				case SQLType.String8          : cmd.CommandText += "varchar(8)"; break;
@@ -745,40 +770,93 @@ public class SqlDB : DataBase
 
 	public List<T> ReadFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull{
 		cmd.CommandText = $"SELECT * FROM {name}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
 		
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		Console.WriteLine(cmd.CommandText);
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 	}
 	public List<T> ReadFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
 		cmd.CommandText = $"SELECT * FROM {name} WHERE {where}";
+		log($"ReadFromTable {name}");
 		conn.Open();
 
 		var rtn = new List<T>();
 		
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		Console.WriteLine(cmd.CommandText);
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name}";
+
+		log($"ReadFromTable {name}");
+
+		Console.WriteLine(cmd.CommandText);
+
 		conn.Open();
 
 		var rtn = new List<T>();
 		
-		var sdr = cmd.ExecuteReader();
-		ReadToArrayFunc(sdr, rtn, initializer);
-		conn.Close();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
 		return rtn;
 
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name} WHERE {where}";
+
+		log($"ReadFromTable {name}");
+
+		Console.WriteLine(cmd.CommandText);
+		conn.Open();
+
+		var rtn = new List<T>();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {	
+			conn.Close();
+		}
+		return rtn;
+	}
+	public List<T> ReadLastFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull{
+		cmd.CommandText = $"SELECT LAST * FROM {name}";
+		Console.WriteLine(cmd.CommandText);
+
+		conn.Open();
+
+		var rtn = new List<T>();
+		
+		Console.WriteLine(cmd.CommandText);
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {
+			conn.Close();
+		}
+		return rtn;
+	}
+	
+	public List<T> ReadLastFromTable<T>(string name, string where, Func<IList<object>, T> initializer) where T : notnull{
+		cmd.CommandText = $"SELECT LAST * FROM {name} WHERE {where}";
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -786,6 +864,31 @@ public class SqlDB : DataBase
 		var sdr = cmd.ExecuteReader();
 		ReadToArrayFunc(sdr, rtn, initializer);
 		conn.Close();
+		return rtn;
+	}
+	public List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, Func<IList<object>, T> initializer ) where T : notnull{
+		cmd.CommandText = $"SELECT LAST {string.Join(',', columns )} FROM {name}";
+		conn.Open();
+
+		var rtn = new List<T>();
+		
+		var sdr = cmd.ExecuteReader();
+		ReadToArrayFunc(sdr, rtn, initializer);
+		conn.Close();
+		return rtn;
+
+	}
+	public List<T> ReadLastFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
+		cmd.CommandText = $"SELECT LAST {string.Join(',', columns )} FROM {name} WHERE {where}";
+		conn.Open();
+
+		var rtn = new List<T>();
+		try {
+			var sdr = cmd.ExecuteReader();
+			ReadToArrayFunc(sdr, rtn, initializer);
+		} finally {	
+			conn.Close();
+		}
 		return rtn;
 	}
 } 
