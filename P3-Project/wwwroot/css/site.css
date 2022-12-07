@@ -43,7 +43,11 @@ body {
 }
 
 
-.topBar{
+.Clickable {
+    cursor: pointer;
+}
+
+.topBar {
     height: 42px;
     background-color: rgb(59, 146, 178);
 }
@@ -288,7 +292,7 @@ body {
 
 
 .delBut {
-    position: absolute;
+    /*position: absolute;*/
     justify-self: end;
 }
 
@@ -417,7 +421,10 @@ img {
 .picSize {
     box-sizing: border-box;
     padding: 5px;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .imageButtons {
@@ -523,6 +530,9 @@ img {
     min-width: 140px;
     min-height: 120px;
     margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .stockList {
@@ -552,7 +562,7 @@ img {
 }
 
 .itemShowCase {
-    width: 20vw;
+    width: 100%;
     height: 25vw;
     border-style: solid;
     border-width: 1px;
@@ -572,12 +582,23 @@ img {
     width: 100%;
     height: 80%;
     background-color: #D9D9D9;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 25vw 25vw 25vw;
-    margin-left: 8%;
+    grid-template-columns: 33% 33% 33%;
+    padding-left: 8%;
+    width: 100%;
+    min-width: 50vw;
+}
+
+.grid-container a {
+    padding: 0px 10px;
+    width: 100%;
 }
 
 .item1 {
@@ -697,7 +718,10 @@ div.createTaxBox{
 
 .picScaling {
     margin-top: 40px;
-   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
 }
 
 .colorStyle {
@@ -731,7 +755,7 @@ div.createTaxBox{
 }
 
 div.shopTagBox{
-    width: 12vw;
+    width: 100%;
     height:50vh;
 }
 
@@ -741,7 +765,9 @@ div.shopTagBox{
 
 .midImg {
     position: relative;/*absolute; */
-    width: 100%;
+
+    /*width: 100%;*/
+
     padding: 5px;
 }
 
@@ -771,19 +797,29 @@ div.shopTagBox{
     position: absolute;
     z-index: 1;
     left: 0;
+
     right: 0;
     top: 0;
     bottom: 0;
     width: 100%;
-}
-    top: 110%;
+
 }
 
-.hovertext:hover:before {
-    opacity: 1;
-    visibility: visible;
+
+/*.grid-container-2 {
+    display: grid;
+    grid-template-columns: 25vw 25vw 25vw;
+    margin-left: 8%;
 }
 
+.itemShowCaseName-2 {
+    height: 20%;
+    width: 100%;
+    background-color: #D9D9D9;
+    box-sizing: border-box;
+    font-size: 1.3vw;
+    text-align: center;
+}*/
 
 .grid-container-2 {
     display: grid;
@@ -801,7 +837,7 @@ div.shopTagBox{
 }
 
 /*Scalling for window < 480px*/
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+@media only screen and (max-device-width : 480px) {
     .mainIndex {
         overflow: auto;
     }
@@ -810,7 +846,14 @@ div.shopTagBox{
         display: grid;
         grid-template-columns: 70vw;
         gap: 1%;
-        margin-left:12%
+        padding: 0px;
+        margin: auto;
+        justify-content: center;
+    }
+
+    .grid-container a {
+        /*padding: 0px;*/
+        margin: auto;
     }
 
     .grid-container-2 {
@@ -905,7 +948,7 @@ div.shopTagBox{
     }
 
     .picScaling {
-        height: 60vw;
+
         margin-top: 5vw;
     }
 
@@ -922,12 +965,16 @@ div.shopTagBox{
 
     div.shopTagBox {
         width: 70vw;
-        height:9vh;
+
+        height: 9vh;
         overflow: auto;
+        padding: 0px;
+        margin: auto;
     }
 
     .midImg {
-    width: 100%;
+    /*width: 100%;*/
+
     padding: 5px;
     }
 
@@ -940,9 +987,9 @@ div.shopTagBox{
         margin-top: 5vw;
     }
 
-    .grid-container {
+    /*.grid-container {
         margin-left: 5%
-    }
+    }*/
     
 }
 
@@ -957,8 +1004,8 @@ div.shopTagBox{
     display: grid;
     width: 100%;
     row-gap: 1vh;
-    column-gap: 6vw;
-    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10%;
+    grid-template-columns: repeat(2, 45%);
 }
 
 .PackPickerHeader {
@@ -984,34 +1031,42 @@ div.shopTagBox{
 .PackPickerItems {
     background-color: #D9D9D9;
     text-align: center;
-    margin-bottom: 4px;
+
+    margin-bottom: 2%;
 }
 .PackPickerImg {
-    position: relative;
+    /*position: relative;*/
     object-fit: contain;
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     right: 0%;
     top: 0%;
     
 }
 
 .PackPickerImgContainer {
-    position: relative;
-    height: 68%;
-    width: 34%;
+    /*position: relative;*/
+    /* height: 68%;
+    width: 34%;*/
+    /*height: 50%;*/
     bottom: 2%;
     left: 3.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.PackPickerFlexBox{
+.PackPickerFlexBox {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    position: relative;
-    bottom: 70.5%;
-    left: 22vw;
-    width: 10vw;
+    /*position: relative;*/
+    /*    bottom: 70.5%;
+    left: 22vw;*/
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 5px;
 }
 .colorBox {
     background-color: #D9D9D9;
@@ -1035,32 +1090,35 @@ div.shopTagBox{
 }
 
 .CheckMark {
-    position: relative;
+    /*position: relative;*/
     width: 40px;
     height: 40px;
     border-width: 2px;
     padding: 4px;
-    margin: 2px;
+    margin: 0px;
     left: 90%;
-    top: 84%
+    /*top: 84%*/
 }
 .smltext {
-    position: relative;
+    /*position: relative;*/
     bottom: 60%;
     right : 0%;
+    margin: 0%;
 }
 .SelectOption {
-    position: relative;
+    /*position: relative;*/
     bottom: 64%;
     left: 41%;
-    width: 30%;
+    width: 100%;
+    display: flex;
 }
 .Name {
-    position: relative;
+    /*position: relative;*/
     height: 50px;
-    width: 240px;
-    top: 4%;
+    max-width: 100%;
+    bottom: 2%;
     padding: 10px;
+    margin: 4px 0px;
 }
 .AddToCart {
     position: relative;
@@ -1079,7 +1137,7 @@ div.shopTagBox{
         height: 40px;
         padding: 5px;
         left: 80%;
-        top: 66%;
+        /*top: 66%;*/
     }
     .CheckMark-Flag {
         width: 22px;
@@ -1087,7 +1145,7 @@ div.shopTagBox{
     }
 
     .smltext {
-        bottom: 50%;
+        bottom: 40%;
         right: 38%;
     }
     .size {
@@ -1095,42 +1153,45 @@ div.shopTagBox{
         right: 32.5%;
     }
     .PackPickerFlexBox {
-        bottom: 61.5%;
+        bottom: 48.5%;
         left: 24%;
-        width: 136px;
+        width: 100%;
     }
     .PackPickerImgContainer {
-        height: 44%;
-        width: 68%;
-        bottom: 14%;
-        left: 3.5%;
-        margin-bottom: 23%;
+        /*height: 50%;*/
+        /*width: 68%;*/
+        bottom: 14%;/*
+        left: 3.5%;*/
+        /*margin-bottom: 23%;*/
+        
     }
     .PackPickerImg {
-        width: 100%;
-        height: 100%;
+        /*width: 100%;
+        height: 100%;*/
         right: 0%;
         top: 0%;
     }
+    .PackPickerItems {
+        margin-bottom: 6%;
+    }
     .SelectOption {
-        bottom: 52%;
-        left: 2%;
-        width: 30%;
+        /*bottom: 42%;*/
+        /*left: 2%;*/
+        /*width: 30%;*/
     }
     .Name {
         height: 50px;
-        width: 240px;
-        top: 5%;
+        /*width: 240px;*/
+        bottom: 0%;
+        top: 21%;
     }
-    .PackPickerItems {
-        height: 35vh;
-    }
-    .PackPickerHeader{
+    
+    /*.PackPickerHeader{
         width: 94vw;
-    }
+    }*/
     .AddToCart {
         left: 40vw;
         width: 180px;
+        top: 0.7%;
     }
 }
-
