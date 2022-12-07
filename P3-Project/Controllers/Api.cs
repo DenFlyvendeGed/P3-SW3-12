@@ -85,8 +85,14 @@ namespace P3_Project.Controllers
         }
 
 		[HttpPost("CreateOrder")]
+		[Produces("application/json")]
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
-			var order = input_order.ToOrder();
+			try  {
+				input_order.Validate();
+			} catch(Exception e) {
+				return Conflict($"{{\"Message\" : \"{e.Message}\"}}");
+			}
+			Order order = input_order.ToOrder();
 			P3_Project.Models.Orders.Globals.OrderDB.PushReserve(order);
 			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
 

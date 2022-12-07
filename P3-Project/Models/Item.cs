@@ -44,6 +44,21 @@ namespace P3_Project.Models
 
         }
 
+		public void NotifyStockAlarm(int modelId){
+			var item = db.DB.GetRow("ItemModels", new ItemModel(), modelId.ToString());
+			if(item.StockAlarm >= Stock - Reserved){
+				new Mail.MailClient()
+					.ToList(new Mail.MailList(db))
+					.Subject("Lavt Lagerbeholdningen")
+					.SetHtml(true)
+					.Body($@"
+<h1> Lavt lager indhold på gendstand {item.ModelName} i størrelse {Size} og farve {Color} </h1>
+<p> Der er blevet placeret en ordre der når den hentes vil sende Lagerbeholdningen af {item.ModelName} under den ønskede værdi </p>
+					")
+					.SendMail();
+			}
+		}
+		
 		void ChangeField(int initial, int amount, string field){
             string table = "Item" + ModelId;
             if (db.DB.CheckRow(table, "Id", Id.ToString()))
@@ -59,21 +74,6 @@ namespace P3_Project.Models
                 throw new Exception("Item Dosent exist");
             }
 			
-		}
-
-		public void NotifyStockAlarm(int modelId){
-			var item = db.DB.GetRow("ItemModels", new ItemModel(), modelId.ToString());
-			if(item.StockAlarm >= Stock - Reserved){
-				new Mail.MailClient()
-					.ToList(new Mail.MailList(db))
-					.Subject("Lavt Lagerbeholdningen")
-					.SetHtml(true)
-					.Body($@"
-<h1> Lavt lager indhold på gendstand {item.ModelName} i størrelse {Size} og farve {Color} </h1>
-<p> Der er blevet placeret en ordre der når den hentes vil sende Lagerbeholdningen af {item.ModelName} under den ønskede værdi </p>
-					")
-					.SendMail();
-			}
 		}
 
         public void ChangeStock(int amount)

@@ -30,27 +30,14 @@
 
 
 <div class="box">
-
-
     <fieldset>
         <legend> Valgte Varer: </legend>
-
         <div class="itemOutput">
-
             <div id="LocalStorageInfo"></div>
-
-
         </div>
-
-
     </fieldset>
-
-
-
-
     <table style="width: 100%;">
         <tbody class="confHeadTable">
-
             <style>
                 td, tr {
                     border-width: 2px;
@@ -59,11 +46,7 @@
                 }
 
             </style>
-
-
-
             <tr>
-
                 <td style="width: 10vw;">
                     Navn
                 </td>
@@ -86,43 +69,29 @@
                 </td>
 
             </tr>
-
-
         </tbody>
-
     </table>
-
-
-
 </div>
 
-
-
 <div class="checkout">
-
     <div class="total" id="total"></div>
     <button class="button" id="createOrder">Reservér</button>
-
     <div class="PromoCode">
         <label for="PromoKodeInput">
             Promokode:
         </label>
         <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
     </div>
-
     <div>
         <input type="text" placeholder="Navn" id="buyerName"/>
         <input type="text" placeholder="Email" id="buyerEmail"/>
     </div>
-
-
 </div>
 
 
 
 
 <script>
-
     window.addEventListener('load', () => {
 
         const itemString = localStorage.getItem('itemsSavedForCart');
@@ -494,14 +463,10 @@
         let TotalPrice = document.getElementById("total").innerHTML;
         TotalPrice = TotalPrice.split(': ');
 
-
         const itemString = localStorage.getItem('itemsSavedForCart');
 
         let itemsSavedForCart = JSON.parse(itemString);
         let ShopUnits = [];
-
-
-
 
         for(let item of itemsSavedForCart){
             let ShopUnit = {};
@@ -537,7 +502,6 @@
                     ShopUnit.Color = item[""+i].ItemColors;
                     ShopUnit.Size = item[""+i].size;
 
-
                     const response = await fetch("/api/getItemId", 
                     {
                         method: 'GET',
@@ -548,8 +512,6 @@
                                 size: encodeURI(ShopUnit.Size),
                                 modelId: ShopUnit.ModelId,
                         },
-
-
                     })
                     .then((response) => response.headers.get("itemId"));
 
@@ -557,13 +519,8 @@
                     ShopUnit.ItemId = parseInt(response);
                     ShopUnits.push({"Amount" : 1, ShopUnit});
                 }
-
-
             }
-
-
         }
-
 
         let order = {
             Name: buyerName,
@@ -585,9 +542,13 @@
             
 
         })
+
+		if(response.status != 200){
+			let data = await response.json();
+			data = JSON.parse(data);
+			alert(data.Message);
+		}
     }
-
-
 
     document.getElementById("createOrder").addEventListener("click", placeOrder);
 
