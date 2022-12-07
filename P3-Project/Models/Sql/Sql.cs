@@ -185,50 +185,6 @@ public class SqlDB : DataBase
             throw new Exception("Row with given field dosent exist");
 		}
 	}
-
-	//public void CreateItemTable(Item item)
-	//{
-	//    //Check if table exist
-	//    if (!CheckTable(item.modelName))
-	//    {
-	//        if (System.Configuration.ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString.Contains("password")) 
-	//        { 
-	//            cmd.CommandText = "CREATE TABLE " + Name + "(" +
-	//            "Id int NOT NULL AUTO_INCREMENT," +
-	//            "Color varchar(255)," +
-	//            "Size varchar(255)," +
-	//            "ModelId Int," +
-	//            "Reserved Int," +
-	//            "Sold Int," +
-	//            "Visible BOOL," +
-	//            "RestockDate DATE," + //format YYYY-MM-DD
-	//            "Stock Int)";
-	//        }
-	//        else
-	//        {
-	//            cmd.CommandText = "CREATE TABLE " + Name + "(" +
-	//            "Id int NOT NULL IDENTITY(1,1) PRIMARY KEY," +
-	//            "Color varchar(255)," +
-	//            "Size varchar(255)," +
-	//            "ModelId Int," +
-	//            "Reserved Int," +
-	//            "Sold Int," +
-	//            "Visible bit," +
-	//            "RestockDate DATE," + //format YYYY-MM-DD
-	//            "Stock Int)";
-	//        }
-
-	//        // open database connection.
-	//        conn.Open();
-
-	//        //Execute the query 
-	//        SqlDataReader sdr = cmd.ExecuteReader();
-
-	//        conn.Close();
-	//    }
-	//    return;
-
-	//}
 	
 	public int GetStockAmount(string tableName)
 	{

@@ -302,14 +302,13 @@
         const CheckMark = document.createElement("img");
         CheckMark.setAttribute("class", "CheckMark-Flag");
         CheckMark.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
-        //console.log(CheckMarkBox.children.length > 0);
-        //console.log(ParentOption);
+
         let deleteIndex = 0;
 
 
 
         document.querySelectorAll(`#${ParentOption}`).forEach(element => {
-            //console.log(element.querySelector("#CheckMarkBox"));
+
             let box = element.querySelector("#CheckMarkBox");
             if (box.children.length > 0) {
                 box.removeChild(box.firstChild);
@@ -336,15 +335,13 @@
         let count = parseInt(result[0]);
 
 
-        //console.log(Elems);
-        //console.log(lastElem);
-        //console.log(count);
+
 
         //let i = 1;
         //document.querySelector(`#Option${i}`).querySelector("#CheckMarkBox").appendChild(CheckMark);
 
         for (let i = 1; i <= count; i++) {
-            //console.log(i);
+
             let Flag = document.createElement("img");
             Flag.setAttribute("class", "CheckMark-Flag");
             Flag.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
@@ -359,8 +356,7 @@
             let NodeList = FlexBox.querySelectorAll(".colorBoxSelect");
             let FirstElem = NodeList[0];
             FirstElem.style.border = "2px solid DodgerBlue";
-            //console.log(NodeList[0]);
-            //console.log(FlexBox);
+
         })
     }
 
@@ -399,14 +395,13 @@
                         FlagChoice++;
                     }
                 })
-                //console.log(Colors);
-                //console.log(FlagChoice);
+
                 obj[loopindex] = { id: Id, name: Name, size: Size, ItemColors: Colors[0], ModelPrice: ModelPrice, };
                 loopindex++;
             }
         })
         SelectedValues = Object.assign(SelectedValues, obj);
-        //console.log(SelectedValues);
+
 
         let itemData = {
             packid: "@Model.PackID",
@@ -416,12 +411,12 @@
         };
         itemData = Object.assign(itemData, SelectedValues);
 
-        //console.log(itemData);
+
 
         // Get the existing data
         var existing = localStorage.getItem('itemsSavedForCart');
 
-        //console.log(existing)
+
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         let itemsSavedForCart = []
@@ -459,3 +454,4 @@
     }
 
 </script>
+

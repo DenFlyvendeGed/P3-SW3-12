@@ -26,7 +26,8 @@ public class SimpleTable<T> where T : notnull {
 		));
 
 	public T Fetch(int id){
-		return db.ReadFromTable(table, new string[] {"Value"}, $"Id='{id}'", r => (T)r[0])[0];
+		var l = db.ReadFromTable(table, new string[] {"Value"}, $"Id='{id}'", r => (T)r[0]);
+		return l[0];
 	}
 
 	public void Push(T name) {

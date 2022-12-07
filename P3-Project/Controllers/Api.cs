@@ -76,7 +76,7 @@ namespace P3_Project.Controllers
         [HttpGet("getItemId")]
         public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
         {
-            
+
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
             size = HttpUtility.UrlDecode(size);
@@ -86,10 +86,18 @@ namespace P3_Project.Controllers
         }
 
 		[HttpPost("CreateOrder")]
+		[Produces("application/json")]
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
-			var order = input_order.ToOrder();
-			P3_Project.Models.Orders.Globals.OrderDB.Push(order);
-			/*await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
+
+			try  {
+				input_order.Validate();
+			} catch(Exception e) {
+				return Conflict($"{{\"Message\" : \"{e.Message}\"}}");
+			}
+			Order order = input_order.ToOrder();
+			P3_Project.Models.Orders.Globals.OrderDB.PushReserve(order);
+			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
+
 
 			var compile_folder = P3_Project.Models.ReservationPdf.ReservationPdf.COMPILE_FOLDER;
 
@@ -99,8 +107,9 @@ namespace P3_Project.Controllers
 				.Subject($"Reservation Ved Aalborg Sportshøjskole {order.Id}")
 				.Body("Du har nu lavet en reservation ved Aalborg Sportshøjskole")
 				.SendMail();
-            */
-			    return Ok();
+			
+			return Ok();
+
 		}
     }
 
@@ -135,8 +144,6 @@ namespace P3_Project.Controllers
         [HttpPost("CreatePromoCode")]
         public async void CreatePromoCode() {
 			string json;
-
-
             using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
 			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
@@ -363,6 +370,18 @@ namespace P3_Project.Controllers
             return new StatusCodeResult((int)HttpStatusCode.OK);
         }
         #endregion
+	
+		[HttpPut("MarkOrderAsPaid/{id}")]
+		public IActionResult MarkAsPaid(int id){
+			P3_Project.Models.Orders.Globals.OrderDB.MarkAsPaid(id);
+			return Ok();
+		}
+
+		[HttpPut("CancelOrder/{id}")]
+		public IActionResult CancelOrder(int id){
+			P3_Project.Models.Orders.Globals.OrderDB.Cancel(id);
+			return Ok();
+		}
 
         #region User
 
@@ -412,8 +431,6 @@ namespace P3_Project.Controllers
 
             return RedirectToActionPermanent("Settings", "Admin");
         }
-
-
         #endregion
         
     }

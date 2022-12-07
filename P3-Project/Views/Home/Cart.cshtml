@@ -16,16 +16,19 @@
 
     .text {
         background-color: #D9D9D9;
+
         
     }
 
     .button {
         
+
         background-color: #D9D9D9;
     }
 
     .gridforname {
         display: grid;
+
         grid-template-columns: 31% 69%;
         
         
@@ -67,12 +70,15 @@
 
 
 
+
     
 </style>
 
 <h1>Indkøbskurv</h1>
 
+
 <div class="box" style="width:100%; ">
+
     <fieldset>
         <legend> Valgte Varer: </legend>
         <div class="itemOutput">
@@ -89,6 +95,7 @@
                 }
             </style>
             <tr>
+
                 <td >
                     Navn
                 </td>
@@ -99,15 +106,18 @@
                     Farve
                 </td>
                 <td >
+
                     Antal
                 </td>
                 <td style="width: 10vw; border-style: none;">
                     Slet vare
                 </td>
+
                 <td >
                     Pris pr. stk. (DKK)
                 </td>
                 <td >
+
                     Samlet pris (DKK)
                 </td>
             </tr>
@@ -115,6 +125,7 @@
     </table>
 </div>
 <div>
+
     <div class="gridforname" style="margin-top: 0.2%; width:100%">
         <div class="gridfornameitems1">
             <label for="PromoKodeInput">
@@ -135,6 +146,7 @@
       
     </div>
     <button class="button" id="createOrder" >Reservér</button>
+
 </div>
 
 
@@ -178,12 +190,16 @@
             if (item.packid != undefined) {
                 const row = document.createElement("tr");
                 row.innerHTML = `
+
                         <td  >
+
                             ${item.packname}
                         </td>
                         <td style = "width: 10vw; border-style: none;" />
                         <td style = "width: 10vw; border-style: none;" />
+
                             <td  >
+
                                 <div class="counterGrid">
                                     <input class="counterItem" type="button" id="minus" value="-">
                                         <div class="counterItem" id="${"pack"},${item.packid},${index}">${item.AmountToCart}</div>
@@ -193,10 +209,12 @@
                             <td style = "width: 10vw; border-style: none;" >
                                 <button onclick="deleteItem(this)">Slet</button>@*Tom Felt til visual*@
                             </td>
+
                             <td  >
                                 ${item.Price} @*Pris pr.stk. (DKK)*@
                             </td>
                             <td  >
+
                                 <div id="${index}">
                                     ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
                                 </div>
@@ -209,6 +227,7 @@
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
+
                     <td  >
                         ${item.ModelName} @*Navn*@
                     </td>
@@ -219,6 +238,7 @@
                         ${item.Color} @*Farve*@
                     </td>
                         <td  >
+
                             <div class="counterGrid">
                                 <input class="counterItem" type="button" id="minus" value="-">
                                     <div class="counterItem" id="${item.Id},${item.ItemId},${index}">${item.AmountToCart}</div>
@@ -228,10 +248,12 @@
                         <td style = "width: 10vw; border-style: none;" >
                               <button onclick="deleteItem(this)">Slet</button>  @*Tom Felt til visual*@
                         </td>
+
                         <td  >
                                     ${item.Price} @*Pris pr.stk. (DKK)*@
                         </td>
                         <td  >
+
                             <div id="${index}">
                                 ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
                             </div>
@@ -241,7 +263,6 @@
                 index += 1;
             }
         }
-
 
 
         function subTotal(itemsSavedForCart, index) {
@@ -264,7 +285,6 @@
         subTotal(itemsSavedForCart, index);
 
 
-
         function total() {
             let totalPrice = 0;
             for (let i = 0; i < itemsSavedForCart.length; i++) {
@@ -284,20 +304,24 @@
                 let newIndex = newDom[2];
                 if (delta == "plus") {
 
+
                     // Get the existing data
                     var existing = localStorage.getItem('itemsSavedForCart');
 
                     //console.log(existing)
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
+
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
 
 
+
                     itemsSavedForCart[newIndex].AmountToCart += 1;
 
                     //console.log(itemsSavedForCart[0]);
+
 
                     localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
 
@@ -331,16 +355,13 @@
                         subTotal(itemsSavedForCart, newIndex);
 
 
+
                     }
 
                 }
             }
 
         }
-
-
-
-
 
 
 
@@ -367,7 +388,9 @@
                     console.log(data);
 
                     if (data.result == true && promoCodeUsed == false) {
+
                         alert("Gyldig promokode aktiveret.")
+
                         let cartIndex = 0;
                         for (let item of itemsSavedForCart) {
 
@@ -425,7 +448,6 @@
                                     }
 
 
-                                    //console.log("All Packs");
                                     break;
 
                                 //validate All items
@@ -451,7 +473,7 @@
                                         document.getElementById(cartIndex).innerHTML = newPrice;
                                     }
 
-                                    //console.log("All items");
+
                                     break;
 
 
@@ -501,13 +523,13 @@
                                         }
                                     }
 
-                                    //console.log("Some");
                                     break;
 
 
                                 default:
 
                                     break;
+
 
                             }
 
@@ -519,11 +541,13 @@
                         console.log(viewValidatedPromoCodes);
                     }
 
+
                     else{
 
                         alert("Promokoden er ugyldig.")
 
                     }
+
                 });
 
         });
@@ -536,17 +560,7 @@
             Plus.onclick = changeCount("plus");
         });
 
-
     })
-
-
-
-
-
-
-
-
-
 
 
     async function placeOrder() {
@@ -622,40 +636,39 @@
                         ShopUnits.push({ "Amount": 1, ShopUnit });
                     }
 
-
                 }
-
-
             }
-            let order = {
-
-                PromoCodes: viewValidatedPromoCodes,
-                Name: buyerName,
-                Email: buyerEmail,
-                Price: parseInt(TotalPrice[1]),
-                ShopUnits: ShopUnits,
-            }
-
-            console.log(order);
-
-            const response = await fetch("/api/CreateOrder",
-                {
-                    method: 'POST',
-                    headers:
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(order),
-
-                })
-
-            //localStorage.removeItem("itemsSavedForCart");
-            // location.reload();
-            alert("Odrer er resaveret. ");
-
-
         }
 
+        let order = {
+            PromoCodes: viewValidatedPromoCodes,
+            Name: buyerName,
+            Email: buyerEmail,
+            Price: parseInt(TotalPrice[1]),
+            ShopUnits: ShopUnits,
+        }
+
+        console.log(order);
+
+        const response = await fetch("/api/CreateOrder", 
+        {
+            method: 'POST',
+            headers: 
+            {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order),
+            
+
+        })
+
+		if(response.status != 200){
+			let data = await response.json();
+			data = JSON.parse(data);
+			alert(data.Message);
+		} else {
+            alert("Odrer er resaveret. ");
+		}
 
     }
 
@@ -663,3 +676,4 @@
 
 
 </script>
+

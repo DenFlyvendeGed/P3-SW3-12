@@ -1,4 +1,7 @@
 ﻿@using P3_Project.Models.Orders
+
+@using System.Text;
+
 @model Order
 
 @{
@@ -10,31 +13,59 @@
 <h4>Bekræft Salg</h4>
 
 <h5>Bekræft køb af genstande</h5>
+
+<script>
+    async function confirmOrder(){
+        let res = await fetch("/api/admin/markorderaspaid/@Model.Id", {
+			method : "Put",	
+        });
+
+		if(res.status == 200) {
+			alert("Ordre Makeret Betalt Og Hentet");
+		} else {
+			alert("Der skete en fejl");
+		}
+	}
+    async function cancelOrder(){
+        let res = await fetch("/api/admin/cancelorder/@Model.Id", {
+			method : "Put",	
+        });
+
+		if(res.status == 200) {
+			alert("Ordre er afvist");
+		} else {
+			alert("Der skete en fejl");
+		}
+    }
+</script>
 <div>
     <table>
         <tbody class="confHeadTable">
-            
+
             <style>
                 td, tr{
-                    border-width: 2px;
-                    border-color: black;
+					border-width: 1px;
+					border-color: black;
                 }
             </style>
-            
+
+
             <tr>
                 <td style="width: 10vw;">
                     ID
                 </td>
-                <td style="width: 10vw;">
+
+                <td style="width: 20vw;">
                     Navn
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
                     Antal
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
                     Pris pr. stk. (DKK)
                 </td>
-                <td style="width: 10vw;">
+                <td class="centerTableText" style="width: 10vw;">
+
                     Samlet pris (DKK)
                 </td>
             </tr>
@@ -42,50 +73,132 @@
     </table>
 </div>
 
-<div onload="checkIfAnyItems()">
-    <table style="margin-top: 10px">
-        <tbody>
-            <tr>
-                <td style="width: 10vw;">
-                    
-                </td>
-                <td style="width: 10vw;">
-                    
-                </td>
-                <td style="width: 10vw;">
-                    
-                </td>
-                <td style="width: 10vw;">
-                    
-                </td>
-                <td style="width: 10vw;">
-                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
 <div>
     <table style="margin-top: 10px">
         <tbody>
-            <tr>
-                <td style="width: 10vw;">
-                </td>
-                <td style="width: 10vw;">
-                </td>
-                <td style="width: 10vw;">
-                </td>
-                <td style="width: 10vw;">
-                </td>
-                <td style="width: 10vw;">
-                </td>
-            </tr>
+            @{
+				Console.WriteLine(Model.Name);
+                List<(ItemSnapshot, int)> itemSnapshots = new List<(ItemSnapshot, int)>();
+
+                int itemPriceTotal = 0;
+
+				foreach (OrderShopUnit unit in Model.ShopUnits)
+				{
+					if (unit.ShopUnit is ItemSnapshot)
+					{
+						itemSnapshots.Add(((ItemSnapshot)unit.ShopUnit, unit.Amount));
+					}
+					else if(unit.ShopUnit is PackSnapShot)
+					{
+						break;
+					}
+				}
+
+				int i = 0;
+				foreach (var (unit, amount) in itemSnapshots)
+				{
+					<tr>
+						<td class="" style="width: 10vw;">
+						@(unit.ModelId)-@(unit.ItemId)
+						</td>
+						<td style="padding-left: 10px; width: 20vw;">
+						@unit.Name | @unit.Color @unit.Size
+						</td>
+						<td class="" style="width: 10vw;">
+						@amount
+						</td>
+						<td class="" style="width: 10vw;">
+						@unit.Price
+						</td>
+						<td class="" style="background-color: var(--ash-blue); width: 10vw;">@(unit.Price * amount)</td>
+					</tr>
+
+					i++;
+					itemPriceTotal = itemPriceTotal + (unit.Price * amount);
+					//Empty the array
+				}
+            }
+
         </tbody>
     </table>
 </div>
 
-<div class="center" style="display: inline; float: right">
-    <button class="ASHButton">Afvis</button>
-    <button class="ASHButton">Bekræft</button>
+
+<div style="width: 60vw;">
+    <table>
+        <tbody>
+            @{
+                List<PackSnapShot> packSnapshots = new List<PackSnapShot>();
+                int packPriceTotal = 0;
+				int index = 0;
+				foreach (OrderShopUnit unit in Model.ShopUnits)
+				{
+					if (unit.ShopUnit is PackSnapShot)
+					{
+						PackSnapShot pack = (PackSnapShot)unit.ShopUnit;
+						<tr class="pack-table" style="margin-top: 10px">
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@pack.PackId
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 20vw;">
+							@pack.Name
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@Model.ShopUnits[index].Amount
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@pack.Price
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@(pack.Price * Model.ShopUnits[index].Amount)
+							</td>
+						</tr>
+						packPriceTotal = packPriceTotal + (pack.Price * Model.ShopUnits[index].Amount);
+
+						int next = 1;
+						while(index + next < Model.ShopUnits.Count() && Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
+						{
+							Console.WriteLine(next);
+							ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
+
+							<tr>
+								<td style="width: 10vw;">
+								@(item.ModelId)-@(item.ItemId)
+								</td>
+								<td style="width: 20vw;">
+								@item.Name | @item.Color @item.Size
+								</td>
+								<td style="width: 10vw;">
+								@Model?.ShopUnits[index + next].Amount
+								</td>
+								<td style="width: 10vw;">
+								</td>
+								<td style="background-color: var(--ash-blue); width: 10vw;"></td>
+							</tr>
+							next++;
+						}
+					}
+					index++;
+				}
+            }
+        </tbody>
+    </table>
+    <div style="text-align: right;">
+        <div style="white-space: nowrap;">
+            <div style="font-weight: bold; display: inline-block;">Total:</div>
+            <div style="display: inline-block;">@(packPriceTotal + itemPriceTotal)</div>
+        </div>
+    </div>
+    <div class="center" style="display: inline; float: right">
+        <button class="ASHButton" onclick="cancelOrder()">Afvis</button>
+        <button class="ASHButton" onclick="confirmOrder()">Bekræft</button>
+    </div>
 </div>
+<style>
+	tr.pack-table > * {
+		font-weight : bold;
+	}
+</style>
+
+

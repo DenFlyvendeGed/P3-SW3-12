@@ -453,7 +453,6 @@ public class MySqlDB : DataBase {
 	}
 	public List<T> ReadFromTable<T>(string name, IEnumerable<string> columns, string where, Func<IList<object>, T> initializer ) where T : notnull{
 		cmd.CommandText = $"SELECT {string.Join(',', columns )} FROM {name} WHERE {where}";
-
 		log($"ReadFromTable {name}");
 
 		Console.WriteLine(cmd.CommandText);
@@ -471,7 +470,6 @@ public class MySqlDB : DataBase {
 	public List<T> ReadLastFromTable<T>(string name, Func<IList<object>, T> initializer) where T : notnull{
 		cmd.CommandText = $"SELECT LAST * FROM {name}";
 		Console.WriteLine(cmd.CommandText);
-
 		conn.Open();
 
 		var rtn = new List<T>();
@@ -543,7 +541,6 @@ public class MySqlDB : DataBase {
         while (sdr.Read())
         {
             sum = (int)(decimal)sdr["SUM(Stock)"];
-
         }
         //Close the connection
         conn.Close();

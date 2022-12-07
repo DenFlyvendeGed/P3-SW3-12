@@ -8,14 +8,16 @@ using P3_Project.Models.Orders;
 public static class ReservationPdf{	
 	public static readonly string COMPILE_FOLDER = System.Configuration.ConfigurationManager.AppSettings["latex-compile-folder"] 
 		?? throw new Exception("AppSetting latex-compile-folder not set in App.Config");
+	public static readonly string ADDRESS_OF_WEBSITE = System.Configuration.ConfigurationManager.AppSettings["address-of-website"] 
+		?? throw new Exception("AppSetting address-of-website not set in App.Config");
 
-	static LatexItemModel ParseItemsnapShot(ItemSnapshot unit, int amount) {
+	static LatexItemModel ParseItemsnapShot(ItemSnapshot unit, int amount, int discount) {
 			return new LatexItemModel (){
 				Id = $"{unit.ModelId}-{unit.ItemId}",
 				Name = $"{unit.Name} | {unit.Color} {unit.Size}",
 				Amount = amount,
-				IndividualPrice = unit.Price,
-				TotalPrice = amount * unit.Price
+				IndividualPrice = unit.Price - discount,
+				TotalPrice = amount * (unit.Price - discount)
 			};
 	}
 
@@ -25,15 +27,15 @@ public static class ReservationPdf{
 		while(i < items.Count){
 			if(items[i].ShopUnit is ItemSnapshot){
 				var unit = (ItemSnapshot)items[i].ShopUnit;
-				ItemList.Add(ParseItemsnapShot(unit, items[i].Amount));
+				ItemList.Add(ParseItemsnapShot(unit, items[i].Amount, items[i].Discount));
 				i++;
 			} else {
 				var unit = (PackSnapShot)items[i].ShopUnit;
-				
 				var packShopUnitList = new List<LatexItemModel>();
 
+				i++;
 				while(i < items.Count && !(items[i].ShopUnit is PackSnapShot)) {
-					packShopUnitList.Add(ParseItemsnapShot((ItemSnapshot)items[i].ShopUnit, items[i].Amount));
+					packShopUnitList.Add(ParseItemsnapShot((ItemSnapshot)items[i].ShopUnit, items[i].Amount, items[i].Discount));
 					i++;
 				}
 
@@ -44,7 +46,6 @@ public static class ReservationPdf{
 					IndividualPrice = unit.Price,
 					TotalPrice = items[i].Amount * unit.Price,
 				});
-				i++;
 			}
 		}
 		return ItemList;
@@ -64,7 +65,8 @@ public static class ReservationPdf{
 				order.SalesTax.ToString(), 
 				ParseOrderItems(order.ShopUnits)
 			));
-		OrderQRCode.Gennerate("Hello World", COMPILE_FOLDER);	
+
+		OrderQRCode.Gennerate(ADDRESS_OF_WEBSITE + "/admin/confirmsale/" + order.Id, COMPILE_FOLDER);	
 		await CompileLatex(tex_file);
 	}
 

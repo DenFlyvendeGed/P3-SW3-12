@@ -11,6 +11,7 @@ public class PackSnapShot: SnapShot{
 	public PackSnapShot(){}
 	public PackSnapShot(PackSnapShotDBInfo dbInfo){
 		this.SnapShotId = dbInfo.SnapShotId;
+		this.PackId = dbInfo.PackId;
 		this.Name = Globals.ItemNameTable.Fetch(dbInfo.Name);
 		this.Price = dbInfo.Price;
 		this.SalesTax = dbInfo.SalesTax;
