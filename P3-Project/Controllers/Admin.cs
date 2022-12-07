@@ -17,6 +17,7 @@ using System.Web.Http;
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using P3_Project.Utilities;
+using P3_Project.Models.Orders;
 
 namespace P3_Project.Controllers
 {
@@ -158,6 +159,13 @@ namespace P3_Project.Controllers
         public ActionResult ConfirmSale()
         {
             return View();
+        }
+
+        public IActionResult SaleOverview()
+        {
+            StorageDB db = new StorageDB();
+            List<OrderDBInfo> orders = db.DB.GetAllElements("OrderDB", new OrderDBInfo());
+            return View(orders);
         }
 
         #endregion
