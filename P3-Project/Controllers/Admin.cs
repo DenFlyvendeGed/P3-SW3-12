@@ -18,6 +18,7 @@ using System.Web.Http;
 using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using P3_Project.Utilities;
+using P3_Project.Models.Orders;
 
 namespace P3_Project.Controllers
 {
@@ -160,10 +161,14 @@ namespace P3_Project.Controllers
         public ActionResult ConfirmSale([FromQuery]int id)
         {
             Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(id);
-			Console.WriteLine(order.Email);
-			Console.WriteLine("Count: " + order.ShopUnits.Count());
-			Console.WriteLine("Price: " + order.Price);
             return View(order);
+        }
+
+        public IActionResult SaleOverview()
+        {
+            StorageDB db = new StorageDB();
+            List<OrderDBInfo> orders = db.DB.GetAllElements("OrderDB", new OrderDBInfo());
+            return View(orders);
 
         }
 

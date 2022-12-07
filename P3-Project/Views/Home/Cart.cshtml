@@ -264,7 +264,6 @@
             }
         }
 
-
         function subTotal(itemsSavedForCart, index) {
 
             let SubIndex = 0;
@@ -280,10 +279,10 @@
                 SubIndex += 1;
 
             }
-            total();
+             total();
+
         }
         subTotal(itemsSavedForCart, index);
-
 
         function total() {
             let totalPrice = 0;
@@ -303,25 +302,19 @@
 
                 let newIndex = newDom[2];
                 if (delta == "plus") {
-
-
                     // Get the existing data
                     var existing = localStorage.getItem('itemsSavedForCart');
 
                     //console.log(existing)
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
-
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
 
-
-
                     itemsSavedForCart[newIndex].AmountToCart += 1;
 
                     //console.log(itemsSavedForCart[0]);
-
 
                     localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
 
@@ -331,9 +324,8 @@
                     subTotal(itemsSavedForCart, newIndex);
                 }
 
-                else if (delta == "minus") {
+                else if (delta == "minus", itemsSavedForCart[newIndex].AmountToCart >= 0) {
                     // Get the existing data
-
                     var existing = localStorage.getItem('itemsSavedForCart');
 
                     // If no existing data, create an array
@@ -341,7 +333,6 @@
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
-
 
                     if (itemsSavedForCart[newIndex].AmountToCart > 0) {
 
@@ -362,7 +353,6 @@
             }
 
         }
-
 
 
         //Promocode input.
@@ -562,8 +552,8 @@
 
     })
 
+    async function placeOrder(){
 
-    async function placeOrder() {
         let buyerName = document.getElementById("buyerName").value;
         let buyerEmail = document.getElementById("buyerEmail").value;
         let TotalPrice = document.getElementById("total").innerHTML;
@@ -662,6 +652,7 @@
 
         })
 
+
 		if(response.status != 200){
 			let data = await response.json();
 			data = JSON.parse(data);
@@ -673,7 +664,5 @@
     }
 
     document.getElementById("createOrder").addEventListener("click", placeOrder);
-
-
 </script>
 

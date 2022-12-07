@@ -1,0 +1,86 @@
+﻿@using P3_Project.Models.Orders
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<P3_Project.Models.Orders.OrderDBInfo>
+
+<div>
+    <table>
+        <tr>
+            <td>
+                <label style="font-weight: bold;">Id</label>
+            </td>   
+            <td>
+                <label style="font-weight: bold;">Navn</label>
+            </td>
+            <td>
+                <label style="font-weight: bold;">E-mail</label>
+            </td>
+            <td>
+                <label style="font-weight: bold;">Udløbsdato</label>
+            </td>   
+            <td>
+                <label style="font-weight: bold;">Pris</label>
+            </td>   
+            <td>
+                <label style="font-weight: bold;">Activ</label>
+            </td>   
+            <td>
+                <label style="font-weight: bold;">Betalt</label>
+            </td>   
+        </tr>
+        @{
+            Dictionary<int,string> emails = Globals.EmailTable.FetchAll();
+            Dictionary<int, string> names = Globals.CoustomerNameTable.FetchAll();
+            foreach(OrderDBInfo order in Model)
+            {
+                <tr onclick="orderClick(@order.Id)" class="Clickable">
+                    <td>
+                        <label>@order.Id</label>
+                    </td>   
+                    <td>
+                        <label>@(names[order.Name])</label>
+                    </td>
+                    <td>
+                        <label>@(emails[order.Email])</label>
+                    </td>
+                    <td>
+                        <label>@order.ExpirationDate</label>
+                    </td>   
+                    <td>
+                        <label>@order.Price</label>
+                    </td>   
+                    <td>
+                        <label>@(order.IsActive == "T" ? "Ja" : "Nej")</label>
+                    </td>   
+                    <td>
+                        <label>@(order.IsPaid == "T" ? "Ja" : "Nej")</label>
+                    </td>   
+                </tr>
+
+            };
+            
+        }
+
+    </table>
+    
+
+
+</div>
+<style>
+    tr,td{
+        border-width: 2px;
+        border-color: black;
+    }
+    td{
+        width: 10vw;
+    }
+</style>
+<script>
+
+    function orderClick(id)
+    {
+        window.location.href = "/Admin/ConfirmSale?Id=" + id;
+    }
+</script>
+

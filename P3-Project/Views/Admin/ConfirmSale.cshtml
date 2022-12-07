@@ -1,5 +1,4 @@
 ﻿@using P3_Project.Models.Orders
-
 @using System.Text;
 
 @model Order
@@ -13,7 +12,6 @@
 <h4>Bekræft Salg</h4>
 
 <h5>Bekræft køb af genstande</h5>
-
 <script>
     async function confirmOrder(){
         let res = await fetch("/api/admin/markorderaspaid/@Model.Id", {
@@ -48,13 +46,10 @@
 					border-color: black;
                 }
             </style>
-
-
             <tr>
                 <td style="width: 10vw;">
                     ID
                 </td>
-
                 <td style="width: 20vw;">
                     Navn
                 </td>
@@ -65,15 +60,12 @@
                     Pris pr. stk. (DKK)
                 </td>
                 <td class="centerTableText" style="width: 10vw;">
-
                     Samlet pris (DKK)
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
-
-
 <div>
     <table style="margin-top: 10px">
         <tbody>
@@ -119,12 +111,9 @@
 					//Empty the array
 				}
             }
-
         </tbody>
     </table>
 </div>
-
-
 <div style="width: 60vw;">
     <table>
         <tbody>
@@ -200,5 +189,3 @@
 		font-weight : bold;
 	}
 </style>
-
-

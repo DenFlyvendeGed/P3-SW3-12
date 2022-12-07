@@ -11,9 +11,6 @@
 <div class="mainIndexScale" > 
     <div class="box shopTagBox">
         Tags:
-
-        
-
         @{
 
             foreach (Tag tag in Tag.GetAllTags())
@@ -23,18 +20,15 @@
                     <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)">
                 </div>
             }
-        }
-                
-        
+        }   
+        </div>
     </div>
 
-    <div class="grid-container">
+    <div class="grid-container-2">
         @foreach(var part in Model){
             <a style="color: black; text-decoration: none;" href="/Home/PackPicker?PackId=@part.Item1"  onclick="PackModelEdit(@part.Item1)" class="Clickable @part.Item5 ">
-
                     <div class="itemShowCase">
                         <div class="itemShowCasePic wrap">
-
 
 
                     <img class="picSize midImg" src="@(part.Item4 != "" ? Html.Raw(part.Item4) : Html.Raw("../favicon.ico"))" style="background-color: black;" />
@@ -42,7 +36,6 @@
                             
                         </div>
                         <div class="itemShowCaseName">
-
                             
                             <div>@part.Item2</div>
                             <div>Pris:@part.Item3 kr.-</div>
@@ -58,6 +51,7 @@
 </div>
 
 <script>
+    function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
     function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
 
 

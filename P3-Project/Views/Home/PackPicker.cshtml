@@ -1,9 +1,8 @@
 ﻿@using P3_Project.Models
 @model PackModel
 @{
-	Layout = "_Layout";
-
-	ViewData["Title"] = "Vælg pakkemuligheder";
+    Layout = "_Layout";
+    ViewData["Title"] = "Vælg pakkemuligheder";
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -210,7 +209,6 @@
 	}
 
 </script>
-
 @*
     ViewData["Title"] = "Vælg pakkemuligheder";
 }
@@ -285,8 +283,8 @@
 </div>
 
 
+
 <div class="box" style="position: relative; left:70vw; display: block; text-align: center; margin-top: 12px; margin-bottom: 12px; width: 220px; padding: 6px;">Tilføj pakke til indkøbskurv</div>
-*@
 
 <div class="box AddToCart" onclick="addToCart()">Tilføj pakke til indkøbskurv</div>
 
@@ -302,13 +300,11 @@
         const CheckMark = document.createElement("img");
         CheckMark.setAttribute("class", "CheckMark-Flag");
         CheckMark.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
-
         let deleteIndex = 0;
 
 
 
         document.querySelectorAll(`#${ParentOption}`).forEach(element => {
-
             let box = element.querySelector("#CheckMarkBox");
             if (box.children.length > 0) {
                 box.removeChild(box.firstChild);
@@ -334,14 +330,7 @@
         let result = text.match(RegPattern);
         let count = parseInt(result[0]);
 
-
-
-
-        //let i = 1;
-        //document.querySelector(`#Option${i}`).querySelector("#CheckMarkBox").appendChild(CheckMark);
-
         for (let i = 1; i <= count; i++) {
-
             let Flag = document.createElement("img");
             Flag.setAttribute("class", "CheckMark-Flag");
             Flag.setAttribute("src", "../Pics/checkmark-svgrepo-com.svg");
@@ -356,7 +345,6 @@
             let NodeList = FlexBox.querySelectorAll(".colorBoxSelect");
             let FirstElem = NodeList[0];
             FirstElem.style.border = "2px solid DodgerBlue";
-
         })
     }
 
@@ -395,13 +383,11 @@
                         FlagChoice++;
                     }
                 })
-
                 obj[loopindex] = { id: Id, name: Name, size: Size, ItemColors: Colors[0], ModelPrice: ModelPrice, };
                 loopindex++;
             }
         })
         SelectedValues = Object.assign(SelectedValues, obj);
-
 
         let itemData = {
             packid: "@Model.PackID",
@@ -411,12 +397,8 @@
         };
         itemData = Object.assign(itemData, SelectedValues);
 
-
-
         // Get the existing data
         var existing = localStorage.getItem('itemsSavedForCart');
-
-
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         let itemsSavedForCart = []
@@ -452,6 +434,5 @@
 
 
     }
-
 </script>
-
+*@

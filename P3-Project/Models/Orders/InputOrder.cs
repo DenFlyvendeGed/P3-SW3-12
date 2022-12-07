@@ -85,6 +85,7 @@ public class InputOrder{
 		var codes = new List<PromoCode>();
 		foreach(var code in this.PromoCodes) {
 			var (item, promo_code) = PromoCode.Validate(code, DB.Globals.StorageDB);
+
 			if(!item) throw new Exception("Promo Code " + code + " was not validated");
 			codes.Add(promo_code ?? throw new Exception("Shoundn't happen"));
 		}
@@ -103,12 +104,14 @@ public class InputOrder{
 					if(code.ItemType == PromoCodeItemType.All || code.ItemType == PromoCodeItemType.AllItems){
 						this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
 					} else if(code.ItemType == PromoCodeItemType.Some) {
+
 						foreach(var item in code.Items){
 							if(!item.IsPack && item.Id == this.ShopUnits[i].ShopUnit.ModelId){
 								this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
 								break;
 							}
 						}
+
 					}
 				}
 			} else { 
@@ -120,6 +123,7 @@ public class InputOrder{
 					if(code.ItemType == PromoCodeItemType.All || code.ItemType == PromoCodeItemType.AllItems){
 						this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);
 					} else if(code.ItemType == PromoCodeItemType.Some) {
+
 						foreach(var item in code.Items){
 							if(item.IsPack && item.Id == this.ShopUnits[i].ShopUnit.PackId){
 								this.ShopUnits[i].ShopUnit.Discount += getDiscout(price, code);

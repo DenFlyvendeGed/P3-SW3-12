@@ -76,7 +76,6 @@ namespace P3_Project.Controllers
         [HttpGet("getItemId")]
         public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
         {
-
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
             size = HttpUtility.UrlDecode(size);
@@ -88,7 +87,6 @@ namespace P3_Project.Controllers
 		[HttpPost("CreateOrder")]
 		[Produces("application/json")]
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
-
 			try  {
 				input_order.Validate();
 			} catch(Exception e) {
@@ -115,7 +113,7 @@ namespace P3_Project.Controllers
 
     [Route("api/Admin")]
     [ApiController]
-    [Authentication]
+    //[Authentication]
     public class AdminController :  ControllerBase
     {
         static StorageDB db = new StorageDB();

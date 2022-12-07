@@ -44,6 +44,7 @@ namespace P3_Project.Models
 
         }
 
+
 		public void NotifyStockAlarm(int modelId){
 			var item = db.DB.GetRow("ItemModels", new ItemModel(), modelId.ToString());
 			if(item.StockAlarm >= Stock - Reserved){
@@ -59,6 +60,7 @@ namespace P3_Project.Models
 			}
 		}
 		
+
 		void ChangeField(int initial, int amount, string field){
             string table = "Item" + ModelId;
             if (db.DB.CheckRow(table, "Id", Id.ToString()))
@@ -75,6 +77,7 @@ namespace P3_Project.Models
             }
 			
 		}
+
 
         public void ChangeStock(int amount)
         {
