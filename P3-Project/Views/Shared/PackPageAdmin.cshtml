@@ -25,7 +25,7 @@
 </script>
 
 
-<div class="packBox class='Clickable'" onclick="PackModelEdit(@Model.PackID)">
+<div class="packBox Clickable" onclick="PackModelEdit(@Model.PackID)">
     <img class="packBox-img" src="@(ImageModel.GetFirstImg(Model.PackID, "PackModel")?.FilePath != "" ? Html.Raw(ImageModel.GetFirstImg(Model.PackID, "PackModel").FilePath) : Html.Raw("../favicon.ico"))" alt="HTML5 Icon">
     <div class="packBox-bar">
         @Model.Name

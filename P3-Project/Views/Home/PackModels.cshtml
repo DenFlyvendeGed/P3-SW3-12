@@ -1,38 +1,41 @@
 ﻿@using P3_Project.Models
+
 @model List<(int, string, int, string, string)>
+
 
 @{
     ViewData["Title"] = "Pakker";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Alle pakker.</p>
-
-<div style="display:grid; grid-template-columns: repeat(2, auto)">
+<div class="mainIndexScale" > 
     <div class="box shopTagBox">
         Tags:
-        <div>
-            
-            <div>
-                <label>lol</label>
-                <input type="checkbox" id="">
-            </div>
-                
+        @{
+
+            foreach (Tag tag in Tag.GetAllTags())
+            {
+                <div>
+                    <label>@tag.Name</label>
+                    <input type="checkbox" id="@tag.Id" class="Clickable" onclick="ToggleTag(this)">
+                </div>
+            }
+        }   
         </div>
     </div>
 
     <div class="grid-container-2">
         @foreach(var part in Model){
-            <a style="color: black; text-decoration: none; margin-bottom: 40px" onclick="PackModelEdit(@part.Item1)">
+            <a style="color: black; text-decoration: none;" href="/Home/PackPicker?PackId=@part.Item1"  onclick="PackModelEdit(@part.Item1)" class="Clickable @part.Item5 ">
                     <div class="itemShowCase">
                         <div class="itemShowCasePic wrap">
 
 
-                    <img class="picSize midImg" src="../favicon.ico" style="background-color: black;" />
+                    <img class="picSize midImg" src="@(part.Item4 != "" ? Html.Raw(part.Item4) : Html.Raw("../favicon.ico"))" style="background-color: black;" />
 
                             
                         </div>
-                        <div class="itemShowCaseName-2">
+                        <div class="itemShowCaseName">
                             
                             <div>@part.Item2</div>
                             <div>Pris:@part.Item3 kr.-</div>
@@ -50,6 +53,7 @@
 <script>
     function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
     function PackModelEdit(id) { window.location.href = "/Home/PackPicker?PackId=" + id; }
+
 
     const tagList = [];
     const itemContainer = document.querySelector(".grid-container");
@@ -77,7 +81,7 @@
 
             const regex = new RegExp(searchString, "gm");
 
-            console.log(searchString);
+            //console.log(searchString);
             //console.log(items)
             for (item of items) {
                 //console.log(item)
@@ -102,4 +106,5 @@
         //\s((test\s+|test1\s+|test2\s+)){3}
 
     }
+
 </script>

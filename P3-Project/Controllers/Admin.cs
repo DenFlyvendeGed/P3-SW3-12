@@ -29,7 +29,7 @@ namespace P3_Project.Controllers
         public ActionResult Index()
         {
 
-            return View("Stock");
+            return RedirectToAction("Stock", "Admin");
         }
 
 
@@ -157,12 +157,10 @@ namespace P3_Project.Controllers
 
         #region ConfirmSale
 
+
         public ActionResult ConfirmSale([FromQuery]int id)
         {
             Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(id);
-			Console.WriteLine(order.Email);
-			Console.WriteLine("Count: " + order.ShopUnits.Count());
-			Console.WriteLine("Price: " + order.Price);
             return View(order);
         }
 
@@ -171,6 +169,7 @@ namespace P3_Project.Controllers
             StorageDB db = new StorageDB();
             List<OrderDBInfo> orders = db.DB.GetAllElements("OrderDB", new OrderDBInfo());
             return View(orders);
+
         }
 
         #endregion

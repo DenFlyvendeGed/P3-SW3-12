@@ -10,16 +10,17 @@ public class OrderShopUnit
     public OrderShopUnit(SnapShot ShopUnit) => this.ShopUnit = ShopUnit;
 }
 
-public class Order{
-	public int? Id {get; set;} = null;
-	public int Price {get; set;} = 0;
-	public int SalesTax {get; set;} = 0;
-	public DateTime ExpirationDate {get; set;} = DateTime.Now.AddDays(3);
-	public bool IsActive{get; set;} = true;
-	public bool IsPaid {get; set;} = false;
-	public string Name  {get; set;} = "";
-	public string Email {get; set;} = "";
-	public List<OrderShopUnit> ShopUnits {get; set;} = new();
+public class Order
+{
+    public int? Id { get; set; } = null;
+    public int Price { get; set; } = 0;
+    public int SalesTax { get; set; } = 0;
+    public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(3);
+    public bool IsActive { get; set; } = true;
+    public bool IsPaid { get; set; } = false;
+    public string Name { get; set; } = "";
+    public string Email { get; set; } = "";
+    public List<OrderShopUnit> ShopUnits { get; set; } = new();
 }
 
 public class OrderDBInfo
@@ -77,7 +78,6 @@ public class OrderDB
 
 		order.Name = Globals.CoustomerNameTable.Fetch(name);
 		order.Email = Globals.EmailTable.Fetch(email);
-
         var unitTable = $"{table}_{id}";
 
         foreach (var (unit_id, isPack, amount, discount) in
@@ -86,12 +86,12 @@ public class OrderDB
             order.ShopUnits.Add(new(isPack ? Globals.PackSnapshotTable.Fetch(unit_id) : Globals.SnapshotTable.Fetch(unit_id))
             {
                 Discount = discount,
-				Amount = amount
+				        Amount = amount
             });
         }
         return order;
     }
-
+  
     public void PushReserve(Order order)
     {
         if (order.Id != null) return;
@@ -196,5 +196,6 @@ public class OrderDB
 			}
 		}
 	}
+
 }
 
