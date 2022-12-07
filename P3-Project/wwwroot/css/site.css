@@ -43,7 +43,11 @@ body {
 }
 
 
-.topBar{
+.Clickable {
+    cursor: pointer;
+}
+
+.topBar {
     height: 42px;
     background-color: rgb(59, 146, 178);
 }

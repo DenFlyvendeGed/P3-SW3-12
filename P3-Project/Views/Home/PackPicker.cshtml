@@ -76,8 +76,8 @@
 </div>
 
 
-<div class="box AddToCart" onclick="addToCart()">Tilføj pakke til indkøbskurv</div>
-
+<div class="box Clickable AddToCart" onclick="addToCart()">Tilføj pakke til kurv</div>
+<a style="display='none'" href="PackModels" id="redirect"></a>
 <script>
 
 	document.querySelector("body").onload = function () {
@@ -204,6 +204,7 @@
 
 		console.log(itemData);
 
+		document.querySelector("#redirect").click()
 	}
 
 </script>
