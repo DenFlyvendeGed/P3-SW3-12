@@ -1,8 +1,10 @@
 namespace P3_Project.Models.Orders;
 using P3_Project.Models.DB;
+using System.Collections.Generic;
+using static QRCoder.PayloadGenerator;
 
 public class SimpleTable<T> where T : notnull {
-	private string table {get; set;} 
+	private string table { get; set; }
 
 	public SimpleTable(string Table, SQLType dbType) {
 		this.table = Table;
@@ -12,20 +14,27 @@ public class SimpleTable<T> where T : notnull {
 	static DataBase db = DB.Globals.StorageDB.DB;
 
 	void CreateTable(SQLType dbType) {
-		if(db.CheckTable(table)) return;
-		db.CreateTable(table, (IEnumerable<(string, SQLType)>) new (string, SQLType)[] {
+		if (db.CheckTable(table)) return;
+		db.CreateTable(table, (IEnumerable<(string, SQLType)>)new (string, SQLType)[] {
 			("Id", SQLType.IntAutoIncrement),
 			("Value", dbType),
 		});
 	}
 
-	public List<(int, T)> FetchAll () =>
-		db.ReadFromTable(table, (r) => (
-			(int)r[0],
-			(T)r[1]
-		));
+	public Dictionary<int, T> FetchAll()  {
 
-	public T Fetch(int id){
+        Dictionary<int, T> dict = new();
+         db.ReadFromTable(table, (r) => {
+			dict.Add((int)r[0], (T)r[1]);
+			return 0;
+		});
+
+        return dict;
+		}
+		
+
+
+    public T Fetch(int id){
 		var l = db.ReadFromTable(table, new string[] {"Value"}, $"Id='{id}'", r => (T)r[0]);
 		return l[0];
 	}

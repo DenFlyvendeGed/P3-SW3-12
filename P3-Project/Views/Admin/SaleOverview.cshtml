@@ -8,47 +8,55 @@
     <table>
         <tr>
             <td>
-                <label>Id</label>
+                <label style="font-weight: bold;">Id</label>
             </td>   
             <td>
-                <label>Navn</label>
+                <label style="font-weight: bold;">Navn</label>
             </td>
             <td>
-                <label>Udløbsdato</label>
+                <label style="font-weight: bold;">E-mail</label>
+            </td>
+            <td>
+                <label style="font-weight: bold;">Udløbsdato</label>
             </td>   
             <td>
-                <label>Pris</label>
+                <label style="font-weight: bold;">Pris</label>
             </td>   
             <td>
-                <label>Activ</label>
+                <label style="font-weight: bold;">Activ</label>
             </td>   
             <td>
-                <label>Betalt</label>
+                <label style="font-weight: bold;">Betalt</label>
             </td>   
         </tr>
         @{
+            Dictionary<int,string> emails = Globals.EmailTable.FetchAll();
+            Dictionary<int, string> names = Globals.CoustomerNameTable.FetchAll();
             foreach(OrderDBInfo order in Model)
             {
-                                <tr onclick="orderClick(@order.Id)" class="Clickable">
-                                    <td>
-                                        <label>@order.Id</label>
-                                    </td>   
-                                    <td>
-                                        <label>@order.Name</label>
-                                    </td>
-                                    <td>
-                                        <label>@order.ExpirationDate</label>
-                                    </td>   
-                                    <td>
-                                        <label>@order.Price</label>
-                                    </td>   
-                                    <td>
-                                        <label>@order.IsActive</label>
-                                    </td>   
-                                    <td>
-                                        <label>@order.IsPaid</label>
-                                    </td>   
-                                </tr>
+                <tr onclick="orderClick(@order.Id)" class="Clickable">
+                    <td>
+                        <label>@order.Id</label>
+                    </td>   
+                    <td>
+                        <label>@(names[order.Name])</label>
+                    </td>
+                    <td>
+                        <label>@(emails[order.Email])</label>
+                    </td>
+                    <td>
+                        <label>@order.ExpirationDate</label>
+                    </td>   
+                    <td>
+                        <label>@order.Price</label>
+                    </td>   
+                    <td>
+                        <label>@(order.IsActive == "T" ? "Ja" : "Nej")</label>
+                    </td>   
+                    <td>
+                        <label>@(order.IsPaid == "T" ? "Ja" : "Nej")</label>
+                    </td>   
+                </tr>
 
             };
             
