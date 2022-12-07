@@ -86,8 +86,6 @@ public class InputOrder{
 		foreach(var code in this.PromoCodes) {
 			var (item, promo_code) = PromoCode.Validate(code, DB.Globals.StorageDB);
 
-			if(!item) return false;
-			codes.Add(promo_code);
 			if(!item) throw new Exception("Promo Code " + code + " was not validated");
 			codes.Add(promo_code ?? throw new Exception("Shoundn't happen"));
 		}
