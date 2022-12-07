@@ -160,15 +160,15 @@
                                 </td>
 
 
-                        data.Add(new Dictionary<string,object>{
-                        {"id",@createIdColor},
-                        {"color", @color.Item1},
-                        {"dom", ""},
-                        {"colorWheel",@color.Item2}
-                        });
+                            data.Add(new Dictionary<string,object>{
+                            {"id",@createIdColor},
+                            {"color", @color.Item1},
+                            {"dom", ""},
+                            {"colorWheel",@color.Item2}
+                            });
 
 
-                        createIdColor+=1;
+                            createIdColor+=1;
                         }
                         ViewBag.colorData = data;
                         ViewBag.colors = createIdColor;

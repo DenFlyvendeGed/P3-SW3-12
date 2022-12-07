@@ -162,7 +162,7 @@
                                          <td style = "width: 10vw; border-style: none;" >
                                         ` + //Tom Felt til visual
                     `</td>
-                                    <td style = "width: 10vw;" >
+                                    <td style = "width: 10vw;" id="indPrice${index}" >
                                         ` + item.Price + //Pris pr.stk. (DKK)
                     `</td>
                                     <td style = "width: 10vw;" > <div id="${index}">
@@ -202,7 +202,7 @@
                                      <td style = "width: 10vw; border-style: none;" >
                                     ` + //Tom Felt til visual
                 `</td>
-                                <td style = "width: 10vw;" >
+                                <td style = "width: 10vw;" id="indPrice${index}" >
                                     ` + item.Price + //Pris pr.stk. (DKK)
                 `</td>
                                 <td style = "width: 10vw;" > <div id="${index}">
@@ -230,7 +230,6 @@
 
                 document.getElementById(SubIndex).innerHTML = SubTotal;
                 document.getElementById(SubIndex).value = SubTotal;
-
                 SubIndex += 1;
 
             }
@@ -329,7 +328,9 @@
 
                         let discount = data.promoCode.Value;
                         let discountType = data.promoCode.DiscountType;
-                        let price = parseInt(document.getElementById(cartIndex).textContent);
+                        let price = parseInt(document.getElementById("indPrice"+cartIndex).textContent);
+                        let amount = document.getElementById("indPrice"+cartIndex);
+                        let newAmount = parseInt(amount.parentElement.querySelector(".counterGrid").innerText);
                         let newPrice = 0;
 
                         switch(data.promoCode.ItemType)
@@ -343,14 +344,14 @@
                                     }
                                     else{
                                         discount = discount/100;
-                                        newPrice = price - (price * discount);
+                                        newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
                                     }
 
                                 }
                                 else if(discountType == 1){
-                                    newPrice = price - discount;
+                                    newPrice = (price - discount) * newAmount;
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
                                 
@@ -370,14 +371,14 @@
                                     }
                                     else{
                                         discount = discount/100;
-                                        newPrice = price - (price * discount);
+                                        newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
                                     }
 
                                 }
                                 else if(discountType == 1){
-                                    newPrice = price - discount;
+                                    newPrice = (price - discount) * newAmount;
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
 
@@ -397,14 +398,14 @@
                                     }
                                     else {
                                         discount = discount / 100;
-                                        newPrice = price - (price * discount);
+                                        newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
                                     }
 
                                 }
                                 else if (discountType == 1) {
-                                    newPrice = price - discount;
+                                    newPrice = (price - discount) * newAmount;
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
                                 
@@ -420,11 +421,11 @@
                                         for (let i = 0; i < data.promoCode.Items.length; i++) {
 
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                                newPrice = price * discount;
+                                                newPrice = (price * discount) * newAmount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
                                             else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                                newPrice = price * discount;
+                                                newPrice = (price * discount) * newAmount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
                                         }
@@ -433,11 +434,11 @@
                                         for (let i = 0; i < data.promoCode.Items.length; i++) {
 
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                                newPrice = price - (price * (discount/100));
+                                                newPrice = (price - (price * (discount/100))) * newAmount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
                                             else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                                newPrice = price - (price * (discount / 100));
+                                                newPrice = (price - (price * (discount / 100))) * newAmount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
                                         }
@@ -447,11 +448,11 @@
                              }else if(discountType == 1){
                                     for (let i = 0; i < data.promoCode.Items.length; i++) {
                                         if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                            newPrice = price - discount;
+                                            newPrice = (price - discount) * newAmount;
                                             document.getElementById(cartIndex).innerHTML = newPrice;
                                         }
                                         else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                            newPrice = price - discount;
+                                            newPrice = (price - discount) * newAmount;
                                             document.getElementById(cartIndex).innerHTML = newPrice;
                                         }
 
@@ -477,6 +478,7 @@
 
         });
 
+     
 
         document.querySelectorAll('#minus').forEach(Minus => {
             Minus.onclick = changeCount("minus");
