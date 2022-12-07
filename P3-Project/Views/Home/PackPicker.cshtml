@@ -23,7 +23,7 @@
 				model.LoadItems();
 
 				<div class="PackPickerItems" id="Option@(index)">
-					<div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"></div>
+					
 					<div class="PackPickerImgContainer">
 
 
@@ -37,7 +37,7 @@
 					<div class="SelectOption">
 						<h5>
 							Størrelse:
-							<select style="height: 10%; font-size:12pt;">
+							<select style="height: 100%; font-size:12pt;">
 								@{
 									int sizeIndex = 1;
 									foreach (string size in model.GetUniqueSize())
@@ -50,13 +50,15 @@
 						</h5>
 					</div>
 
-					<h5 class="smltext">Farve:</h5>
+					
 
 					<div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)" onload="SetFirstColor(this)">
 						@{
 							int colorIndex = 1;
+							<h5 class="smltext">Farve:</h5>
 							foreach ((string, string) color in model.GetUniqueColor())
 							{
+								
 								<div class="colorBoxSelect" style="border: 2px solid transparent">
 									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item2)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
 								</div>
@@ -65,7 +67,7 @@
 						}
 					</div>
 
-
+					<div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"> </div>
 				</div>
 				IdIndex++;
 				OptionCount++;
