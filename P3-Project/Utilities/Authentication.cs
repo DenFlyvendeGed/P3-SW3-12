@@ -24,11 +24,12 @@ namespace P3_Project.Utilities
                     UserPassword = "admin123"
                 });
             }
-
-            if(filterContext.HttpContext.Request.Cookies["UserName"] != null) 
+            if (filterContext.HttpContext.Session.GetString("UserName") == null && filterContext.HttpContext.Request.Cookies["UserName"] != null)
             {
-                filterContext.HttpContext.Session.SetString("UserName", filterContext.HttpContext.Request.Cookies["UserName"]);
+                if(db.DB.CheckRow("Users", "UserName", filterContext.HttpContext.Request.Cookies["UserName"]))
+                    filterContext.HttpContext.Session.SetString("UserName", filterContext.HttpContext.Request.Cookies["UserName"]);
             }
+
             if (filterContext.HttpContext.Session.GetString("UserName") == null)
             {
                 filterContext.Result = new RedirectToRouteResult(
@@ -37,6 +38,7 @@ namespace P3_Project.Utilities
                                 { "Action", "Login" }
                             });
             }
+            
 
         }
     }
