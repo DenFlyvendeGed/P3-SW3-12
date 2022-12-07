@@ -11,14 +11,38 @@
 <h4>Bekræft Salg</h4>
 
 <h5>Bekræft køb af genstande</h5>
+<script>
+    async function confirmOrder(){
+        let res = await fetch("/api/admin/markorderaspaid/@Model.Id", {
+			method : "Put",	
+        });
+
+		if(res.status == 200) {
+			alert("Ordre Makeret Betalt Og Hentet");
+		} else {
+			alert("Der skete en fejl");
+		}
+	}
+    async function cancelOrder(){
+        let res = await fetch("/api/admin/cancelorder/@Model.Id", {
+			method : "Put",	
+        });
+
+		if(res.status == 200) {
+			alert("Ordre er afvist");
+		} else {
+			alert("Der skete en fejl");
+		}
+    }
+</script>
 <div>
     <table>
         <tbody class="confHeadTable">
 
             <style>
                 td, tr{
-                border-width: 1px;
-                border-color: black;
+					border-width: 1px;
+					border-color: black;
                 }
             </style>
 
@@ -47,54 +71,47 @@
     <table style="margin-top: 10px">
         <tbody>
             @{
+				Console.WriteLine(Model.Name);
                 List<(ItemSnapshot, int)> itemSnapshots = new List<(ItemSnapshot, int)>();
 
                 int itemPriceTotal = 0;
 
-                if(Model?.ShopUnits.Count() > 0)
-                {
-                    foreach (OrderShopUnit unit in Model.ShopUnits)
-                    {
-                        if (unit.ShopUnit is ItemSnapshot)
-                        {
+				foreach (OrderShopUnit unit in Model.ShopUnits)
+				{
+					if (unit.ShopUnit is ItemSnapshot)
+					{
+						itemSnapshots.Add(((ItemSnapshot)unit.ShopUnit, unit.Amount));
+					}
+					else if(unit.ShopUnit is PackSnapShot)
+					{
+						break;
+					}
+				}
 
-                            itemSnapshots.Add(((ItemSnapshot)unit.ShopUnit, unit.Amount));
-                        }
-                        else if(unit.ShopUnit is PackSnapShot)
-                        {
-                            break;
-                        }
-                    }
-                }
+				int i = 0;
+				foreach (var (unit, amount) in itemSnapshots)
+				{
+					<tr>
+						<td class="" style="width: 10vw;">
+						@(unit.ModelId)-@(unit.ItemId)
+						</td>
+						<td style="padding-left: 10px; width: 20vw;">
+						@unit.Name | @unit.Color @unit.Size
+						</td>
+						<td class="" style="width: 10vw;">
+						@amount
+						</td>
+						<td class="" style="width: 10vw;">
+						@unit.Price
+						</td>
+						<td class="" style="background-color: var(--ash-blue); width: 10vw;">@(unit.Price * amount)</td>
+					</tr>
 
-                if(itemSnapshots.Count() > 0)
-                {
-                    int i = 0;
-                    foreach (var (unit, amount) in itemSnapshots)
-                    {
-                        <tr>
-                            <td class="centerTableText" style="width: 10vw;">
-                            @unit.ItemId
-                            </td>
-                            <td style="padding-left: 10px; width: 20vw;">
-                            @unit.Name | @unit.Color @unit.Size
-                            </td>
-                            <td class="centerTableText" style="width: 10vw;">
-                            @amount
-                            </td>
-                            <td class="centerTableText" style="width: 10vw;">
-                            @unit.Price
-                            </td>
-                            <td class="centerTableText" style="background-color: var(--ash-blue); width: 10vw;">@(unit.Price * amount)</td>
-                        </tr>
-
-                        i++;
-                        itemPriceTotal = itemPriceTotal + (unit.Price * amount);
-                        //Empty the array
-                    }
-                }
+					i++;
+					itemPriceTotal = itemPriceTotal + (unit.Price * amount);
+					//Empty the array
+				}
             }
-
         </tbody>
     </table>
 </div>
@@ -104,64 +121,58 @@
         <tbody>
             @{
                 List<PackSnapShot> packSnapshots = new List<PackSnapShot>();
-
                 int packPriceTotal = 0;
+				int index = 0;
+				foreach (OrderShopUnit unit in Model.ShopUnits)
+				{
+					if (unit.ShopUnit is PackSnapShot)
+					{
+						PackSnapShot pack = (PackSnapShot)unit.ShopUnit;
+						<tr class="pack-table" style="margin-top: 10px">
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@pack.PackId
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 20vw;">
+							@pack.Name
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@Model.ShopUnits[index].Amount
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@pack.Price
+							</td>
+							<td style="background-color: var(--ash-light-blue); width: 10vw;">
+							@(pack.Price * Model.ShopUnits[index].Amount)
+							</td>
+						</tr>
+						packPriceTotal = packPriceTotal + (pack.Price * Model.ShopUnits[index].Amount);
 
-                if (Model?.ShopUnits.Count() > 0)
-                {
-                    int index = 0;
-                    foreach (OrderShopUnit unit in Model.ShopUnits)
-                    {
-                        if (unit.ShopUnit is PackSnapShot)
-                        {
-                            PackSnapShot pack = (PackSnapShot)unit.ShopUnit;
-                            <tr style="margin-top: 10px">
-                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
-                                @pack.PackId
-                                </td>
-                                <td style="background-color: var(--ash-light-blue); width: 20vw;">
-                                @pack.Name
-                                </td>
-                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
-                                @Model.ShopUnits[index].Amount
-                                </td>
-                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
-                                @pack.Price
-                                </td>
-                                <td style="background-color: var(--ash-light-blue); width: 10vw;">
-                                @(pack.Price * Model.ShopUnits[index].Amount)
-                                </td>
-                            </tr>
-                            packPriceTotal = packPriceTotal + (pack.Price * Model.ShopUnits[index].Amount);
+						int next = 1;
+						while(index + next < Model.ShopUnits.Count() && Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
+						{
+							Console.WriteLine(next);
+							ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
 
-                            int next = 0;
-                            while(Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
-                            {
-                                ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
-
-                                <tr>
-                                    <td style="width: 10vw;">
-                                    @item.ItemId
-                                    </td>
-                                    <td style="width: 20vw;">
-                                    @item.Name | @item.Color @item.Size
-                                    </td>
-                                    <td style="width: 10vw;">
-                                    @Model?.ShopUnits[index + next].Amount
-                                    </td>
-                                    <td style="width: 10vw;">
-                                    @item.Price
-                                    </td>
-                                    <td style="background-color: var(--ash-blue); width: 10vw;"></td>
-                                </tr>
-                                next++;
-                            }
-                        }
-                        index++;
-                    }
-                }
+							<tr>
+								<td style="width: 10vw;">
+								@(item.ModelId)-@(item.ItemId)
+								</td>
+								<td style="width: 20vw;">
+								@item.Name | @item.Color @item.Size
+								</td>
+								<td style="width: 10vw;">
+								@Model?.ShopUnits[index + next].Amount
+								</td>
+								<td style="width: 10vw;">
+								</td>
+								<td style="background-color: var(--ash-blue); width: 10vw;"></td>
+							</tr>
+							next++;
+						}
+					}
+					index++;
+				}
             }
-            
         </tbody>
     </table>
     <div style="text-align: right;">
@@ -175,15 +186,9 @@
         <button class="ASHButton" onclick="confirmOrder()">Bekræft</button>
     </div>
 </div>
+<style>
+	tr.pack-table > * {
+		font-weight : bold;
+	}
+</style>
 
-<script>
-    function confirmOrder(){
-        //fetch(url), {
-
-        //}
-    }
-
-    function cancelOrder(){
-        //fetch()
-    }
-</script>

@@ -75,6 +75,9 @@ public class OrderDB
 			};
 		}).Last();
 
+		order.Name = Globals.CoustomerNameTable.Fetch(name);
+		order.Email = Globals.EmailTable.Fetch(email);
+
         var unitTable = $"{table}_{id}";
 
         foreach (var (unit_id, isPack, amount, discount) in

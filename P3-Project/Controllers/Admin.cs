@@ -156,9 +156,12 @@ namespace P3_Project.Controllers
 
         #region ConfirmSale
 
-        public ActionResult ConfirmSale()
+        public ActionResult ConfirmSale([FromQuery]int id)
         {
-            Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(1);
+            Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(id);
+			Console.WriteLine(order.Email);
+			Console.WriteLine("Count: " + order.ShopUnits.Count());
+			Console.WriteLine("Price: " + order.Price);
             return View(order);
         }
 
