@@ -115,7 +115,7 @@ namespace P3_Project.Controllers
 
     [Route("api/Admin")]
     [ApiController]
-    //[Authentication]
+    [Authentication]
     public class AdminController :  ControllerBase
     {
         static StorageDB db = new StorageDB();
