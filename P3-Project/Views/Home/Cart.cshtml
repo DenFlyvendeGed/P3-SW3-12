@@ -16,26 +16,63 @@
 
     .text {
         background-color: #D9D9D9;
+        
     }
 
     .button {
-        margin-left: 57.7vw;
+        
         background-color: #D9D9D9;
     }
 
     .gridforname {
         display: grid;
-        grid-template-columns: 30% 28% 30%;
-    }
-    .gridfornameitems1 {
+        grid-template-columns: 31% 69%;
+        
         
     }
+     .gridfornameitems1 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        flex-direction: column;
+        
+    }
+
+    .gridfornameitems2 {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        width: 100%;
+        align-content: flex-end;
+        flex-wrap: wrap;
+    }
+    .checkout{
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: flex-end;
+    }
+
+    .gridforname div input{
+        max-width:100%;
+    }
+
+    
+    @@media (max-width: 676px) {
+        .box{
+            font-size: 2vw;
+        }
+    }
+
+
+
     
 </style>
 
 <h1>Indkøbskurv</h1>
 
-<div class="box" style="width:90%">
+<div class="box" style="width:100%; ">
     <fieldset>
         <legend> Valgte Varer: </legend>
         <div class="itemOutput">
@@ -52,25 +89,25 @@
                 }
             </style>
             <tr>
-                <td style="width: 10vw;">
+                <td >
                     Navn
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Størelse
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Farve
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Antal
                 </td>
                 <td style="width: 10vw; border-style: none;">
                     Slet vare
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Pris pr. stk. (DKK)
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Samlet pris (DKK)
                 </td>
             </tr>
@@ -78,28 +115,26 @@
     </table>
 </div>
 <div>
-    <div class="gridforname" style="margin-top: 0.2%; width:80%">
+    <div class="gridforname" style="margin-top: 0.2%; width:100%">
         <div class="gridfornameitems1">
-           
-
+            <label for="PromoKodeInput">
+                 Promokode:
+             </label>
             <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
         </div>
-        <div class="gridfornameitems1"style="margin-left:110%">
-            <input type="text" placeholder="Navn" id="buyerName" required style="margin-bottom: 0.1vw" />
-        </div> 
-        <div class="gridfornameitems1" style="margin-left:95%">
-            <input type="text" placeholder="Email" id="buyerEmail" required />
+        
+        <div class="gridfornameitems2" >
+            <input type="text" placeholder="Navn" id="buyerName" style="margin-bottom: 0.1vw; background-color: #D9D9D9; height: 50%;" />
+            <input type="text" placeholder="Email" id="buyerEmail" style="margin-bottom: 0.1vw; background-color: #D9D9D9; height: 50%;" />
         </div>
     </div>
-    <label for="PromoKodeInput">
-        Promokode:
-    </label>
+    
 </div>
 <div class="checkout">
-    <div class="total" id="total"style="margin-left: 80%">
+    <div class="total" id="total">
       
     </div>
-    <button class="button" id="createOrder" style="margin-left: 80%">Reservér</button>
+    <button class="button" id="createOrder" >Reservér</button>
 </div>
 
 
@@ -143,12 +178,12 @@
             if (item.packid != undefined) {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                        <td style="width: 10vw;" >
+                        <td  >
                             ${item.packname}
                         </td>
                         <td style = "width: 10vw; border-style: none;" />
                         <td style = "width: 10vw; border-style: none;" />
-                            <td style = "width: 10vw;" >
+                            <td  >
                                 <div class="counterGrid">
                                     <input class="counterItem" type="button" id="minus" value="-">
                                         <div class="counterItem" id="${"pack"},${item.packid},${index}">${item.AmountToCart}</div>
@@ -158,10 +193,10 @@
                             <td style = "width: 10vw; border-style: none;" >
                                 <button onclick="deleteItem(this)">Slet</button>@*Tom Felt til visual*@
                             </td>
-                            <td style = "width: 10vw;" >
+                            <td  >
                                 ${item.Price} @*Pris pr.stk. (DKK)*@
                             </td>
-                            <td style = "width: 10vw;" >
+                            <td  >
                                 <div id="${index}">
                                     ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
                                 </div>
@@ -174,16 +209,16 @@
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td style="width: 10vw;" >
+                    <td  >
                         ${item.ModelName} @*Navn*@
                     </td>
-                    <td style = "width: 10vw;" >
+                    <td  >
                         ${item.Size} @*Størelse*@
                     </td>
-                    <td style = "width: 10vw;" >
+                    <td  >
                         ${item.Color} @*Farve*@
                     </td>
-                        <td style = "width: 10vw;" >
+                        <td  >
                             <div class="counterGrid">
                                 <input class="counterItem" type="button" id="minus" value="-">
                                     <div class="counterItem" id="${item.Id},${item.ItemId},${index}">${item.AmountToCart}</div>
@@ -193,10 +228,10 @@
                         <td style = "width: 10vw; border-style: none;" >
                               <button onclick="deleteItem(this)">Slet</button>  @*Tom Felt til visual*@
                         </td>
-                        <td style = "width: 10vw;" >
+                        <td  >
                                     ${item.Price} @*Pris pr.stk. (DKK)*@
                         </td>
-                        <td style = "width: 10vw;" >
+                        <td  >
                             <div id="${index}">
                                 ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
                             </div>
@@ -332,7 +367,7 @@
                     console.log(data);
 
                     if (data.result == true && promoCodeUsed == false) {
-
+                        alert("Gyldig promokode aktiveret.")
                         let cartIndex = 0;
                         for (let item of itemsSavedForCart) {
 
@@ -484,6 +519,11 @@
                         console.log(viewValidatedPromoCodes);
                     }
 
+                    else{
+
+                        alert("Promokoden er ugyldig.")
+
+                    }
                 });
 
         });

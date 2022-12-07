@@ -942,7 +942,7 @@ div.shopTagBox{
 
     .counterGrid {
         display: grid;
-        grid-template-columns: 60% 40% 60%;
+        grid-template-columns: 35% 30% 35%;
         padding: 2px;
         text-align: center;
     }
