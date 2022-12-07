@@ -76,6 +76,7 @@ namespace P3_Project.Controllers
         [HttpGet("getItemId")]
         public IActionResult GetItemId([FromHeader]string size, [FromHeader] string color, [FromHeader] int modelId) 
         {
+
             StorageDB db= new StorageDB();
             color = HttpUtility.UrlDecode(color); 
             size = HttpUtility.UrlDecode(size);
@@ -87,6 +88,7 @@ namespace P3_Project.Controllers
 		[HttpPost("CreateOrder")]
 		[Produces("application/json")]
 		public async Task<IActionResult> CreateOrder(InputOrder input_order){
+
 			try  {
 				input_order.Validate();
 			} catch(Exception e) {
@@ -95,6 +97,7 @@ namespace P3_Project.Controllers
 			Order order = input_order.ToOrder();
 			P3_Project.Models.Orders.Globals.OrderDB.PushReserve(order);
 			await P3_Project.Models.ReservationPdf.ReservationPdf.FromOrder(order);
+
 
 			var compile_folder = P3_Project.Models.ReservationPdf.ReservationPdf.COMPILE_FOLDER;
 
@@ -106,6 +109,7 @@ namespace P3_Project.Controllers
 				.SendMail();
 			
 			return Ok();
+
 		}
     }
 
@@ -428,5 +432,6 @@ namespace P3_Project.Controllers
             return RedirectToActionPermanent("Settings", "Admin");
         }
         #endregion
+        
     }
 }

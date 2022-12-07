@@ -156,6 +156,7 @@ namespace P3_Project.Controllers
 
         #region ConfirmSale
 
+
         public ActionResult ConfirmSale([FromQuery]int id)
         {
             Order order = P3_Project.Models.Orders.Globals.OrderDB.Fetch(id);
@@ -163,6 +164,7 @@ namespace P3_Project.Controllers
 			Console.WriteLine("Count: " + order.ShopUnits.Count());
 			Console.WriteLine("Price: " + order.Price);
             return View(order);
+
         }
 
         #endregion

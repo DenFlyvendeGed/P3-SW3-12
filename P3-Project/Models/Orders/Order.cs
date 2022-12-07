@@ -10,16 +10,17 @@ public class OrderShopUnit
     public OrderShopUnit(SnapShot ShopUnit) => this.ShopUnit = ShopUnit;
 }
 
-public class Order{
-	public int? Id {get; set;} = null;
-	public int Price {get; set;} = 0;
-	public int SalesTax {get; set;} = 0;
-	public DateTime ExpirationDate {get; set;} = DateTime.Now.AddDays(3);
-	public bool IsActive{get; set;} = true;
-	public bool IsPaid {get; set;} = false;
-	public string Name  {get; set;} = "";
-	public string Email {get; set;} = "";
-	public List<OrderShopUnit> ShopUnits {get; set;} = new();
+public class Order
+{
+    public int? Id { get; set; } = null;
+    public int Price { get; set; } = 0;
+    public int SalesTax { get; set; } = 0;
+    public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(3);
+    public bool IsActive { get; set; } = true;
+    public bool IsPaid { get; set; } = false;
+    public string Name { get; set; } = "";
+    public string Email { get; set; } = "";
+    public List<OrderShopUnit> ShopUnits { get; set; } = new();
 }
 
 public class OrderDBInfo
@@ -60,6 +61,7 @@ public class OrderDB
             });
     }
 
+
 	public Order Fetch(int id){
 		int name = 0, email = 0;
 		var order = db.ReadFromTable(table, $"Id='{id}'", (r) => {
@@ -78,6 +80,7 @@ public class OrderDB
 		order.Name = Globals.CoustomerNameTable.Fetch(name);
 		order.Email = Globals.EmailTable.Fetch(email);
 
+
         var unitTable = $"{table}_{id}";
 
         foreach (var (unit_id, isPack, amount, discount) in
@@ -85,14 +88,18 @@ public class OrderDB
         {
             order.ShopUnits.Add(new(isPack ? Globals.PackSnapshotTable.Fetch(unit_id) : Globals.SnapshotTable.Fetch(unit_id))
             {
+r
                 Discount = discount,
 				Amount = amount
+
             });
         }
         return order;
     }
 
+
     public void PushReserve(Order order)
+
     {
         if (order.Id != null) return;
         var name = Globals.CoustomerNameTable.PushIfNone(order.Name);
@@ -112,6 +119,7 @@ public class OrderDB
 
         order.Id = id;
         var unitsTable = $"{table}_{id}";
+
 
 		db.CreateTable(unitsTable, (IEnumerable<(string, SQLType)>) new (string, SQLType) [] {
 			("ItemId", SQLType.Int),
@@ -196,5 +204,6 @@ public class OrderDB
 			}
 		}
 	}
+
 }
 
