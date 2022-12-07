@@ -6,214 +6,239 @@
 
 <style>
     .total {
-        margin-left: 74vw;
-    }
-
-    .button {
-        margin-left: 74vw;
-        background-color: #D9D9D9;
+        
+        
     }
 
     .PromoCode {
-        margin-left: 74vw;
-        margin-top: 5vw;
+        margin-top: 0.2vw;
     }
 
     .text {
-        border: solid;
+        background-color: #D9D9D9;
+        
+    }
+
+    .button {
+        
         background-color: #D9D9D9;
     }
-</style>
 
+    .gridforname {
+        display: grid;
+        grid-template-columns: 31% 69%;
+        
+        
+    }
+     .gridfornameitems1 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        flex-direction: column;
+        
+    }
+
+    .gridfornameitems2 {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        width: 100%;
+        align-content: flex-end;
+        flex-wrap: wrap;
+    }
+    .checkout{
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: flex-end;
+    }
+
+    .gridforname div input{
+        max-width:100%;
+    }
+
+    
+    @@media (max-width: 676px) {
+        .box{
+            font-size: 2vw;
+        }
+    }
+
+
+
+    
+</style>
 
 <h1>Indkøbskurv</h1>
 
-
-<div class="box">
-
-
+<div class="box" style="width:100%; ">
     <fieldset>
         <legend> Valgte Varer: </legend>
-
         <div class="itemOutput">
-
             <div id="LocalStorageInfo"></div>
-
-
         </div>
-
-
     </fieldset>
-
-
-
-
     <table style="width: 100%;">
         <tbody class="confHeadTable">
-
             <style>
                 td, tr {
                     border-width: 2px;
                     color: #000000;
                     background-color: #D9D9D9;
                 }
-
             </style>
-
-
-
             <tr>
-
-                <td style="width: 10vw;">
+                <td >
                     Navn
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Størelse
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Farve
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Antal
                 </td>
                 <td style="width: 10vw; border-style: none;">
+                    Slet vare
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Pris pr. stk. (DKK)
                 </td>
-                <td style="width: 10vw;">
+                <td >
                     Samlet pris (DKK)
                 </td>
-
             </tr>
-
-
         </tbody>
-
     </table>
-
-
-
 </div>
-
-
-
+<div>
+    <div class="gridforname" style="margin-top: 0.2%; width:100%">
+        <div class="gridfornameitems1">
+            <label for="PromoKodeInput">
+                 Promokode:
+             </label>
+            <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
+        </div>
+        
+        <div class="gridfornameitems2" >
+            <input type="text" placeholder="Navn" id="buyerName" style="margin-bottom: 0.1vw; background-color: #D9D9D9; height: 50%;" />
+            <input type="text" placeholder="Email" id="buyerEmail" style="margin-bottom: 0.1vw; background-color: #D9D9D9; height: 50%;" />
+        </div>
+    </div>
+    
+</div>
 <div class="checkout">
-
-    <div class="total" id="total"></div>
-    <button class="button" id="createOrder">Reservér</button>
-
-    <div class="PromoCode">
-        <label for="PromoKodeInput">
-            Promokode:
-        </label>
-        <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
+    <div class="total" id="total">
+      
     </div>
-
-    <div>
-        <input type="text" placeholder="Navn" id="buyerName"/>
-        <input type="text" placeholder="Email" id="buyerEmail"/>
-    </div>
-
-
+    <button class="button" id="createOrder" >Reservér</button>
 </div>
-
-
 
 
 <script>
+    const viewValidatedPromoCodes = [];
+
+    function deleteItem(e) {
+        const localstorage = JSON.parse(localStorage.getItem('itemsSavedForCart'));
+        let deleteDom = e.closest("tr");
+        let name = deleteDom.children[0].textContent.trim();
+        let size = deleteDom.children[1].textContent.trim();
+        let color = deleteDom.children[2].textContent.trim();
+        
+        if (size == "") {
+            let packindex = localstorage.findIndex(item =>{
+                return item.packname == name;
+            });
+            localstorage.splice(packindex, 1);
+        }else {
+            let itemindex = localstorage.findIndex(item =>{
+                return (item.ModelName == name, item.Size == size, item.Color == color);
+            });
+            localstorage.splice(itemindex, 1);
+        }
+
+
+
+        localStorage.setItem("itemsSavedForCart", JSON.stringify(localstorage));
+        location.reload();
+
+    }
 
     window.addEventListener('load', () => {
-
         const itemString = localStorage.getItem('itemsSavedForCart');
-
         let itemsSavedForCart = JSON.parse(itemString);
-
         const table = document.querySelector(".confHeadTable");
         let index = 0;
-
         //Load items
         for (let item of itemsSavedForCart) {
 
             if (item.packid != undefined) {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-
-                                    <td style="width: 10vw;" >
-                                        ` + item.packname + //Navn
-                    `</td>
-                                         <td style = "width: 10vw; border-style: none;" >
-                                        ` + //Tom Felt til visual
-                    `</td>
-                                      <td style = "width: 10vw; border-style: none;" >
-                                    ` + //Tom Felt til visual
-                    `</td>
-                                     <td style = "width: 10vw;" >
-
-
-                                        <div class="counterGrid">
-                                            <input class="counterItem" type="button" id="minus" value="-">
-                                                <div class="counterItem" id="${"pack"},${item.packid},${index}">` + item.AmountToCart + `</div>
-                                            <input class="counterItem" type="button" id="plus" value="+">
-                                        </div>
-
-                                      </td>
-
-                                         <td style = "width: 10vw; border-style: none;" >
-                                        ` + //Tom Felt til visual
-                    `</td>
-                                    <td style = "width: 10vw;" id="indPrice${index}" >
-                                        ` + item.Price + //Pris pr.stk. (DKK)
-                    `</td>
-                                    <td style = "width: 10vw;" > <div id="${index}">
-                                                ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
-                    `</div>
-                                     </td>
-
-                                     `;
+                        <td  >
+                            ${item.packname}
+                        </td>
+                        <td style = "width: 10vw; border-style: none;" />
+                        <td style = "width: 10vw; border-style: none;" />
+                            <td  >
+                                <div class="counterGrid">
+                                    <input class="counterItem" type="button" id="minus" value="-">
+                                        <div class="counterItem" id="${"pack"},${item.packid},${index}">${item.AmountToCart}</div>
+                                    <input class="counterItem" type="button" id="plus" value="+">
+                                </div>
+                            </td>
+                            <td style = "width: 10vw; border-style: none;" >
+                                <button onclick="deleteItem(this)">Slet</button>@*Tom Felt til visual*@
+                            </td>
+                            <td id="indPrice${index}" >
+                                ${item.Price} @*Pris pr.stk. (DKK)*@
+                            </td>
+                            <td  >
+                                <div id="${index}">
+                                    ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                                </div>
+                            </td>
+                        `;
 
                 table.append(row)
                 index += 1;
-            }else{
+            } else {
 
-            const row = document.createElement("tr");
-            row.innerHTML = `
-
-                                <td style="width: 10vw;" >
-                                    ` + item.ModelName + //Navn
-                `</td>
-                                <td style = "width: 10vw;" >
-                                    ` + item.Size + //Størelse
-                `</td>
-                                <td style = "width: 10vw;" >
-                                    ` + item.Color + //Farve
-                `</td>
-                                 <td style = "width: 10vw;" >
-
-
-                                    <div class="counterGrid">
-                                        <input class="counterItem" type="button" id="minus" value="-">
-                                        <div class="counterItem" id="${item.Id},${item.ItemId},${index}">` + item.AmountToCart + `</div>
-                                        <input class="counterItem" type="button" id="plus" value="+">
-                                    </div>
-
-                                  </td>
-
-                                     <td style = "width: 10vw; border-style: none;" >
-                                    ` + //Tom Felt til visual
-                `</td>
-                                <td style = "width: 10vw;" id="indPrice${index}" >
-                                    ` + item.Price + //Pris pr.stk. (DKK)
-                `</td>
-                                <td style = "width: 10vw;" > <div id="${index}">
-                                    ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
-                `</div>
-                                 </td>
-
-                                 `;
-
-            table.append(row)
-            index += 1;
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td  >
+                        ${item.ModelName} @*Navn*@
+                    </td>
+                    <td  >
+                        ${item.Size} @*Størelse*@
+                    </td>
+                    <td  >
+                        ${item.Color} @*Farve*@
+                    </td>
+                        <td  >
+                            <div class="counterGrid">
+                                <input class="counterItem" type="button" id="minus" value="-">
+                                    <div class="counterItem" id="${item.Id},${item.ItemId},${index}">${item.AmountToCart}</div>
+                                <input class="counterItem" type="button" id="plus" value="+">
+                            </div>
+                        </td>
+                        <td style = "width: 10vw; border-style: none;" >
+                              <button onclick="deleteItem(this)">Slet</button>  @*Tom Felt til visual*@
+                        </td>
+                        <td id="indPrice${index}"  >
+                                    ${item.Price} @*Pris pr.stk. (DKK)*@
+                        </td>
+                        <td  >
+                            <div id="${index}">
+                                ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                            </div>
+                        </td>
+                        `;
+                table.append(row)
+                index += 1;
             }
         }
 
@@ -233,7 +258,7 @@
                 SubIndex += 1;
 
             }
-             total();
+            total();
         }
         subTotal(itemsSavedForCart, index);
 
@@ -242,11 +267,11 @@
         function total() {
             let totalPrice = 0;
             for (let i = 0; i < itemsSavedForCart.length; i++) {
-               let currentValue = parseInt(document.getElementById(i).textContent);
-               totalPrice += currentValue;
-           }
+                let currentValue = parseInt(document.getElementById(i).textContent);
+                totalPrice += currentValue;
+            }
 
-           document.getElementById("total").innerHTML = "Total: " + totalPrice;
+            document.getElementById("total").innerHTML = "Total: " + totalPrice;
         }
 
         function changeCount(delta) {
@@ -280,51 +305,70 @@
                     document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
                     subTotal(itemsSavedForCart, newIndex);
                 }
-                else if (delta == "minus", itemsSavedForCart[newIndex].AmountToCart >= 0) {
+
+                else if (delta == "minus") {
                     // Get the existing data
+
                     var existing = localStorage.getItem('itemsSavedForCart');
-                    
+
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
 
-                    itemsSavedForCart[newIndex].AmountToCart -= 1;
 
-                    localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
+                    if (itemsSavedForCart[newIndex].AmountToCart > 0) {
 
-                    document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
-                    document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
-                    subTotal(itemsSavedForCart, newIndex);
+                        itemsSavedForCart[newIndex].AmountToCart -= 1;
+
+                        localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
+
+
+                        document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
+                        document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
+                        subTotal(itemsSavedForCart, newIndex);
+
+
+                    }
 
                 }
             }
 
         }
 
+
+
+
+
+
+
         //Promocode input.
         const selectObject = document.querySelector('#PromoKodeInput');
 
-        const viewValidatedPromoCodes = [];
 
-        selectObject.addEventListener('change', e =>
-        {
+        selectObject.addEventListener('change', e => {
 
             let promoCodeInput = e.target.value;
+            let promoCodeUsed = false;
+
+            for (let i = 0; i < viewValidatedPromoCodes.length; i++) {
+                if (viewValidatedPromoCodes[i] == promoCodeInput) {
+                    promoCodeUsed = true;
+                    console.log("Promo Code is in use");
+                }
+            }
 
 
-             let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
-             .then((response) => response.json())
-             .then((data) => {
-                 console.log(data);
+            let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
 
-                 let cartIndex = 0;
-                 for(let item of itemsSavedForCart){
-                        if (data.result != true) { 
-                            console.log("Promo code Not Valid");
-                            break;
-                        }
+                    if (data.result == true && promoCodeUsed == false) {
+                        alert("Gyldig promokode aktiveret.")
+                        let cartIndex = 0;
+                        for (let item of itemsSavedForCart) {
 
                         let discount = data.promoCode.Value;
                         let discountType = data.promoCode.DiscountType;
@@ -347,7 +391,7 @@
                                         newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
+                                        }
 
                                 }
                                 else if(discountType == 1){
@@ -356,8 +400,8 @@
                                 }
                                 
 
-                                //console.log("All");
-                                break;
+                                    //console.log("All");
+                                    break;
 
                             //validate all packs
                              case 1:
@@ -374,7 +418,7 @@
                                         newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
+                                        }
 
                                 }
                                 else if(discountType == 1){
@@ -382,9 +426,9 @@
                                     document.getElementById(cartIndex).innerHTML = newPrice;
                                 }
 
-                               
-                                //console.log("All Packs");
-                                break;
+
+                                    //console.log("All Packs");
+                                    break;
 
                             //validate All items
                              case 2:
@@ -401,7 +445,7 @@
                                         newPrice = (price - (price * discount)) * newAmount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
+                                        }
 
                                 }
                                 else if (discountType == 1) {
@@ -413,12 +457,12 @@
                                 break;
 
 
-                            //validate some
-                             case 3:
-                             if(discountType == 0){
-                                    if (discount == 100) {
-                                        discount = 0;
-                                        for (let i = 0; i < data.promoCode.Items.length; i++) {
+                                //validate some
+                                case 3:
+                                    if (discountType == 0) {
+                                        if (discount == 100) {
+                                            discount = 0;
+                                            for (let i = 0; i < data.promoCode.Items.length; i++) {
 
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
                                                 newPrice = (price * discount) * newAmount;
@@ -430,8 +474,8 @@
                                             }
                                         }
 
-                                    }else{
-                                        for (let i = 0; i < data.promoCode.Items.length; i++) {
+                                        } else {
+                                            for (let i = 0; i < data.promoCode.Items.length; i++) {
 
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
                                                 newPrice = (price - (price * (discount/100))) * newAmount;
@@ -456,25 +500,33 @@
                                             document.getElementById(cartIndex).innerHTML = newPrice;
                                         }
 
+                                        }
                                     }
-                             }
 
-                                 //console.log("Some");
-                                 break;
+                                    //console.log("Some");
+                                    break;
 
 
-                            default:
-                                
-                                break;
+                                default:
+
+                                    break;
+
+                            }
+
+                            cartIndex += 1;
+                            total();
 
                         }
-                        
-                        cartIndex += 1;
-                        total();
+                        viewValidatedPromoCodes.push(promoCodeInput);
+                        console.log(viewValidatedPromoCodes);
+                    }
 
-                 }
+                    else{
 
-             });
+                        alert("Promokoden er ugyldig.")
+
+                    }
+                });
 
         });
 
@@ -490,106 +542,125 @@
 
     })
 
-    async function placeOrder(){
+
+
+
+
+
+
+
+
+
+
+    async function placeOrder() {
         let buyerName = document.getElementById("buyerName").value;
         let buyerEmail = document.getElementById("buyerEmail").value;
         let TotalPrice = document.getElementById("total").innerHTML;
         TotalPrice = TotalPrice.split(': ');
-
-
-        const itemString = localStorage.getItem('itemsSavedForCart');
-
-        let itemsSavedForCart = JSON.parse(itemString);
         let ShopUnits = [];
 
+        if (buyerName == "" || buyerEmail == "" || !buyerEmail.includes("@@")) {
+            console.log("got here");
+            alert("Navn eller mail mangler.");
+
+        } else {
+            const itemString = localStorage.getItem('itemsSavedForCart');
+
+            let itemsSavedForCart = JSON.parse(itemString);
 
 
+            for (let item of itemsSavedForCart) {
+                let ShopUnit = {};
+                //console.log(item);
+                if (item.packid == undefined) {
 
-        for(let item of itemsSavedForCart){
-            let ShopUnit = {};
-            //console.log(item);
-            if(item.packid == undefined){
+                    ShopUnit.ModelId = item.Id;
+                    ShopUnit.ItemId = item.ItemId;
+                    ShopUnit.Name = item.ModelName;
+                    ShopUnit.Color = item.Color;
+                    ShopUnit.Size = item.Size;
+                    ShopUnit.Price = item.Price;
 
-                ShopUnit.ModelId = item.Id;
-                ShopUnit.ItemId = item.ItemId;
-                ShopUnit.Name = item.ModelName;
-                ShopUnit.Color = item.Color;
-                ShopUnit.Size = item.Size;
-                ShopUnit.Price = item.Price;
+                    ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
+                }
 
-                ShopUnits.push({"Amount" : item.AmountToCart, ShopUnit : ShopUnit});
             }
-        }
 
-        for(let item of itemsSavedForCart){
-            let ShopUnit = {};
-            //console.log(item);
-            if(item.packid != undefined){
+            for (let item of itemsSavedForCart) {
+                let ShopUnit = {};
+                //console.log(item);
+                if (item.packid != undefined) {
 
-                ShopUnit.IsPack = true
-                ShopUnit.Name = item.packname;
-                ShopUnit.PackId = parseInt(item.packid);
-                ShopUnit.Price = item.Price;
-                ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
+                    ShopUnit.IsPack = true
+                    ShopUnit.Name = item.packname;
+                    ShopUnit.PackId = parseInt(item.packid);
+                    ShopUnit.Price = item.Price;
+                    ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
 
-                for(let i = 0; item[""+i] != undefined; i++){
-                    ShopUnit = {};
-                    ShopUnit.ModelId = parseInt(item[""+i].id);
-                    ShopUnit.Name = item[""+i].name;
-                    ShopUnit.Color = item[""+i].ItemColors;
-                    ShopUnit.Size = item[""+i].size;
-
-
-                    const response = await fetch("/api/getItemId", 
-                    {
-                        method: 'GET',
-                        redirect: 'follow',
-
-                        headers: {
-                                color: encodeURI(ShopUnit.Color),
-                                size: encodeURI(ShopUnit.Size),
-                                modelId: ShopUnit.ModelId,
-                        },
+                    for (let i = 0; item["" + i] != undefined; i++) {
+                        ShopUnit = {};
+                        ShopUnit.ModelId = parseInt(item["" + i].id);
+                        ShopUnit.Name = item["" + i].name;
+                        ShopUnit.Color = item["" + i].ItemColors;
+                        ShopUnit.Size = item["" + i].size;
 
 
-                    })
-                    .then((response) => response.headers.get("itemId"));
+                        const response = await fetch("/api/getItemId",
+                            {
+                                method: 'GET',
+                                redirect: 'follow',
 
-                    ShopUnit.Price = parseInt(item[""+i].ModelPrice);
-                    ShopUnit.ItemId = parseInt(response);
-                    ShopUnits.push({"Amount" : 1, ShopUnit});
+                                headers: {
+                                    color: encodeURI(ShopUnit.Color),
+                                    size: encodeURI(ShopUnit.Size),
+                                    modelId: ShopUnit.ModelId,
+                                },
+
+
+                            })
+                            .then((response) => response.headers.get("itemId"));
+
+                        ShopUnit.Price = parseInt(item["" + i].ModelPrice);
+                        ShopUnit.ItemId = parseInt(response);
+                        ShopUnits.push({ "Amount": 1, ShopUnit });
+                    }
+
+
                 }
 
 
             }
+            let order = {
+
+                PromoCodes: viewValidatedPromoCodes,
+                Name: buyerName,
+                Email: buyerEmail,
+                Price: parseInt(TotalPrice[1]),
+                ShopUnits: ShopUnits,
+            }
+
+            console.log(order);
+
+            const response = await fetch("/api/CreateOrder",
+                {
+                    method: 'POST',
+                    headers:
+                    {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order),
+
+                })
+
+            //localStorage.removeItem("itemsSavedForCart");
+            // location.reload();
+            alert("Odrer er resaveret. ");
 
 
         }
 
 
-        let order = {
-            Name: buyerName,
-            Email: buyerEmail,
-            Price: parseInt(TotalPrice[1]),
-            ShopUnits: ShopUnits,
-        }
-
-        console.log(order);
-
-        const response = await fetch("/api/CreateOrder", 
-        {
-            method: 'POST',
-            headers: 
-            {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(order),
-            
-
-        })
     }
-
-
 
     document.getElementById("createOrder").addEventListener("click", placeOrder);
 
