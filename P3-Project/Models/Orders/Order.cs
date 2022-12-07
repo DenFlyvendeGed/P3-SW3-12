@@ -88,7 +88,7 @@ public class OrderDB
         {
             order.ShopUnits.Add(new(isPack ? Globals.PackSnapshotTable.Fetch(unit_id) : Globals.SnapshotTable.Fetch(unit_id))
             {
-r
+
                 Discount = discount,
 				Amount = amount
 
