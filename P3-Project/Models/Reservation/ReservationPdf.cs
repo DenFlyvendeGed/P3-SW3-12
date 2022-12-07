@@ -16,8 +16,8 @@ public static class ReservationPdf{
 				Id = $"{unit.ModelId}-{unit.ItemId}",
 				Name = $"{unit.Name} | {unit.Color} {unit.Size}",
 				Amount = amount,
-				IndividualPrice = unit.Price,
-				TotalPrice = amount * unit.Price
+				IndividualPrice = unit.Price - discount,
+				TotalPrice = amount * (unit.Price - discount)
 			};
 	}
 
@@ -31,7 +31,6 @@ public static class ReservationPdf{
 				i++;
 			} else {
 				var unit = (PackSnapShot)items[i].ShopUnit;
-				
 				var packShopUnitList = new List<LatexItemModel>();
 
 				i++;
