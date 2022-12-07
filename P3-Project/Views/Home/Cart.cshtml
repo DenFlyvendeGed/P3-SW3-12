@@ -6,64 +6,52 @@
 
 <style>
     .total {
-        margin-left: 74vw;
-    }
-
-    .button {
-        margin-left: 74vw;
-        background-color: #D9D9D9;
+        
+        
     }
 
     .PromoCode {
-        margin-left: 74vw;
-        margin-top: 5vw;
+        margin-top: 0.2vw;
     }
 
     .text {
-        border: solid;
         background-color: #D9D9D9;
     }
-</style>
 
+    .button {
+        margin-left: 57.7vw;
+        background-color: #D9D9D9;
+    }
+
+    .gridforname {
+        display: grid;
+        grid-template-columns: 30% 28% 30%;
+    }
+    .gridfornameitems1 {
+        
+    }
+    
+</style>
 
 <h1>Indkøbskurv</h1>
 
-
-<div class="box">
-
-
+<div class="box" style="width:90%">
     <fieldset>
         <legend> Valgte Varer: </legend>
-
         <div class="itemOutput">
-
             <div id="LocalStorageInfo"></div>
-
-
         </div>
-
-
     </fieldset>
-
-
-
-
     <table style="width: 100%;">
         <tbody class="confHeadTable">
-
             <style>
                 td, tr {
                     border-width: 2px;
                     color: #000000;
                     background-color: #D9D9D9;
                 }
-
             </style>
-
-
-
             <tr>
-
                 <td style="width: 10vw;">
                     Navn
                 </td>
@@ -77,6 +65,7 @@
                     Antal
                 </td>
                 <td style="width: 10vw; border-style: none;">
+                    Slet vare
                 </td>
                 <td style="width: 10vw;">
                     Pris pr. stk. (DKK)
@@ -84,136 +73,137 @@
                 <td style="width: 10vw;">
                     Samlet pris (DKK)
                 </td>
-
             </tr>
-
-
         </tbody>
-
     </table>
-
-
-
 </div>
+<div>
+    <div class="gridforname" style="margin-top: 0.2%; width:80%">
+        <div class="gridfornameitems1">
+           
 
-
-
+            <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
+        </div>
+        <div class="gridfornameitems1"style="margin-left:110%">
+            <input type="text" placeholder="Navn" id="buyerName" required style="margin-bottom: 0.1vw" />
+        </div> 
+        <div class="gridfornameitems1" style="margin-left:95%">
+            <input type="text" placeholder="Email" id="buyerEmail" required />
+        </div>
+    </div>
+    <label for="PromoKodeInput">
+        Promokode:
+    </label>
+</div>
 <div class="checkout">
-
-    <div class="total" id="total"></div>
-    <button class="button" id="createOrder">Reservér</button>
-
-    <div class="PromoCode">
-        <label for="PromoKodeInput">
-            Promokode:
-        </label>
-        <input class="text" type="text" id="PromoKodeInput" name="Promokode" placeholder="Exemple: Sommer2022">
+    <div class="total" id="total"style="margin-left: 80%">
+      
     </div>
-
-    <div>
-        <input type="text" placeholder="Navn" id="buyerName"/>
-        <input type="text" placeholder="Email" id="buyerEmail"/>
-    </div>
-
-
+    <button class="button" id="createOrder" style="margin-left: 80%">Reservér</button>
 </div>
-
-
 
 
 <script>
+    const viewValidatedPromoCodes = [];
+
+    function deleteItem(e) {
+        const localstorage = JSON.parse(localStorage.getItem('itemsSavedForCart'));
+        let deleteDom = e.closest("tr");
+        let name = deleteDom.children[0].textContent.trim();
+        let size = deleteDom.children[1].textContent.trim();
+        let color = deleteDom.children[2].textContent.trim();
+        
+        if (size == "") {
+            let packindex = localstorage.findIndex(item =>{
+                return item.packname == name;
+            });
+            localstorage.splice(packindex, 1);
+        }else {
+            let itemindex = localstorage.findIndex(item =>{
+                return (item.ModelName == name, item.Size == size, item.Color == color);
+            });
+            localstorage.splice(itemindex, 1);
+        }
+
+
+
+        localStorage.setItem("itemsSavedForCart", JSON.stringify(localstorage));
+        location.reload();
+
+    }
 
     window.addEventListener('load', () => {
-
         const itemString = localStorage.getItem('itemsSavedForCart');
-
         let itemsSavedForCart = JSON.parse(itemString);
-
         const table = document.querySelector(".confHeadTable");
         let index = 0;
-
         //Load items
         for (let item of itemsSavedForCart) {
 
             if (item.packid != undefined) {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-
-                                    <td style="width: 10vw;" >
-                                        ` + item.packname + //Navn
-                    `</td>
-                                         <td style = "width: 10vw; border-style: none;" >
-                                        ` + //Tom Felt til visual
-                    `</td>
-                                      <td style = "width: 10vw; border-style: none;" >
-                                    ` + //Tom Felt til visual
-                    `</td>
-                                     <td style = "width: 10vw;" >
-
-
-                                        <div class="counterGrid">
-                                            <input class="counterItem" type="button" id="minus" value="-">
-                                                <div class="counterItem" id="${"pack"},${item.packid},${index}">` + item.AmountToCart + `</div>
-                                            <input class="counterItem" type="button" id="plus" value="+">
-                                        </div>
-
-                                      </td>
-
-                                         <td style = "width: 10vw; border-style: none;" >
-                                        ` + //Tom Felt til visual
-                    `</td>
-                                    <td style = "width: 10vw;" >
-                                        ` + item.Price + //Pris pr.stk. (DKK)
-                    `</td>
-                                    <td style = "width: 10vw;" > <div id="${index}">
-                                                ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
-                    `</div>
-                                     </td>
-
-                                     `;
+                        <td style="width: 10vw;" >
+                            ${item.packname}
+                        </td>
+                        <td style = "width: 10vw; border-style: none;" />
+                        <td style = "width: 10vw; border-style: none;" />
+                            <td style = "width: 10vw;" >
+                                <div class="counterGrid">
+                                    <input class="counterItem" type="button" id="minus" value="-">
+                                        <div class="counterItem" id="${"pack"},${item.packid},${index}">${item.AmountToCart}</div>
+                                    <input class="counterItem" type="button" id="plus" value="+">
+                                </div>
+                            </td>
+                            <td style = "width: 10vw; border-style: none;" >
+                                <button onclick="deleteItem(this)">Slet</button>@*Tom Felt til visual*@
+                            </td>
+                            <td style = "width: 10vw;" >
+                                ${item.Price} @*Pris pr.stk. (DKK)*@
+                            </td>
+                            <td style = "width: 10vw;" >
+                                <div id="${index}">
+                                    ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                                </div>
+                            </td>
+                        `;
 
                 table.append(row)
                 index += 1;
-            }else{
+            } else {
 
-            const row = document.createElement("tr");
-            row.innerHTML = `
-
-                                <td style="width: 10vw;" >
-                                    ` + item.ModelName + //Navn
-                `</td>
-                                <td style = "width: 10vw;" >
-                                    ` + item.Size + //Størelse
-                `</td>
-                                <td style = "width: 10vw;" >
-                                    ` + item.Color + //Farve
-                `</td>
-                                 <td style = "width: 10vw;" >
-
-
-                                    <div class="counterGrid">
-                                        <input class="counterItem" type="button" id="minus" value="-">
-                                        <div class="counterItem" id="${item.Id},${item.ItemId},${index}">` + item.AmountToCart + `</div>
-                                        <input class="counterItem" type="button" id="plus" value="+">
-                                    </div>
-
-                                  </td>
-
-                                     <td style = "width: 10vw; border-style: none;" >
-                                    ` + //Tom Felt til visual
-                `</td>
-                                <td style = "width: 10vw;" >
-                                    ` + item.Price + //Pris pr.stk. (DKK)
-                `</td>
-                                <td style = "width: 10vw;" > <div id="${index}">
-                                    ` + item.Price * item.AmountToCart + //Samlet pris(DKK)
-                `</div>
-                                 </td>
-
-                                 `;
-
-            table.append(row)
-            index += 1;
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td style="width: 10vw;" >
+                        ${item.ModelName} @*Navn*@
+                    </td>
+                    <td style = "width: 10vw;" >
+                        ${item.Size} @*Størelse*@
+                    </td>
+                    <td style = "width: 10vw;" >
+                        ${item.Color} @*Farve*@
+                    </td>
+                        <td style = "width: 10vw;" >
+                            <div class="counterGrid">
+                                <input class="counterItem" type="button" id="minus" value="-">
+                                    <div class="counterItem" id="${item.Id},${item.ItemId},${index}">${item.AmountToCart}</div>
+                                <input class="counterItem" type="button" id="plus" value="+">
+                            </div>
+                        </td>
+                        <td style = "width: 10vw; border-style: none;" >
+                              <button onclick="deleteItem(this)">Slet</button>  @*Tom Felt til visual*@
+                        </td>
+                        <td style = "width: 10vw;" >
+                                    ${item.Price} @*Pris pr.stk. (DKK)*@
+                        </td>
+                        <td style = "width: 10vw;" >
+                            <div id="${index}">
+                                ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                            </div>
+                        </td>
+                        `;
+                table.append(row)
+                index += 1;
             }
         }
 
@@ -234,7 +224,7 @@
                 SubIndex += 1;
 
             }
-             total();
+            total();
         }
         subTotal(itemsSavedForCart, index);
 
@@ -243,11 +233,11 @@
         function total() {
             let totalPrice = 0;
             for (let i = 0; i < itemsSavedForCart.length; i++) {
-               let currentValue = parseInt(document.getElementById(i).textContent);
-               totalPrice += currentValue;
-           }
+                let currentValue = parseInt(document.getElementById(i).textContent);
+                totalPrice += currentValue;
+            }
 
-           document.getElementById("total").innerHTML = "Total: " + totalPrice;
+            document.getElementById("total").innerHTML = "Total: " + totalPrice;
         }
 
         function changeCount(delta) {
@@ -281,199 +271,220 @@
                     document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
                     subTotal(itemsSavedForCart, newIndex);
                 }
-                else if (delta == "minus", itemsSavedForCart[newIndex].AmountToCart >= 0) {
+
+                else if (delta == "minus") {
                     // Get the existing data
+
                     var existing = localStorage.getItem('itemsSavedForCart');
-                    
+
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
                     let itemsSavedForCart = []
                     if (existing != null)
                         itemsSavedForCart = JSON.parse(existing);
 
-                    itemsSavedForCart[newIndex].AmountToCart -= 1;
 
-                    localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
+                    if (itemsSavedForCart[newIndex].AmountToCart > 0) {
 
-                    document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
-                    document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
-                    subTotal(itemsSavedForCart, newIndex);
+                        itemsSavedForCart[newIndex].AmountToCart -= 1;
+
+                        localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
+
+
+                        document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
+                        document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
+                        subTotal(itemsSavedForCart, newIndex);
+
+
+                    }
 
                 }
             }
 
         }
 
+
+
+
+
+
+
         //Promocode input.
         const selectObject = document.querySelector('#PromoKodeInput');
 
-        const viewValidatedPromoCodes = [];
 
-        selectObject.addEventListener('change', e =>
-        {
+        selectObject.addEventListener('change', e => {
 
             let promoCodeInput = e.target.value;
+            let promoCodeUsed = false;
+
+            for (let i = 0; i < viewValidatedPromoCodes.length; i++) {
+                if (viewValidatedPromoCodes[i] == promoCodeInput) {
+                    promoCodeUsed = true;
+                    console.log("Promo Code is in use");
+                }
+            }
 
 
-             let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
-             .then((response) => response.json())
-             .then((data) => {
-                 console.log(data);
+            let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
 
-                 let cartIndex = 0;
-                 for(let item of itemsSavedForCart){
-                        if (data.result != true) { 
-                            console.log("Promo code Not Valid");
-                            break;
-                        }
+                    if (data.result == true && promoCodeUsed == false) {
 
-                        let discount = data.promoCode.Value;
-                        let discountType = data.promoCode.DiscountType;
-                        let price = parseInt(document.getElementById(cartIndex).textContent);
-                        let newPrice = 0;
+                        let cartIndex = 0;
+                        for (let item of itemsSavedForCart) {
 
-                        switch(data.promoCode.ItemType)
-                        {
-                            //validate all
-                            case 0:
-                                if(discountType == 0){
-                                    if(discount == 100){
-                                        newPrice = price * 0;
+                            let discount = data.promoCode.Value;
+                            let discountType = data.promoCode.DiscountType;
+                            let price = parseInt(document.getElementById(cartIndex).textContent);
+                            let newPrice = 0;
+
+                            switch (data.promoCode.ItemType) {
+                                //validate all
+                                case 0:
+                                    if (discountType == 0) {
+                                        if (discount == 100) {
+                                            newPrice = price * 0;
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+                                        }
+                                        else {
+                                            discount = discount / 100;
+                                            newPrice = price - (price * discount);
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                        }
+
+                                    }
+                                    else if (discountType == 1) {
+                                        newPrice = price - discount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
                                     }
-                                    else{
-                                        discount = discount/100;
-                                        newPrice = price - (price * discount);
-                                        document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
 
-                                }
-                                else if(discountType == 1){
-                                    newPrice = price - discount;
-                                    document.getElementById(cartIndex).innerHTML = newPrice;
-                                }
-                                
-
-                                //console.log("All");
-                                break;
-
-                            //validate all packs
-                             case 1:
-                                if(item.packid == undefined){
+                                    //console.log("All");
                                     break;
-                                }
-                                if(discountType == 0){
-                                    if(discount == 100){
-                                        newPrice = price * 0;
+
+                                //validate all packs
+                                case 1:
+                                    if (item.packid == undefined) {
+                                        break;
+                                    }
+                                    if (discountType == 0) {
+                                        if (discount == 100) {
+                                            newPrice = price * 0;
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+                                        }
+                                        else {
+                                            discount = discount / 100;
+                                            newPrice = price - (price * discount);
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                        }
+
+                                    }
+                                    else if (discountType == 1) {
+                                        newPrice = price - discount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
                                     }
-                                    else{
-                                        discount = discount/100;
-                                        newPrice = price - (price * discount);
-                                        document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
 
-                                }
-                                else if(discountType == 1){
-                                    newPrice = price - discount;
-                                    document.getElementById(cartIndex).innerHTML = newPrice;
-                                }
-
-                               
-                                //console.log("All Packs");
-                                break;
-
-                            //validate All items
-                             case 2:
-                                if (item.packid != undefined) {
+                                    //console.log("All Packs");
                                     break;
-                                }
-                                if (discountType == 0) {
-                                    if (discount == 100) {
-                                        newPrice = price * 0;
+
+                                //validate All items
+                                case 2:
+                                    if (item.packid != undefined) {
+                                        break;
+                                    }
+                                    if (discountType == 0) {
+                                        if (discount == 100) {
+                                            newPrice = price * 0;
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+                                        }
+                                        else {
+                                            discount = discount / 100;
+                                            newPrice = price - (price * discount);
+                                            document.getElementById(cartIndex).innerHTML = newPrice;
+
+                                        }
+
+                                    }
+                                    else if (discountType == 1) {
+                                        newPrice = price - discount;
                                         document.getElementById(cartIndex).innerHTML = newPrice;
                                     }
-                                    else {
-                                        discount = discount / 100;
-                                        newPrice = price - (price * discount);
-                                        document.getElementById(cartIndex).innerHTML = newPrice;
 
-                                    }
-
-                                }
-                                else if (discountType == 1) {
-                                    newPrice = price - discount;
-                                    document.getElementById(cartIndex).innerHTML = newPrice;
-                                }
-                                
-                                //console.log("All items");
-                                break;
+                                    //console.log("All items");
+                                    break;
 
 
-                            //validate some
-                             case 3:
-                             if(discountType == 0){
-                                    if (discount == 100) {
-                                        discount = 0;
+                                //validate some
+                                case 3:
+                                    if (discountType == 0) {
+                                        if (discount == 100) {
+                                            discount = 0;
+                                            for (let i = 0; i < data.promoCode.Items.length; i++) {
+
+                                                if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
+                                                    newPrice = price * discount;
+                                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                                }
+                                                else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
+                                                    newPrice = price * discount;
+                                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                                }
+                                            }
+
+                                        } else {
+                                            for (let i = 0; i < data.promoCode.Items.length; i++) {
+
+                                                if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
+                                                    newPrice = price - (price * (discount / 100));
+                                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                                }
+                                                else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
+                                                    newPrice = price - (price * (discount / 100));
+                                                    document.getElementById(cartIndex).innerHTML = newPrice;
+                                                }
+                                            }
+                                        }
+
+
+                                    } else if (discountType == 1) {
                                         for (let i = 0; i < data.promoCode.Items.length; i++) {
-
                                             if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                                newPrice = price * discount;
+                                                newPrice = price - discount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
                                             else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                                newPrice = price * discount;
+                                                newPrice = price - discount;
                                                 document.getElementById(cartIndex).innerHTML = newPrice;
                                             }
-                                        }
 
-                                    }else{
-                                        for (let i = 0; i < data.promoCode.Items.length; i++) {
-
-                                            if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                                newPrice = price - (price * (discount/100));
-                                                document.getElementById(cartIndex).innerHTML = newPrice;
-                                            }
-                                            else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                                newPrice = price - (price * (discount / 100));
-                                                document.getElementById(cartIndex).innerHTML = newPrice;
-                                            }
                                         }
                                     }
 
-
-                             }else if(discountType == 1){
-                                    for (let i = 0; i < data.promoCode.Items.length; i++) {
-                                        if (item.Id == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == false) {
-                                            newPrice = price - discount;
-                                            document.getElementById(cartIndex).innerHTML = newPrice;
-                                        }
-                                        else if (item.packid == data.promoCode.Items[i].Id && data.promoCode.Items[i].IsPack == true) {
-                                            newPrice = price - discount;
-                                            document.getElementById(cartIndex).innerHTML = newPrice;
-                                        }
-
-                                    }
-                             }
-
-                                 //console.log("Some");
-                                 break;
+                                    //console.log("Some");
+                                    break;
 
 
-                            default:
-                                
-                                break;
+                                default:
+
+                                    break;
+
+                            }
+
+                            cartIndex += 1;
+                            total();
 
                         }
-                        
-                        cartIndex += 1;
-                        total();
+                        viewValidatedPromoCodes.push(promoCodeInput);
+                        console.log(viewValidatedPromoCodes);
+                    }
 
-                 }
-
-             });
+                });
 
         });
 
@@ -488,106 +499,125 @@
 
     })
 
-    async function placeOrder(){
+
+
+
+
+
+
+
+
+
+
+    async function placeOrder() {
         let buyerName = document.getElementById("buyerName").value;
         let buyerEmail = document.getElementById("buyerEmail").value;
         let TotalPrice = document.getElementById("total").innerHTML;
         TotalPrice = TotalPrice.split(': ');
-
-
-        const itemString = localStorage.getItem('itemsSavedForCart');
-
-        let itemsSavedForCart = JSON.parse(itemString);
         let ShopUnits = [];
 
+        if (buyerName == "" || buyerEmail == "" || !buyerEmail.includes("@@")) {
+            console.log("got here");
+            alert("Navn eller mail mangler.");
+
+        } else {
+            const itemString = localStorage.getItem('itemsSavedForCart');
+
+            let itemsSavedForCart = JSON.parse(itemString);
 
 
+            for (let item of itemsSavedForCart) {
+                let ShopUnit = {};
+                //console.log(item);
+                if (item.packid == undefined) {
 
-        for(let item of itemsSavedForCart){
-            let ShopUnit = {};
-            //console.log(item);
-            if(item.packid == undefined){
+                    ShopUnit.ModelId = item.Id;
+                    ShopUnit.ItemId = item.ItemId;
+                    ShopUnit.Name = item.ModelName;
+                    ShopUnit.Color = item.Color;
+                    ShopUnit.Size = item.Size;
+                    ShopUnit.Price = item.Price;
 
-                ShopUnit.ModelId = item.Id;
-                ShopUnit.ItemId = item.ItemId;
-                ShopUnit.Name = item.ModelName;
-                ShopUnit.Color = item.Color;
-                ShopUnit.Size = item.Size;
-                ShopUnit.Price = item.Price;
+                    ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
+                }
 
-                ShopUnits.push({"Amount" : item.AmountToCart, ShopUnit : ShopUnit});
             }
-        }
 
-        for(let item of itemsSavedForCart){
-            let ShopUnit = {};
-            //console.log(item);
-            if(item.packid != undefined){
+            for (let item of itemsSavedForCart) {
+                let ShopUnit = {};
+                //console.log(item);
+                if (item.packid != undefined) {
 
-                ShopUnit.IsPack = true
-                ShopUnit.Name = item.packname;
-                ShopUnit.PackId = parseInt(item.packid);
-                ShopUnit.Price = item.Price;
-                ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
+                    ShopUnit.IsPack = true
+                    ShopUnit.Name = item.packname;
+                    ShopUnit.PackId = parseInt(item.packid);
+                    ShopUnit.Price = item.Price;
+                    ShopUnits.push({ "Amount": item.AmountToCart, ShopUnit: ShopUnit });
 
-                for(let i = 0; item[""+i] != undefined; i++){
-                    ShopUnit = {};
-                    ShopUnit.ModelId = parseInt(item[""+i].id);
-                    ShopUnit.Name = item[""+i].name;
-                    ShopUnit.Color = item[""+i].ItemColors;
-                    ShopUnit.Size = item[""+i].size;
-
-
-                    const response = await fetch("/api/getItemId", 
-                    {
-                        method: 'GET',
-                        redirect: 'follow',
-
-                        headers: {
-                                color: encodeURI(ShopUnit.Color),
-                                size: encodeURI(ShopUnit.Size),
-                                modelId: ShopUnit.ModelId,
-                        },
+                    for (let i = 0; item["" + i] != undefined; i++) {
+                        ShopUnit = {};
+                        ShopUnit.ModelId = parseInt(item["" + i].id);
+                        ShopUnit.Name = item["" + i].name;
+                        ShopUnit.Color = item["" + i].ItemColors;
+                        ShopUnit.Size = item["" + i].size;
 
 
-                    })
-                    .then((response) => response.headers.get("itemId"));
+                        const response = await fetch("/api/getItemId",
+                            {
+                                method: 'GET',
+                                redirect: 'follow',
 
-                    ShopUnit.Price = parseInt(item[""+i].ModelPrice);
-                    ShopUnit.ItemId = parseInt(response);
-                    ShopUnits.push({"Amount" : 1, ShopUnit});
+                                headers: {
+                                    color: encodeURI(ShopUnit.Color),
+                                    size: encodeURI(ShopUnit.Size),
+                                    modelId: ShopUnit.ModelId,
+                                },
+
+
+                            })
+                            .then((response) => response.headers.get("itemId"));
+
+                        ShopUnit.Price = parseInt(item["" + i].ModelPrice);
+                        ShopUnit.ItemId = parseInt(response);
+                        ShopUnits.push({ "Amount": 1, ShopUnit });
+                    }
+
+
                 }
 
 
             }
+            let order = {
+
+                PromoCodes: viewValidatedPromoCodes,
+                Name: buyerName,
+                Email: buyerEmail,
+                Price: parseInt(TotalPrice[1]),
+                ShopUnits: ShopUnits,
+            }
+
+            console.log(order);
+
+            const response = await fetch("/api/CreateOrder",
+                {
+                    method: 'POST',
+                    headers:
+                    {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order),
+
+                })
+
+            //localStorage.removeItem("itemsSavedForCart");
+            // location.reload();
+            alert("Odrer er resaveret. ");
 
 
         }
 
 
-        let order = {
-            Name: buyerName,
-            Email: buyerEmail,
-            Price: parseInt(TotalPrice[1]),
-            ShopUnits: ShopUnits,
-        }
-
-        console.log(order);
-
-        const response = await fetch("/api/CreateOrder", 
-        {
-            method: 'POST',
-            headers: 
-            {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(order),
-            
-
-        })
     }
-
-
 
     document.getElementById("createOrder").addEventListener("click", placeOrder);
 
