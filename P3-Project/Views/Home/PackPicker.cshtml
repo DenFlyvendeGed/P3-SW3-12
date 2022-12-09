@@ -2,6 +2,7 @@
 @model PackModel
 @{
     Layout = "_Layout";
+    @*
     ViewData["Title"] = "Vælg pakkemuligheder";
 }
 <h1>@ViewData["Title"]</h1>
@@ -59,7 +60,7 @@
 							{
 								
 								<div class="colorBoxSelect" style="border: 2px solid transparent">
-									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item2)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
+									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item1)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
 								</div>
 								colorIndex += 1;
 							}
@@ -209,7 +210,7 @@
 	}
 
 </script>
-@*
+*@
     ViewData["Title"] = "Vælg pakkemuligheder";
 }
 <h1>@ViewData["Title"]</h1>
@@ -282,9 +283,6 @@
     }
 </div>
 
-
-
-<div class="box" style="position: relative; left:70vw; display: block; text-align: center; margin-top: 12px; margin-bottom: 12px; width: 220px; padding: 6px;">Tilføj pakke til indkøbskurv</div>
 
 <div class="box AddToCart" onclick="addToCart()">Tilføj pakke til indkøbskurv</div>
 
@@ -430,9 +428,5 @@
         itemsSavedForCart.push(itemData);
         localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
 
-
-
-
     }
 </script>
-*@
