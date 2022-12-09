@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="App.Config" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="wwwroot\Pics\logo_2016.png" />
   </ItemGroup>
 
