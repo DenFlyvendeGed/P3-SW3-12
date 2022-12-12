@@ -23,4 +23,8 @@
     <PackageReference Include="XunitXml.TestLogger" Version="3.0.70" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\P3-Project\P3-Project.csproj" />
+  </ItemGroup>
+
 </Project>

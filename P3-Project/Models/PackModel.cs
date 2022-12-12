@@ -182,5 +182,37 @@ namespace P3_Project.Models
 
 			db.DB.DeleteTable($"PackModel_{PackID}_Tags");
 		}
+
+        #region validation
+
+        public bool inputValidation()
+		{
+			if (validName() && validPrice() && validOptions())
+				return true;
+			return false;
+		}
+
+		public bool validName()
+		{
+			if (Name != "")
+				return true;
+			return false;
+		}
+
+		public bool validPrice()
+		{
+			if (Price >= 0)
+				return true;
+			return false;
+		}
+
+		public bool validOptions()
+		{
+			if (Options.Count() > 0)
+				return true;
+			return false;
+		}
+
+        #endregion
     }
 }

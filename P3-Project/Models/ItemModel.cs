@@ -281,8 +281,44 @@ namespace P3_Project.Models
 
             return result;
         }
-        
 
+        #region validation
+        public bool inputValidation()
+        {
+
+            if(validModelPrice() && validStockAlarm() && validType() && validModelName())
+                return true;
+            return false;
+        }
+
+        public bool validModelPrice()
+        {
+            if (ModelPrice >= 0 && ModelPrice % 1 == 0)
+                return true;
+            return false;
+        }
+
+        public bool validStockAlarm()
+        {
+            if (StockAlarm >= -1)
+                return true;
+            return false;
+        }
+        public bool validType()
+        {
+            if (Type == "Tøj" || Type == "Tilbehør")
+                return true;
+            return false;
+        }
+
+        public bool validModelName()
+        {
+            if (ModelName != "")
+                return true;
+            return false;
+        }
+
+        #endregion
     }
 
     public class ImageModel
