@@ -1104,9 +1104,6 @@ div.shopTagBox{
     height: 22px;
 }
 .Name {
-    position: relative;
-    height: 50px;
-    width: 240px;
     top: 4%;
     padding: 10px;
 }
@@ -1129,10 +1126,12 @@ div.shopTagBox{
         left: 80%;
         top: 66%;
     }
+
     .CheckMark-Flag {
         width: 22px;
         height: 22px;
     }
+}
 
 .CheckMark {
     /*position: relative;*/

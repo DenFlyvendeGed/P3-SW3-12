@@ -2,7 +2,7 @@
 @model PackModel
 @{
     Layout = "_Layout";
-    @*
+    
     ViewData["Title"] = "Vælg pakkemuligheder";
 }
 <h1>@ViewData["Title"]</h1>
@@ -15,60 +15,60 @@
 		var IdIndex = 1;
 		foreach (var option in Model.Options)
 		{
-			<div class="PackChoices"><h4><b>Valgmulighed @index</b></h4></div>
+                <div class="PackChoices"><h4><b>Valgmulighed @index</b></h4></div>
 			var OptionCount = 1;
 			foreach (var ItemModelId in option)
 			{
 				ItemModel model = ItemModel.LoadModel(ItemModelId.ToString());
 				model.LoadItems();
 
-				<div class="PackPickerItems" id="Option@(index)">
-					
-					<div class="PackPickerImgContainer">
+                    <div class="PackPickerItems" id="Option@(index)">
+                        
+                        <div class="PackPickerImgContainer">
 
 
-						<img class="PackPickerImg" src="@(model.GetFirstImg().FilePath)" alt="@(model.Id)" onerror="this.src='../favicon.ico';" />
+                            <img class="PackPickerImg" src="@(model.GetFirstImg().FilePath)" alt="@(model.Id)" onerror="this.src='../favicon.ico';" />
 
 
-					</div>
-					<div class="box Name" id="NameBox">@(model.ModelName)</div>
+                        </div>
+                        <div class="box Name" id="NameBox">@(model.ModelName)</div>
 
 
-					<div class="SelectOption">
-						<h5>
-							Størrelse:
-							<select style="height: 100%; font-size:12pt;">
-								@{
+                        <div class="SelectOption">
+                            <h5>
+                                Størrelse:
+                                <select style="height: 100%; font-size:12pt;">
+                                    @{
 									int sizeIndex = 1;
 									foreach (string size in model.GetUniqueSize())
 									{
-										<option id="size@(sizeIndex)" style="font-size:12pt;">@(size)</option>
+                                                <option id="size@(sizeIndex)" style="font-size:12pt;">@(size)</option>
 										sizeIndex += 1;
 									}
-								}
-							</select>
-						</h5>
-					</div>
+                                    }
+                                </select>
+                            </h5>
+                        </div>
 
-					
+                        
 
-					<div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)" onload="SetFirstColor(this)">
-						@{
+                        <div class="PackPickerFlexBox" id="Flexbox@(index)@(OptionCount)" onload="SetFirstColor(this)">
+                            @{
 							int colorIndex = 1;
-							<h5 class="smltext">Farve:</h5>
+                                    <h5 class="smltext">Farve:</h5>
 							foreach ((string, string) color in model.GetUniqueColor())
 							{
 								
-								<div class="colorBoxSelect" style="border: 2px solid transparent">
-									<div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item1)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
-								</div>
+                                        <div class="colorBoxSelect" style="border: 2px solid transparent">
+                                            <div class="colorBox" id="color@(index)@(OptionCount)@(colorIndex)" value="@(color.Item1)" style="background-color: @(color.Item2);" onclick="ColorSelect(this.id)"></div>
+                                        </div>
 								colorIndex += 1;
 							}
-						}
-					</div>
+                            }
+                        </div>
 
-					<div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"> </div>
-				</div>
+                        <div id="CheckMarkBox" class="box CheckMark" onclick="CheckBox(this)"> </div>
+                    </div>
 				IdIndex++;
 				OptionCount++;
 			}
@@ -167,50 +167,82 @@
 
 	function addToCart() {
 
-		let SelectedValues = {
+        let SelectedValues = {
 
-		}
-		let obj = [];
-		let loopindex = 0;
-		document.querySelectorAll(".PackPickerItems").forEach(element => {
-			if (element.querySelector("#CheckMarkBox").children.length > 0) {
-				let Name = element.querySelector("#NameBox").textContent;
-				let Size = element.querySelector("select").value;
-				let Id = element.querySelector(".PackPickerImg").alt;
-				option = element;
-				let FlagChoice = 0;
-				let Colors = [];
-				let ColArray = 0;
-				option.querySelectorAll(".colorBoxSelect").forEach(color => {
-					if ((color.style.border).toString() == "2px solid dodgerblue") {
-						Colors[ColArray] = color.querySelector(".colorBox").getAttribute('value');
-						ColArray++;
-						FlagChoice++;
-					}
-				})
-				//console.log(Colors);
-				//console.log(FlagChoice);
-				obj[loopindex] = { id: Id, name: Name, size: Size, ItemColors: Colors[0] };
-				loopindex++;
-			}
-		})
-		SelectedValues = Object.assign(SelectedValues, obj);
-		//console.log(SelectedValues);
+        }
+        let obj = [];
+        let loopindex = 0;
+        document.querySelectorAll(".PackPickerItems").forEach(element => {
+            if (element.querySelector("#CheckMarkBox").children.length > 0) {
+                let Name = element.querySelector("#NameBox").textContent;
+                let ModelPrice = element.querySelector("#NameBox").getAttribute('value');
+                let Size = element.querySelector("select").value;
+                let Id = element.querySelector(".PackPickerImg").alt;
+                option = element;
+                let FlagChoice = 0;
+                let Colors = [];
+                let ColArray = 0;
+                option.querySelectorAll(".colorBoxSelect").forEach(color => {
+                    if ((color.style.border).toString() == "2px solid dodgerblue") {
+                        Colors[ColArray] = color.querySelector(".colorBox").getAttribute('value');
+                        ColArray++;
+                        FlagChoice++;
+                    }
+                })
+                obj[loopindex] = { id: Id, name: Name, size: Size, ItemColors: Colors[0], ModelPrice: ModelPrice, };
+                loopindex++;
+            }
+        })
+        SelectedValues = Object.assign(SelectedValues, obj);
 
-		let itemData = {
-			packid: "@Model.PackID",
-			packname: "@Model.Name",
-			price: @Model.Price
-				};
-		itemData = Object.assign(itemData, SelectedValues);
+        let itemData = {
+            packid: "@Model.PackID",
+            packname: "@Model.Name",
+            Price: @Model.Price,
+            AmountToCart: 1,
+        };
+        itemData = Object.assign(itemData, SelectedValues);
 
-		//console.log(itemData);
+        // Get the existing data
+        var existing = localStorage.getItem('itemsSavedForCart');
+        // If no existing data, create an array
+        // Otherwise, convert the localStorage string to an array
+        let itemsSavedForCart = []
+        if (existing != null)
+            itemsSavedForCart = JSON.parse(existing);
 
-		document.querySelector("#redirect").click()
-	}
+        /*
+                let indexOfDuplicate = -1
+                if (itemsSavedForCart.length > 0) {
+                    indexOfDuplicate = itemsSavedForCart.findIndex(item => {
+                        return (item.Size == itemData.Size && item.Color == itemData.Color)
+                    })
+                }
+                if (indexOfDuplicate >= 0) {
+                    itemsSavedForCart[indexOfDuplicate].AmountToCart += itemData.AmountToCart
+                }
+                else {
+                    itemsSavedForCart.push(itemData);
+                }
+                //existing = existing ? existing.split(',') : [];
+                // Add new data to localStorage Array
+                //existing.push(JSON.stringify(itemData));
 
+                // Save back to localStorage
+                //localStorage.setItem('itemsSavedForCart', existing.toString());
+                localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
+                */
+
+        itemsSavedForCart.push(itemData);
+        localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
+            
+
+        document.querySelector("#redirect").click();
+    }
+    //itemsSavedForCart.push(itemData);
+    //localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
 </script>
-*@
+@*
     ViewData["Title"] = "Vælg pakkemuligheder";
 }
 <h1>@ViewData["Title"]</h1>
@@ -430,3 +462,4 @@
 
     }
 </script>
+*@
