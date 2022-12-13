@@ -50,13 +50,13 @@ namespace P3_Project.Models
 			this.Description = table_data.Item4;
 
 			foreach(var i in new Counter(table_data.Item5)){
-				var l = new List<int>();
-				var itemIds = db.DB.ReadFromTable($"{TABLE_NAME}_{this.PackID}_{i}", (e) => e[0].ToString() ?? "");
-				var data = itemIds.Count != 0 
-					? db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0])
-					: new();
-				foreach(var d in data) l.Add(d);
-				this.Options.Add(l);
+				//var l = new List<int>();
+				var itemIds = db.DB.ReadFromTable($"{TABLE_NAME}_{this.PackID}_{i}", (e) => (int)e[0]);
+				//var data = itemIds.Count != 0 
+				//	? db.DB.ReadFromTable("ItemModels", new string[] {"Id", "ModelName"}, $"Id in ({string.Join(',', itemIds)})", (e) => (int)e[0])
+				//	: new();
+				//foreach(var d in data) l.Add(d);
+				this.Options.Add(itemIds);
 			}
 		}
 
