@@ -255,9 +255,7 @@ public class MySqlDB : DataBase {
 				}
 				catch
 				{
-					Console.WriteLine(property.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			foreach (var field in fields)
 			{
@@ -267,9 +265,7 @@ public class MySqlDB : DataBase {
 				}
 				catch
 				{
-					Console.WriteLine(field.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			objectClass = classInstance;
 		}

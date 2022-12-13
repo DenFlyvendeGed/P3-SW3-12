@@ -130,13 +130,11 @@ namespace P3_Project.Controllers
 
             ViewBag.model = models;
 
-
             return View((model, models, packs));
         }
 
         public ActionResult PromoCode()
         {
-
 			List<(int, string, DateTime, int, PromoCodeDiscountType, PromoCodeItemType)> psudoCodes;
 			try {
 				psudoCodes = new StorageDB().DB.ReadFromTable("PromoCode", new string[] {"Id", "Code", "ExpirationDate", "Value", "DiscountType", "ItemType" }, (r) => ((int)r[0], (string)r[1], (DateTime)r[2], (int)r[3], (PromoCodeDiscountType)(short)r[4], (PromoCodeItemType)(short)r[5]));
@@ -148,15 +146,12 @@ namespace P3_Project.Controllers
         
 		public ActionResult Settings()
         {
-
-
             return View();
         }
 
         #endregion
 
         #region ConfirmSale
-
 
         public ActionResult ConfirmSale([FromQuery]int id)
         {
@@ -175,7 +170,6 @@ namespace P3_Project.Controllers
         #endregion
 
         #region Settings
-
         public ActionResult FakturaSettings()
         {
             StorageDB db = new StorageDB();
@@ -186,6 +180,7 @@ namespace P3_Project.Controllers
 
             return View();
         }
+
         #endregion
 
     }

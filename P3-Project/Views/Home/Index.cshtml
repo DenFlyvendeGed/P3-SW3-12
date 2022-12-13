@@ -78,8 +78,6 @@
         else {
             tagList.splice(tagList.indexOf(text), 1);
         }
-        //console.log(tagList)
-
 
 
         if (tagList.length > 0) {
@@ -93,12 +91,7 @@
 
             const regex = new RegExp(searchString, "gm");
 
-            console.log(searchString);
-            //console.log(items)
             for (item of items) {
-                //console.log(item)
-                //console.log(item.classList.value)
-                //console.log(item.classList.value.match(regex))
 
                 if (item.classList.value.match(regex)?.length != tagList.length) {
                     item.style.display = "none";
@@ -114,8 +107,6 @@
             }
         }
 
-
-        //\s((test\s+|test1\s+|test2\s+)){3}
 
     }
 

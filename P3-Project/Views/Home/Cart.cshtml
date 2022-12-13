@@ -207,16 +207,16 @@
                                 </div>
                             </td>
                             <td style = "width: 10vw; border-style: none;" >
-                                <button onclick="deleteItem(this)">Slet</button>@*Tom Felt til visual*@
+                                <button onclick="deleteItem(this)">Slet</button>
                             </td>
 
                             <td  >
-                                ${item.Price} @*Pris pr.stk. (DKK)*@
+                                ${item.Price} @*Price (DKK)*@
                             </td>
                             <td  >
 
                                 <div id="${index}">
-                                    ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                                    ${item.Price * item.AmountToCart} @*Total price(DKK)*@
                                 </div>
                             </td>
                         `;
@@ -229,13 +229,13 @@
                 row.innerHTML = `
 
                     <td  >
-                        ${item.ModelName} @*Navn*@
+                        ${item.ModelName} @*Name*@
                     </td>
                     <td  >
-                        ${item.Size} @*Størelse*@
+                        ${item.Size} @*Size*@
                     </td>
                     <td  >
-                        ${item.Color} @*Farve*@
+                        ${item.Color} @*Color*@
                     </td>
                         <td  >
 
@@ -246,16 +246,16 @@
                             </div>
                         </td>
                         <td style = "width: 10vw; border-style: none;" >
-                              <button onclick="deleteItem(this)">Slet</button>  @*Tom Felt til visual*@
+                              <button onclick="deleteItem(this)">Slet</button>  
                         </td>
 
                         <td  >
-                                    ${item.Price} @*Pris pr.stk. (DKK)*@
+                                    ${item.Price} @*Price (DKK)*@
                         </td>
                         <td  >
 
                             <div id="${index}">
-                                ${item.Price * item.AmountToCart} @*Samlet pris(DKK)*@
+                                ${item.Price * item.AmountToCart} @*Total price(DKK)*@
                             </div>
                         </td>
                         `;
@@ -305,7 +305,6 @@
                     // Get the existing data
                     var existing = localStorage.getItem('itemsSavedForCart');
 
-                    //console.log(existing)
                     // If no existing data, create an array
                     // Otherwise, convert the localStorage string to an array
                     let itemsSavedForCart = []
@@ -313,8 +312,6 @@
                         itemsSavedForCart = JSON.parse(existing);
 
                     itemsSavedForCart[newIndex].AmountToCart += 1;
-
-                    //console.log(itemsSavedForCart[0]);
 
                     localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
 
@@ -340,12 +337,9 @@
 
                         localStorage.setItem("itemsSavedForCart", JSON.stringify(itemsSavedForCart));
 
-
                         document.getElementById(dom).innerHTML = itemsSavedForCart[newIndex].AmountToCart;
                         document.getElementById(newIndex).innerHTML = itemsSavedForCart[newIndex].AmountToCart * itemsSavedForCart[newIndex].Price;
                         subTotal(itemsSavedForCart, newIndex);
-
-
 
                     }
 
@@ -358,7 +352,6 @@
         //Promocode input.
         const selectObject = document.querySelector('#PromoKodeInput');
 
-
         selectObject.addEventListener('change', e => {
 
             let promoCodeInput = e.target.value;
@@ -367,7 +360,6 @@
             for (let i = 0; i < viewValidatedPromoCodes.length; i++) {
                 if (viewValidatedPromoCodes[i] == promoCodeInput) {
                     promoCodeUsed = true;
-                    console.log("Promo Code is in use");
                 }
             }
 
@@ -375,7 +367,6 @@
             let result = fetch(`/api/ValidatePromoCode/${promoCodeInput}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
 
                     if (data.result == true && promoCodeUsed == false) {
 
@@ -410,8 +401,6 @@
                                         document.getElementById(cartIndex).innerHTML = newPrice;
                                     }
 
-
-                                    //console.log("All");
                                     break;
 
                                 //validate all packs
@@ -528,7 +517,6 @@
 
                         }
                         viewValidatedPromoCodes.push(promoCodeInput);
-                        console.log(viewValidatedPromoCodes);
                     }
 
 
@@ -561,7 +549,6 @@
         let ShopUnits = [];
 
         if (buyerName == "" || buyerEmail == "" || !buyerEmail.includes("@@")) {
-            console.log("got here");
             alert("Navn eller mail mangler.");
 
         } else {
@@ -572,7 +559,6 @@
 
             for (let item of itemsSavedForCart) {
                 let ShopUnit = {};
-                //console.log(item);
                 if (item.packid == undefined) {
 
                     ShopUnit.ModelId = item.Id;
@@ -589,7 +575,6 @@
 
             for (let item of itemsSavedForCart) {
                 let ShopUnit = {};
-                //console.log(item);
                 if (item.packid != undefined) {
 
                     ShopUnit.IsPack = true
@@ -638,7 +623,6 @@
             ShopUnits: ShopUnits,
         }
 
-        console.log(order);
 
         const response = await fetch("/api/CreateOrder", 
         {

@@ -171,8 +171,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension;
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 Pictures.Add(img);
             }
@@ -204,8 +202,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".","");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 return img;
             }
@@ -348,7 +344,6 @@ namespace P3_Project.Models
             string fileName = Path.Combine(dir.FullName, Name);
             
             string base64Data = Regex.Replace(Data, "^data:image\\/(png|jpeg);base64,", "");
-            //Image img = LoadBase64(base64Data);
             File.WriteAllBytes(fileName, Convert.FromBase64String(base64Data));
         }
 
@@ -360,7 +355,6 @@ namespace P3_Project.Models
             string fileName = Path.Combine(dir.FullName, Name);
 
             string base64Data = Regex.Replace(Data, "^data:image\\/(png|jpeg);base64,", "");
-            //Image img = LoadBase64(base64Data);
             File.WriteAllBytes(fileName, Convert.FromBase64String(base64Data));
         }
 
@@ -393,10 +387,8 @@ namespace P3_Project.Models
         {
             if(Id == null)
                 return string.Empty;
-            //string projectPath = Directory.GetCurrentDirectory();
             string fileName = Path.Combine("/Pictures", Id.ToString(), Name);
             fileName = Regex.Replace(fileName, "\\\\", "/");
-            //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
 
             return fileName;
@@ -406,10 +398,8 @@ namespace P3_Project.Models
         {
             if (Id == null)
                 return string.Empty;
-            //string projectPath = Directory.GetCurrentDirectory();
             string fileName = Path.Combine("/Pictures",parentFolder, Id.ToString(), Name);
             fileName = Regex.Replace(fileName, "\\\\", "/");
-            //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
             return fileName;
         }
@@ -424,8 +414,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".", "");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 return img;
             }
@@ -442,8 +430,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".", "");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath(parentFolderName);
                 return img;
             }

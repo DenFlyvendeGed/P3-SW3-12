@@ -59,7 +59,6 @@
         let model = e.target.name;
         let content = confirm("Du er ved at slette: " + model + "\n Er du sikker?");
         if (content == true) {
-            console.log(e);
             e.target.nextElementSibling.click();
         }
     }

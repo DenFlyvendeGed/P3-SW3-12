@@ -42,8 +42,6 @@ namespace P3_Project.Controllers
                 {
                     StorageDB db = new StorageDB();
                     List<bool> exist = db.DB.ReadFromTable("Users", "UserName='" + u.UserName + "' AND UserPassword='" + u.UserPassword +"'", arr => true);
-                    //var obj = db.Users.Where(a => a.UserName.Equals(u.UserName) && a.UserPassword.Equals(u.UserPassword)).FirstOrDefault();
-                    //if (obj != null)
                     if(exist.Count() > 0)
                     {
                         HttpContext.Session.SetString("UserName", u.UserName.ToString());
@@ -60,9 +58,6 @@ namespace P3_Project.Controllers
             }
             else
             {
-
-
-
                 return RedirectToAction("Login");
             }
             return View();
