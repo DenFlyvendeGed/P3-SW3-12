@@ -69,8 +69,12 @@ namespace P3_Project.Controllers
         public IActionResult ValidatePromoCode(string code)
         {
             var (validate, promoCode) = PromoCode.Validate(code, new StorageDB());
-            var promoCodeJson = JsonSerializer.Serialize(promoCode);
-            return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
+            if(promoCode.inputValidation())
+            {
+                var promoCodeJson = JsonSerializer.Serialize(promoCode);
+                return Ok(JsonDocument.Parse($"{{\"result\" : {validate.ToString().ToLower()}, \"promoCode\" : {promoCodeJson}}}"));
+            }
+            return BadRequest();
         }
 
         [HttpGet("getItemId")]
@@ -140,13 +144,20 @@ namespace P3_Project.Controllers
 
         #region PromoCode
         [HttpPost("CreatePromoCode")]
-        public async void CreatePromoCode() {
+        public async Task<IActionResult> CreatePromoCode() {
 			string json;
             using (var reader = new StreamReader(Request.Body)) json = await reader.ReadToEndAsync();
 			Console.WriteLine(json);
 			var code = JsonSerializer.Deserialize<PromoCode>(json);
-			if(code == null) return;
-			code.PushToDB(db);
+
+            if (code.inputValidation())
+            {
+                code.PushToDB(db);
+            }
+            else
+                return BadRequest();
+
+            return Ok();
 		}
 
 		[HttpPut("EditPromoCode/{id}")]
@@ -164,8 +175,13 @@ namespace P3_Project.Controllers
 			code.ExpirationDate = data.ExpirationDate;
 			code.Items = data.Items;
 
-			code.PushToDB(db);
-            return new StatusCodeResult((int)HttpStatusCode.OK); ;
+            if(code.inputValidation())
+            {
+                code.PushToDB(db);
+                return Ok();
+            }
+			
+            return BadRequest();
 		}
 		
 		[HttpDelete("DeletePromoCode")]
@@ -232,14 +248,19 @@ namespace P3_Project.Controllers
         {
             
             ItemModel itemModel = test;
-            if (itemModel.Id == 0)
+            if(itemModel.inputValidation())
             {
-                itemModel.Create();
+                if (itemModel.Id == 0)
+                {
+                    itemModel.Create();
+                }
+                else
+                {
+                    itemModel.Update();
+                }
+
             }
-            else
-            {
-                itemModel.Update();
-            }
+            
            
             //return Redirect(new Uri(newUrl.ToString(), UriKind.RelativeOrAbsolute));
             //RedirectToAction("Index", "Clients");
@@ -389,7 +410,6 @@ namespace P3_Project.Controllers
             List<User> users = db.DB.GetAllElements("Users", new User());
             var json = JsonSerializer.Serialize(users);
             Response.Headers.Add("Content-Type", "application/json");
-            //Response.Body = new MemoryStream(Encoding.UTF8.GetBytes(json ?? ""));
             return Ok(json);
         }
 

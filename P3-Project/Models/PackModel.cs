@@ -146,8 +146,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension;
                 img.Id = PackID;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath("PackModel");
 
 				if (Pictures == null)
@@ -166,8 +164,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension;
                 img.Id = PackID;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath("PackModel");
 
                 return img;
@@ -182,5 +178,37 @@ namespace P3_Project.Models
 
 			db.DB.DeleteTable($"PackModel_{PackID}_Tags");
 		}
+
+        #region validation
+
+        public bool inputValidation()
+		{
+			if (validName() && validPrice() && validOptions())
+				return true;
+			return false;
+		}
+
+		public bool validName()
+		{
+			if (Name != "")
+				return true;
+			return false;
+		}
+
+		public bool validPrice()
+		{
+			if (Price >= 0)
+				return true;
+			return false;
+		}
+
+		public bool validOptions()
+		{
+			if (Options.Count() > 0)
+				return true;
+			return false;
+		}
+
+        #endregion
     }
 }

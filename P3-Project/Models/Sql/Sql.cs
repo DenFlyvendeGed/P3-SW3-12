@@ -316,9 +316,7 @@ public class SqlDB : DataBase
 				}
 				catch
 				{
-					Console.WriteLine(property.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			foreach (FieldInfo field in fields)
 			{
@@ -328,9 +326,7 @@ public class SqlDB : DataBase
 				}
 				catch
 				{
-					Console.WriteLine(field.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			list.Add(classInstance);
 		}
@@ -571,9 +567,7 @@ public class SqlDB : DataBase
 				}
 				catch
 				{
-					Console.WriteLine(property.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			foreach (FieldInfo field in fields)
 			{
@@ -583,9 +577,7 @@ public class SqlDB : DataBase
 				}
 				catch
 				{
-					Console.WriteLine(field.Name + " Cant be set");
 				}
-				//instance.Add(field.Name, sdr[field.Name].ToString());
 			}
 			objectClass = classInstance;
 		}

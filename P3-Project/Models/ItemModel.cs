@@ -171,8 +171,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension;
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 Pictures.Add(img);
             }
@@ -204,8 +202,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".","");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 return img;
             }
@@ -281,8 +277,44 @@ namespace P3_Project.Models
 
             return result;
         }
-        
 
+        #region validation
+        public bool inputValidation()
+        {
+
+            if(validModelPrice() && validStockAlarm() && validType() && validModelName())
+                return true;
+            return false;
+        }
+
+        public bool validModelPrice()
+        {
+            if (ModelPrice >= 0 && ModelPrice % 1 == 0)
+                return true;
+            return false;
+        }
+
+        public bool validStockAlarm()
+        {
+            if (StockAlarm >= -1)
+                return true;
+            return false;
+        }
+        public bool validType()
+        {
+            if (Type == "Tøj" || Type == "Tilbehør")
+                return true;
+            return false;
+        }
+
+        public bool validModelName()
+        {
+            if (ModelName != "")
+                return true;
+            return false;
+        }
+
+        #endregion
     }
 
     public class ImageModel
@@ -312,7 +344,6 @@ namespace P3_Project.Models
             string fileName = Path.Combine(dir.FullName, Name);
             
             string base64Data = Regex.Replace(Data, "^data:image\\/(png|jpeg);base64,", "");
-            //Image img = LoadBase64(base64Data);
             File.WriteAllBytes(fileName, Convert.FromBase64String(base64Data));
         }
 
@@ -324,7 +355,6 @@ namespace P3_Project.Models
             string fileName = Path.Combine(dir.FullName, Name);
 
             string base64Data = Regex.Replace(Data, "^data:image\\/(png|jpeg);base64,", "");
-            //Image img = LoadBase64(base64Data);
             File.WriteAllBytes(fileName, Convert.FromBase64String(base64Data));
         }
 
@@ -357,10 +387,8 @@ namespace P3_Project.Models
         {
             if(Id == null)
                 return string.Empty;
-            //string projectPath = Directory.GetCurrentDirectory();
             string fileName = Path.Combine("/Pictures", Id.ToString(), Name);
             fileName = Regex.Replace(fileName, "\\\\", "/");
-            //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
 
             return fileName;
@@ -370,10 +398,8 @@ namespace P3_Project.Models
         {
             if (Id == null)
                 return string.Empty;
-            //string projectPath = Directory.GetCurrentDirectory();
             string fileName = Path.Combine("/Pictures",parentFolder, Id.ToString(), Name);
             fileName = Regex.Replace(fileName, "\\\\", "/");
-            //fileName = fileName.Replace(@"\\", "/");
             this.FilePath = fileName;
             return fileName;
         }
@@ -388,8 +414,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".", "");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath();
                 return img;
             }
@@ -406,8 +430,6 @@ namespace P3_Project.Models
                 img.Name = file.Name;
                 img.Type = file.Extension.Replace(".", "");
                 img.Id = Id;
-                //img.Data = Convert.ToBase64String(File.ReadAllBytes(Path.Combine(file.DirectoryName, file.Name)));
-                //img.Data = $"data:image/{img.Type};base64,{img.Data}";
                 img.FilePath = img.GetFilePath(parentFolderName);
                 return img;
             }

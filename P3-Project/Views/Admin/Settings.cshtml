@@ -26,18 +26,8 @@
 <div class="box setting">
 	<h2>Bruger indstillinger</h2>
 	<div class="userContainer">
-		@*<div >
-			<label>Brugernavn: </label>
-			<input placeholder="Indsæt brugernavn" />
-			<label¨>Kodeord: </label¨>
-			<input placeholder="Indsæt kodeord" />
-
-		</div>*@
-		
-		
 	</div>
 	<input type="button" value="Tilføj login" onclick="addUserDom()"/>
-	@*<input type="button" value="Rediger" onclick="location.href='FakturaSettings';" />*@
 </div>
 
 <script>
@@ -102,8 +92,6 @@
 		users = JSON.parse(users);
 		for (user of users) {
 
-			//console.log(user)
-
 			let divDom = document.createElement("div");
 
 			divDom.innerHTML = `
@@ -122,9 +110,6 @@
 
 
 		}
-
-		//console.log(users)
-
 	}
 
 	function addUserDom()
@@ -143,7 +128,6 @@
 
 	function createUser(dom) //Update to add hidden labels with porper data
 	{
-		console.log(dom)
 		const parent = dom.parentElement;
 
 		let newUsername = parent.querySelector(".UserNameNew").value;
@@ -210,7 +194,6 @@
 		if(dom.type=="click"){
 			dom = dom.target;
 		}
-		console.log(dom)
 		const parent = dom.parentElement;
 		let username = parent.querySelector(".UserName").innerText;
 		let UserPassword = parent.querySelector(".UserPassword").innerText;
@@ -262,7 +245,6 @@
 		]
 
 
-		console.log(dom)
 		fetch("/api/admin/UpdateUser",
 			{
 				method: "POST",

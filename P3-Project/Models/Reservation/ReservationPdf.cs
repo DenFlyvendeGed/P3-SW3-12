@@ -38,7 +38,7 @@ public static class ReservationPdf{
 					packShopUnitList.Add(ParseItemsnapShot((ItemSnapshot)items[i].ShopUnit, items[i].Amount, items[i].Discount));
 					i++;
 				}
-
+				if (i >= items.Count) { break; }
 				ItemList.Add(new LatexPackModel (){
 					Id = $"{unit.PackId}",
 					Name = $"{unit.Name}",

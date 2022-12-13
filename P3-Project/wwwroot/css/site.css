@@ -233,8 +233,6 @@ body {
     margin-left: auto;
     margin-right: auto;
     line-height: 64px;
-    background-color: #D9D9D9;
-    border: 2px solid #000000;
     text-align: center;
 }
 .packBox-img {
@@ -417,8 +415,8 @@ body {
 
 img {
     
-    max-width: -webkit-fill-available;
-    max-height: -webkit-fill-available;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 
@@ -1104,9 +1102,6 @@ div.shopTagBox{
     height: 22px;
 }
 .Name {
-    position: relative;
-    height: 50px;
-    width: 240px;
     top: 4%;
     padding: 10px;
 }
@@ -1129,10 +1124,12 @@ div.shopTagBox{
         left: 80%;
         top: 66%;
     }
+
     .CheckMark-Flag {
         width: 22px;
         height: 22px;
     }
+}
 
 .CheckMark {
     /*position: relative;*/

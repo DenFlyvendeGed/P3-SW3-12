@@ -1,4 +1,6 @@
-namespace P3_Project.Models; 
+namespace P3_Project.Models;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using P3_Project.Models.DB;
 public enum PromoCodeDiscountType {
 	Percentage, Fixed
@@ -112,5 +114,55 @@ public class PromoCode
 		if(db.DB.CheckTable($"{TABLE_NAME}_{Id}"))
 			db.DB.DeleteTable($"{TABLE_NAME}_{Id}");
 	}
+
+	public bool inputValidation()
+	{
+		if( validValue() && validCode() && validDiscountType() && validItemType() && validItems())
+			return true;
+
+		return false;
+	}
+    public bool validValue()
+    {
+		if(DiscountType == PromoCodeDiscountType.Fixed)
+		{
+			if (Value > 0)
+				return true;
+		}
+		if(DiscountType == PromoCodeDiscountType.Percentage)
+		{
+			if(0 < Value && Value <= 100)
+				return true;
+		}
+
+        return false;
+    }
+    public bool validCode()
+	{
+		if(Code != "")
+		{
+			return true;
+		}
+		return false;
+	}
+    public bool validDiscountType()
+    {
+		if (Enum.IsDefined(typeof(PromoCodeDiscountType), DiscountType))
+			return true;
+        return false;
+    }
+    public bool validItemType()
+    {
+        if (Enum.IsDefined(typeof(PromoCodeItemType), ItemType))
+            return true;
+        return false;
+    }	
+    public bool validItems()
+    {
+		if (ItemType == PromoCodeItemType.Some && Items.Count() <= 0)
+			return false;
+        return true;
+    }
+
 }
 

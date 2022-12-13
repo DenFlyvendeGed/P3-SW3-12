@@ -38,7 +38,6 @@
                     {
                         picAmount += 1;
                     }
-                    Console.WriteLine(picAmount);
                     if (picAmount > 1)
                     {
                         <button class="ASHButton" onclick="lastPic()" style="margin:1px;">Tilbage</button>
@@ -228,12 +227,9 @@
                 ItemId: response,
             }
 
-            console.log(itemData);
-
             // Get the existing data
             var existing = localStorage.getItem('itemsSavedForCart');
 
-            console.log(existing)
             // If no existing data, create an array
             // Otherwise, convert the localStorage string to an array
             let itemsSavedForCart = []
@@ -253,20 +249,14 @@
             else {
                 itemsSavedForCart.push(itemData);
             }
-            //existing = existing ? existing.split(',') : [];
-            // Add new data to localStorage Array
-            //existing.push(JSON.stringify(itemData));
 
             // Save back to localStorage
-            //localStorage.setItem('itemsSavedForCart', existing.toString());
             localStorage.setItem('itemsSavedForCart', JSON.stringify(itemsSavedForCart));
 
         }
         else {
             console.log("intet valgt");
         }
-
-
 
     }
 
@@ -307,7 +297,6 @@
 
     //Display picture in box
     function showImg(pic) {
-        //console.log(currentPic);
         if (pictures[pic] != undefined) {
             const imgDom = document.querySelector('.displayItem img');
             imgDom.setAttribute('src', pictures[pic]);

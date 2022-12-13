@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - Webshop</title>
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/P3_Project.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
@@ -52,9 +51,6 @@
                             <a class="nav-link text-white navBarText" asp-area="" asp-controller="Admin" asp-action="Settings">Settings</a>
                         </li>
 
-                        @*<li class="nav-item">
-                            <a class="nav-link text-white navBarText" asp-area="" asp-controller="Admin" asp-action="ConfirmSale">Bekræft Salg</a>
-                        </li>*@
 
                         <li class="nav-item">
                             <a class="nav-link text-white navBarText" asp-area="" asp-controller="Admin" asp-action="SaleOverview">Salgs oversigt</a>
@@ -90,21 +86,14 @@
                     <div id="textLeft" class="layoutBox">sph@sportshojskolen.dk</div>
                 </div>
             </div>
-            @*<div id="rightFooterBox" class="layoutBox">
-            <div id="footerSlogan" class="layoutBox">
-            <img srcset="~/Pics/footer-slogan.png 2x" />
-            </div>
-            </div>*@
+          
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         const links = document.querySelectorAll(".nav-link");
-        //console.log(links);
-        //console.log('@ViewContext.RouteData.Values["action"].ToString()');
 
         links.forEach(link => {
             if (link.href.includes('@ViewContext.RouteData.Values["action"].ToString()')) {

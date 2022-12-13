@@ -16,8 +16,6 @@
 }
 
 
-
-
 <h1>@isModel()</h1>
 
 
@@ -43,9 +41,9 @@
 					@{
 						async Task AddOption(PromoCodeDiscountType type, string message) {
 							if(promoCode.DiscountType == type){
-																																																																																																																																					<option value="@((int)type)" selected> @message </option> 
+																																																																																																																																								<option value="@((int)type)" selected> @message </option> 
 							} else {
-																																																				<option value="@((int)type)"> @message </option> 
+																																																							<option value="@((int)type)"> @message </option> 
 							}
 						}
 						AddOption(PromoCodeDiscountType.Percentage, "Procent (%)");
@@ -65,36 +63,36 @@
 			@{
 				if(promoCode.Id != null){
 					if(promoCode.ItemType == PromoCodeItemType.Some){
-					<option value="" id="0">Alt</option>
-					<option value="" id="1">Alle pakker</option>
-					<option value="" id="2">Alle genstande</option>
-					<option value="" selected id="3">Vælg selv</option>
+								<option value="" id="0">Alt</option>
+								<option value="" id="1">Alle pakker</option>
+								<option value="" id="2">Alle genstande</option>
+								<option value="" selected id="3">Vælg selv</option>
 					}
 					else if(promoCode.ItemType == PromoCodeItemType.All){
-					<option value="" selected id="0">Alt</option>
-					<option value="" id="1">Alle pakker</option>
-					<option value="" id="2">Alle genstande</option>
-					<option value="" id="3">Vælg selv</option>
+								<option value="" selected id="0">Alt</option>
+								<option value="" id="1">Alle pakker</option>
+								<option value="" id="2">Alle genstande</option>
+								<option value="" id="3">Vælg selv</option>
 					}
 					else if(promoCode.ItemType == PromoCodeItemType.AllItems){
-					<option value="" id="0">Alt</option>
-					<option value="" id="1">Alle pakker</option>
-					<option value="" selected id="2">Alle genstande</option>
-					<option value="" id="3">Vælg selv</option>
+								<option value="" id="0">Alt</option>
+								<option value="" id="1">Alle pakker</option>
+								<option value="" selected id="2">Alle genstande</option>
+								<option value="" id="3">Vælg selv</option>
 					}
 					else if(promoCode.ItemType == PromoCodeItemType.AllPacks){
-					<option value="" id="0">Alt</option>
-					<option value="" selected id="1">Alle pakker</option>
-					<option value="" id="2">Alle genstande</option>
-					<option value="" id="3">Vælg selv</option>
+								<option value="" id="0">Alt</option>
+								<option value="" selected id="1">Alle pakker</option>
+								<option value="" id="2">Alle genstande</option>
+								<option value="" id="3">Vælg selv</option>
 					}
 				}
 				else{
-					<option value="" selected hidden>Vælg indholds type</option>
-					<option value="" id="0">Alt</option>
-					<option value="" id="1">Alle pakker</option>
-					<option value="" id="2">Alle genstande</option>
-					<option value="" id="3">Vælg selv</option>
+								<option value="" selected hidden>Vælg indholds type</option>
+								<option value="" id="0">Alt</option>
+								<option value="" id="1">Alle pakker</option>
+								<option value="" id="2">Alle genstande</option>
+								<option value="" id="3">Vælg selv</option>
 				}
 				
 			}
@@ -112,14 +110,12 @@
 				<option value=”” selected hidden>Tilføj vare</option>
 					@{
 					foreach (ItemModel item in ViewBag.model){
-							<option value="@("Vare: "+item.ModelName)" id="@(item.Id)">Vare: @(item.ModelName)</option>
+										<option value="@("Vare: "+item.ModelName)" id="@(item.Id)">Vare: @(item.ModelName)</option>
 					}
 
 					foreach (var pack in packList){
-							<option value="@("Pakke: "+pack.Item2)" id="@(pack.Item1)">Pakke: @(pack.Item2)</option>
+										<option value="@("Pakke: "+pack.Item2)" id="@(pack.Item1)">Pakke: @(pack.Item2)</option>
 					}
-
-
 					}
             </select>
 		</div>
@@ -139,10 +135,10 @@
 					
 						if(index != -1){
 
-								<div class="addedOptions-Item" id="@(item.Id)" value="@(isPack)">
-									@("Vare: "+itemList[index].ModelName)
-									<input type="button" value="-" class="delBtn">
-								</div>
+											<div class="addedOptions-Item" id="@(item.Id)" value="@(isPack)">
+												@("Vare: "+itemList[index].ModelName)
+												<input type="button" value="-" class="delBtn">
+											</div>
 						}
 					}
 					else{
@@ -150,10 +146,10 @@
 					
 						if(index != -1){
 
-								<div class="addedOptions-Item" id="@(item.Id)" value="@(isPack)">
-									@("Pakke: "+packList[index].Item2)
-									<input type="button" value="-" class="delBtn">
-								</div>
+											<div class="addedOptions-Item" id="@(item.Id)" value="@(isPack)">
+												@("Pakke: "+packList[index].Item2)
+												<input type="button" value="-" class="delBtn">
+											</div>
 						}
 					}
 					
@@ -186,7 +182,6 @@
 					isPack = true;
 				}
 
-
 				let promoData = {
 					Id: parseInt(id),
 					IsPack: isPack,
@@ -199,14 +194,9 @@
 				btn.addEventListener("click", removeItem);
 			})
 
-
-			console.log(items);
-
 		}
 
-
 		function getData() {
-			console.log(items);
 			let rtn = {
 				Code : document.getElementById("promo-code-code").value,
 				ExpirationDate : document.getElementById("promo-code-date").value,
@@ -254,7 +244,6 @@
 			newOption.appendChild(newBtn);
 			document.getElementById("addedItems").appendChild(newOption);
 
-			console.log(items);
 		}
 
 		function removeItem(e){
@@ -273,9 +262,6 @@
 					items.splice(i, 1);
 				}
 			}
-			
-			console.log(items);
-
 		}
 
 		function chosenType(e){
@@ -328,8 +314,15 @@
 				fetch("/api/admin/createPromoCode", {
 					method : 'POST',
 					body : JSON.stringify(getData()) 
-				}).then(() => {
-					window.location.href = "/admin/promocode";
+				}).then((response) => {
+					if(response.ok)
+					{
+						window.location.href = "/admin/promocode";
+					}
+					else{
+						alert("Oprettelse fejlede, er alle felter udfyldt?")
+					}
+					
 				})
 			}</text>
 	} else {
@@ -337,14 +330,19 @@
 				fetch("/api/admin/editPromoCode/@promoCode.Id", {
 					method : 'PUT',
 					body : JSON.stringify(getData()) 
-				}).then(() => {
-					window.location.href = "/admin/promocode";
+				}).then((response) => {
+					if(response.ok)
+					{
+						window.location.href = "/admin/promocode";
+
+					}
+					else{
+						alert("opdatering fejlede")
+					}
+					
 				})
 			}</text>
 	}
-
-		
-
 
 
 	</script>
