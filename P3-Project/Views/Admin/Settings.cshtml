@@ -11,7 +11,7 @@
 <div class="box setting">
 	<h2>E-mailliste til notifikationer</h2>
 	<input type="button" value="Tilføj ny E-mail" onclick="addEmail()"/>
-	<input type="button" value="Update E-mail-liste" onclick="update()"/>
+	<input type="button" value="Opdater E-mail-liste" onclick="update()"/>
 	<table id="setting-email-table">
 	</table>
 </div>
@@ -103,7 +103,7 @@
 				<input placeholder = "Indsæt kodeord"  class="UserPasswordNew" value="`+ user.UserPassword + `"/>
 				<label style="display: none" class="UserPassword">`+ user.UserPassword + `</label>
 
-				<input type=button value="Update" onclick="updateUser(this)"/>
+				<input type=button value="Opdater" onclick="updateUser(this)"/>
 				<input type=button value="Slet" onclick="deleteUser(this)" />
 				`;
 			userDom.append(divDom)
