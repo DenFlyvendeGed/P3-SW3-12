@@ -70,7 +70,6 @@
     <table style="margin-top: 10px">
         <tbody>
             @{
-				Console.WriteLine(Model.Name);
                 List<(ItemSnapshot, int)> itemSnapshots = new List<(ItemSnapshot, int)>();
 
                 int itemPriceTotal = 0;
@@ -148,7 +147,6 @@
 						int next = 1;
 						while(index + next < Model.ShopUnits.Count() && Model.ShopUnits[index + next].ShopUnit is ItemSnapshot)
 						{
-							Console.WriteLine(next);
 							ItemSnapshot item = (ItemSnapshot)Model.ShopUnits[index + next].ShopUnit;
 
 							<tr>

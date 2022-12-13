@@ -389,7 +389,6 @@ namespace P3_Project.Controllers
             List<User> users = db.DB.GetAllElements("Users", new User());
             var json = JsonSerializer.Serialize(users);
             Response.Headers.Add("Content-Type", "application/json");
-            //Response.Body = new MemoryStream(Encoding.UTF8.GetBytes(json ?? ""));
             return Ok(json);
         }
 
