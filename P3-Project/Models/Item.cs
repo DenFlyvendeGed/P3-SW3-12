@@ -39,11 +39,6 @@ namespace P3_Project.Models
             Sold = 0;
         }
 
-        public Item(string id, string modelId, string description, string color, string size)
-        {
-
-        }
-
 
 		public void NotifyStockAlarm(int modelId){
 			var item = db.DB.GetRow("ItemModels", new ItemModel(), modelId.ToString());

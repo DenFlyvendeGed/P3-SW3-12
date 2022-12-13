@@ -70,16 +70,12 @@
                                 <input type="button" value="-" id="@tag.Id" onclick="DeleteTag(this)">
                             </div>
                     }
-
-
-
                 }
             </div>
             <input type="button" value="+" onclick="CreateTagDom(this.previousElementSibling)">
 
         </div>
     </div>
-
 
 
 
@@ -93,15 +89,10 @@
                 Type:
                 @{
 
-                        <select name="itemModelType" id="itemModelType" class="Clickable">
-                            @*<option selected>@(ViewBag.model?.Type != null ? ViewBag.model.Type : "Type")</option> *@
-                            @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj'class='Clickable' >Tøj</option>") : Html.Raw("<option value='Tøj' class='Clickable'>Tøj</option>"))
-                            @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' class='Clickable'>Tilbehør</option>") : Html.Raw("<option value='Tilbehør' class='Clickable'>Tilbehør</option>"))
-
-
-                            @*<option value="Tilbehør">Tilbehør</option>
-                    *@
-                        </select>
+                    <select name="itemModelType" id="itemModelType" class="Clickable">
+                        @(ViewBag.model?.Type == "Tøj" ? Html.Raw("<option selected value='Tøj'class='Clickable' >Tøj</option>") : Html.Raw("<option value='Tøj' class='Clickable'>Tøj</option>"))
+                        @(ViewBag.model?.Type == "Tilbehør" ? Html.Raw("<option selected value='Tilbehør' class='Clickable'>Tilbehør</option>") : Html.Raw("<option value='Tilbehør' class='Clickable'>Tilbehør</option>"))
+                    </select>
 
                     string toolTip = "Type: Om varen skal vises i 'Tøj' sektionen eller 'Tilbehør' sektionen i webshoppen";
 
@@ -113,12 +104,6 @@
 
 
         </div>
-
-        @*
-        //Tilføj td for hver farve
-        //Tilføj tr for hver størrelse
-        *@
-
 
         @*Item table*@
         <div class="ItemTable" style="overflow:auto;">
@@ -298,7 +283,6 @@
 
 
             document.getElementById('charCounterBox').innerHTML = "Tegn: " + currentLength + " af " + (maxLength);
-            console.log(currentLength);
         });
     }
     TextAreaCounter();
@@ -636,7 +620,6 @@
         if (itemModel.items != null) {
 
             for (let i = 0; i < itemModel.items.length; i++) {
-                console.log(itemModel.items[i]);
                 if (itemModel.items[i].Color === "") {
                     stateColor = false;
                     break;
@@ -658,7 +641,6 @@
         }
 
         const data = JSON.stringify(itemModel);
-        console.log(grid.itemData);
 
         if ((isNaN(itemModel.ModelPrice)) || itemModel.ModelPrice == 0 || (isNaN(itemModel.StockAlarm))) {
             alert("Pris eller notifikation ved lager skal være tal");
@@ -721,7 +703,6 @@
 
     //Display picture in box
     function showImg(pic) {
-        //console.log(currentPic);
         if (pictures[pic] != undefined)
             imgTag.setAttribute('src', pictures[pic]);
         else
@@ -738,7 +719,6 @@
             imgTag.setAttribute('src', e.target.result);
             pictures.push(e.target.result);
             currentPic = pictures.length - 1;
-            console.log(currentPic);
 
             fileArray.push(
                 {
@@ -817,7 +797,6 @@
         else {
             tagList.push({ Id })
         }
-        //console.log(Id)
     }
 
     function RemoveTag(Id) {
@@ -833,7 +812,6 @@
         else {
             tagList = taglist.splice(tagList.indexOf(Id), 1);
         }
-        //console.log(Id)
     }
 
     function DeleteTag(dom) {
@@ -878,8 +856,6 @@
     }
 
     function CreateTagDom(dom) {
-
-        //console.log(dom)
 
         const input = document.createElement("input");
 

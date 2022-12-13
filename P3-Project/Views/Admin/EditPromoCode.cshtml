@@ -16,8 +16,6 @@
 }
 
 
-
-
 <h1>@isModel()</h1>
 
 
@@ -118,8 +116,6 @@
 					foreach (var pack in packList){
 										<option value="@("Pakke: "+pack.Item2)" id="@(pack.Item1)">Pakke: @(pack.Item2)</option>
 					}
-
-
 					}
             </select>
 		</div>
@@ -186,7 +182,6 @@
 					isPack = true;
 				}
 
-
 				let promoData = {
 					Id: parseInt(id),
 					IsPack: isPack,
@@ -199,14 +194,9 @@
 				btn.addEventListener("click", removeItem);
 			})
 
-
-			console.log(items);
-
 		}
 
-
 		function getData() {
-			console.log(items);
 			let rtn = {
 				Code : document.getElementById("promo-code-code").value,
 				ExpirationDate : document.getElementById("promo-code-date").value,
@@ -254,7 +244,6 @@
 			newOption.appendChild(newBtn);
 			document.getElementById("addedItems").appendChild(newOption);
 
-			console.log(items);
 		}
 
 		function removeItem(e){
@@ -273,9 +262,6 @@
 					items.splice(i, 1);
 				}
 			}
-			
-			console.log(items);
-
 		}
 
 		function chosenType(e){
@@ -357,9 +343,6 @@
 				})
 			}</text>
 	}
-
-		
-
 
 
 	</script>

@@ -118,7 +118,6 @@
 
     //Display picture in box
     function showImg(pic) {
-        //console.log(currentPic);
         if (pictures[pic] != undefined)
             imgTag.setAttribute('src', pictures[pic]);
         else
@@ -135,7 +134,6 @@
             imgTag.setAttribute('src', e.target.result);
             pictures.push(e.target.result);
             currentPic = pictures.length - 1;
-            console.log(currentPic);
 
             fileArray.push(
                 {
@@ -212,7 +210,6 @@
         else {
             tagList.push({ Id })
         }
-        //console.log(Id)
     }
 
     function RemoveTag(Id) {
@@ -226,7 +223,6 @@
         else {
             tagList = taglist.splice(tagList.indexOf(Id), 1);
         }
-        //console.log(Id)
     }
 
     function DeleteTag(dom) {
@@ -270,7 +266,6 @@
 
     function CreateTagDom(dom) {
 
-        //console.log(dom)
 
         const input = document.createElement("input");
 
@@ -317,7 +312,6 @@
         <text>], </text>
     }
                     ];
-    console.log(arraylist);
     window.onload = LoadExistingPack(arraylist.length, arraylist, "@Packs.Name", "@Packs.Price", "@Packs.Description");
 
     function AddOption(ChoiceNumber) {
@@ -356,10 +350,9 @@
         DropDown.addEventListener("change", loadImg)
         AddOptionFields(ItemArray, DropDown); //<-- helper function to make the select options based on an array it gets passed
 
-        //sæt billedet af første option som Select indeholder
+        //Set placeholder picture
         ModelImage.src = DropDown.selectedOptions[0].imgPath;
         function loadImg(e) {
-            //console.log(e.target.selectedOptions[0].imgPath)
             ModelImage.src = e.target.selectedOptions[0].imgPath;
         }
 
@@ -474,8 +467,6 @@
                 AddChoice();
                 for (k = 1; k <= Options[j - 1].length; k++) {
                     AddOption(j);
-                    console.log(j);
-                    console.log(k);
                     ChangeOption(`flexBox-Packcreator-${j}`, Options[j - 1][k - 1], j, k);
                 }
             }
@@ -486,15 +477,12 @@
         let name = document.getElementById("LeftInput").value;
         let price = parseInt(document.getElementById("RightInput").value);
         let description = document.getElementById("DescriptionBox").value;
-        console.log(name, price, description);
         let options = [];
 
         const Choices = document.querySelectorAll(".flexBox-Packcreator");
 
         for (i = 0; i < Choices.length; i++) {
-
             options.push(FindOptions(Choices[i].id));
-            console.log(options);
         }
 
         const formatedTagList = [];
@@ -517,7 +505,6 @@
             Tags: formatedTagList,
         };
         let PackModel = JSON.stringify(PayLoad);
-        //console.log(PackModel)
 
         if (@((Packs.PackID != null).ToString().ToLower())) {
             fetch(`/api/admin/EditPackModel/@Packs.PackID`, {
@@ -547,16 +534,6 @@
                 });
         }
 
-
-
-        /*
-        [
-          1, 2, 3, 4
-        ],
-        [
-          1
-        ]
-        */
     }
 
 </script>
