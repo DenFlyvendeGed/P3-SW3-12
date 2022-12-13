@@ -260,6 +260,10 @@ namespace P3_Project.Controllers
                 }
 
             }
+            else
+            {
+                return BadRequest();
+            }
             
            
             //return Redirect(new Uri(newUrl.ToString(), UriKind.RelativeOrAbsolute));
