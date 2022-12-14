@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3-Project", "P3-Project\P3-Project.csproj", "{3B0E2EBB-F9BB-43C6-8F37-4754B08F850C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3-Project_Test", "P3-Project_Test\P3-Project_Test.csproj", "{0808BB63-FDD2-4576-8CD9-75D75B522C55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3-Project_Test", "P3-Project_Test\P3-Project_Test.csproj", "{0808BB63-FDD2-4576-8CD9-75D75B522C55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3_Project_Integration", "P3_Project_Integration\P3_Project_Integration.csproj", "{5A2495CB-42D7-444A-A763-9E0DB02DD8DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0808BB63-FDD2-4576-8CD9-75D75B522C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0808BB63-FDD2-4576-8CD9-75D75B522C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0808BB63-FDD2-4576-8CD9-75D75B522C55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A2495CB-42D7-444A-A763-9E0DB02DD8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A2495CB-42D7-444A-A763-9E0DB02DD8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A2495CB-42D7-444A-A763-9E0DB02DD8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A2495CB-42D7-444A-A763-9E0DB02DD8DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
