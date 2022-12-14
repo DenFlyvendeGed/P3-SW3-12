@@ -73,7 +73,12 @@ namespace P3_Project.Models.DB
 					throw new Exception("No database was specified in App.Config");
 			}
 		}
-		
+
+		public StorageDB(string connectionString) 
+		{
+			DB = new SqlDB(connectionString);
+		}
+
 		public string GetItemTable(int ItemModelId){
 			return DB.GetField("Id", ItemModelId.ToString(), "ItemModels", "ItemTable");
 		}
