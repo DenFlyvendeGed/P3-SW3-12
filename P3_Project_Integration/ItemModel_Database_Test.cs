@@ -100,7 +100,22 @@ namespace P3_Project_Integration
         }
 
 
+        [Theory]
+        [MemberData(nameof(ItemModelIndividualValidData.SplitCountData), MemberType = typeof(ItemModelIndividualValidData))]
+        //[ClassData(typeof(CreateItemModelValidData))]
+        public void Delete_ItemModel_Valid(ItemModel model)
+        {
+            db.DB.CreateTable("test5", new ItemModel());
 
+            db.DB.AddRowToTable("test5", model);
+
+            db.DB.RemoveRow("test5", "ModelName", model.ModelName);
+
+
+
+            Assert.False(db.DB.CheckRow("test5","ModelName",model.ModelName));
+            db.DB.DeleteTable("test5");
+        }
 
     }
 

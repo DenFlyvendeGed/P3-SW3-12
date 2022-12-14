@@ -74,9 +74,20 @@ namespace P3_Project.Models.DB
 			}
 		}
 
-		public StorageDB(string connectionString) 
+		public StorageDB(string connectionString, string type = "SQL") 
 		{
-			DB = new SqlDB(connectionString);
+            switch (type)
+            {
+                case "SQL":
+                    DB = new SqlDB(connectionString);
+                    break;
+                case "MySQL":
+                    DB = new MySqlDB(connectionString);
+                    break;
+                default:
+                    throw new Exception("No database was specified in App.Config");
+            }
+            //DB = new SqlDB(connectionString);
 		}
 
 		public string GetItemTable(int ItemModelId){

@@ -145,21 +145,6 @@ namespace P3_Project_Test
             Assert.True(test.validItems());
         }
 
-        [Theory]
-        [InlineData(PromoCodeItemType.All)]
-        [InlineData(PromoCodeItemType.AllItems)]
-        [InlineData(PromoCodeItemType.AllPacks)]
-        public void Items_Incorrect_ItemType_Invalid(PromoCodeItemType type)
-        {
-            PromoCode test = new();
-            List<PromoCodeSomeItemType> list = new();
-            list.Add(new PromoCodeSomeItemType());
-            test.Items = list;
-            test.ItemType = type;
-            Assert.False(test.validItems());
-
-        }
-
         [Fact]
         public void Items_Correct_ItemType_Empty_List_Invalid()
         {
