@@ -406,35 +406,6 @@
 			display: none;
 		}
 
-		.hovertext {
-			position: relative;
-			border-bottom: 1px dotted black;
-		}
-
-		.hovertext:before {
-			content: attr(data-hover);
-			visibility: hidden;
-			width: 20vw;
-			min-width: 50px;
-			opacity: 0;
-			background-color: black;
-			color: #fff;
-			text-align: center;
-			border-radius: 5px;
-			padding: 5px 5px;
-			transition: opacity 1s ease-in-out;
-
-			position: absolute;
-			z-index: 1;
-			left: 0;
-			top: 110%;
-		}
-
-		.hovertext:hover:before {
-			opacity: 1;
-			visibility: visible;
-		}
-
 		.grid-indhold {
 			display: grid;
 			grid-template-columns: repeat(3, 25vw);
@@ -451,10 +422,7 @@
 		display: none;
 	}
 
-	.hovertext {
-		position: relative;
-		border-bottom: 1px dotted black;
-	}
+	
 
 	</style>
 
