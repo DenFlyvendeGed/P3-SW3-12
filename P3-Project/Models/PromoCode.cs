@@ -156,12 +156,12 @@ public class PromoCode
         if (Enum.IsDefined(typeof(PromoCodeItemType), ItemType))
             return true;
         return false;
-    }
+    }	
     public bool validItems()
     {
-		if (ItemType == PromoCodeItemType.Some && Items.Count() > 0)
-			return true;
-        return false;
+		if (ItemType == PromoCodeItemType.Some && Items.Count() <= 0)
+			return false;
+        return true;
     }
 
 }

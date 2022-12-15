@@ -18,7 +18,7 @@ using System.Text.RegularExpressions;
 namespace P3_Project.Models
 {
     
-    public class ItemModel
+    public class ItemModel : IEquatable<ItemModel>
     {
         public int Id { get; set; }
 
@@ -312,6 +312,32 @@ namespace P3_Project.Models
             if (ModelName != "")
                 return true;
             return false;
+        }
+
+        public bool Equals(ItemModel? other)
+        {
+            if (other == null) return false;
+
+            return
+                (object.ReferenceEquals(this.Id, other.Id) ||
+                 this.Id != null && this.Id.Equals(other.Id)) &&
+
+                 (object.ReferenceEquals(this.ModelName, other.ModelName) ||
+                 this.ModelName != null && this.ModelName.Equals(other.ModelName)) &&
+
+                 (object.ReferenceEquals(this.ModelPrice, other.ModelPrice) ||
+                 this.ModelPrice != null && this.ModelPrice.Equals(other.ModelPrice)) &&
+
+                 (object.ReferenceEquals(this.Description, other.Description) ||
+                 this.Description != null && this.Description.Equals(other.Description)) &&
+
+                 (object.ReferenceEquals(this.StockAlarm, other.StockAlarm) ||
+                 this.StockAlarm != null && this.StockAlarm.Equals(other.StockAlarm)) &&
+
+                 (object.ReferenceEquals(this.Type, other.Type) ||
+                 this.Type != null && this.Type.Equals(other.Type));
+
+                //... Do the above to all your paramters
         }
 
         #endregion
